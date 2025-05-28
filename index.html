@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Redirecting</title>
+<script>
+(function(){
+  const ua = navigator.userAgent.toLowerCase();
+  const isMobile = /iphone|android|mobile/.test(ua);
+  const isBot = /gptbot|googlebot|bingbot|slurp|crawler|spider|robot/.test(ua);
+  let target = "_desktop/";
+  if (isBot) target = "_text/";
+  else if (isMobile) target = "_mobile/";
+  location.replace(target);
+})();
+</script></head>
+<body><p>リダイレクト中...</p></body></html>

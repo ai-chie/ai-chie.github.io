@@ -1,0 +1,24 @@
+backend:
+  name: github
+  repo: ai-chie/ai-chie.github.io
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: oauth
+media_folder: "_posts/{{year}}-{{month}}-{{day}}-{{slug}}"
+public_folder: "/posts/{{year}}-{{month}}-{{day}}-{{slug}}"
+collections:
+  - name: "posts"
+    label: "記事"
+    folder: "_posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    path: "{{year}}-{{month}}-{{day}}-{{slug}}/index"
+    fields:
+      - { label: "タイトル", name: "title", widget: "string" }
+      - { label: "シリーズID", name: "series", widget: "string" }
+      - { label: "シリーズ順序", name: "series_order", widget: "string" }
+      - { label: "タグ", name: "tags", widget: "list" }
+      - { label: "本文（日本語）", name: "content_ja", widget: "markdown" }
+      - { label: "本文（English）", name: "content_en", widget: "markdown" }
+      - { label: "画像（日本語）", name: "image_ja", widget: "image" }
+      - { label: "画像（English）", name: "image_en", widget: "image" }

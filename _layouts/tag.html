@@ -1,0 +1,4 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>タグ: {{ page.tag }}</title></head>
+<body><h1>タグ: {{ page.tag }}</h1><ul>{% for post in site.posts %}{% if post.tags contains page.tag %}<li><a href="{{ post.url }}">{{ post.title }}</a></li>{% endif %}{% endfor %}</ul></body>
+</html>
