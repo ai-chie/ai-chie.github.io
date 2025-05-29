@@ -21,6 +21,8 @@
         
         
         <label>投稿日: <input type="datetime-local" id="postDate" required></label><br><!-- frontmatterに保存 -->
+        <!-- 他のサイトに投稿した記事を投稿する場合など、元のサイトに投稿した過去の日時も指定できる。 -->
+        <!-- 更新日時も投稿時に自動でfrontmatterに保存 -->
         <label>表示順（デフォルト）: <input type="text" id="displayOrder" placeholder="例: 202505291558"></label><br><!-- frontmatterに保存 -->
         
         <label>タイトル（日本語）: <input type="text" id="titleJp" required></label><br><!-- frontmatterに保存 -->
@@ -32,6 +34,9 @@
         <label>画像（英語記事用）: <input type="file" id="imagesEn" multiple></label><br>
         
         <label>関連記事（英語/日本語）ファイル: <input type="text" id="relatedArticle" placeholder="相対パス（フォルダ名 + ファイル名）"></label><br><!-- frontmatterに保存 -->
+        <!-- 日本語版と英語版の記事を同時投稿した場合は、それぞれの記事は自動で紐づけられる。
+             どちらか片方のみ先に投稿された場合には、後に手動で明示的に「関連記事（英語/日本語）ファイル」のフィールドで指定することによって指定された記事が紐づけられる。
+             紐づけられた記事同士は、それぞれの記事のfrontmatterにお互いのファイルの相対パスが保存される。 -->
         
         <label>下書き: <input type="checkbox" id="draft"></label><br><!-- frontmatterに保存 -->
         
