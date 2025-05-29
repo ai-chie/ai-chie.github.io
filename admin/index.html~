@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>記事投稿フォーム</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>記事投稿フォーム</h1>
+    <form id="postForm">
+    
+        <label>記事ID: <input type="text" id="articleId" required readonly></label><br><!-- frontmatterに保存 -->
+        
+        <!--<label>シリーズ（カンマ区切り）: <input type="text" id="series"></label><br>-->
+        <!--<label>タグ（カンマ区切り）: <input type="text" id="tags"></label><br>-->
+        
+        <label for="series">シリーズ（カンマ区切り）:</label>
+        <select id="series" name="series" multiple></select><br><!-- frontmatterに保存 -->
+        <label for="tags">タグ（カンマ区切り）:</label>
+        <select id="tags" name="tags" multiple></select><br><!-- frontmatterに保存 -->
+        
+        
+        <label>投稿日: <input type="datetime-local" id="postDate" required></label><br><!-- frontmatterに保存 -->
+        <label>表示順（デフォルト）: <input type="text" id="displayOrder" placeholder="例: 202505291558"></label><br><!-- frontmatterに保存 -->
+        
+        <label>タイトル（日本語）: <input type="text" id="titleJp" required></label><br><!-- frontmatterに保存 -->
+        <label>本文（日本語）: <br><textarea id="bodyJp" rows="10" cols="60" required></textarea></label><br>
+        <label>画像（日本語記事用）: <input type="file" id="imagesJp" multiple></label><br>
+        
+        <label>タイトル（英語）: <input type="text" id="titleEn" required></label><br><!-- frontmatterに保存 -->
+        <label>本文（英語）: <br><textarea id="bodyEn" rows="10" cols="60" required></textarea></label><br>
+        <label>画像（英語記事用）: <input type="file" id="imagesEn" multiple></label><br>
+        
+        <label>関連記事（英語/日本語）ファイル: <input type="text" id="relatedArticle" placeholder="相対パス（フォルダ名 + ファイル名）"></label><br><!-- frontmatterに保存 -->
+        
+        <label>下書き: <input type="checkbox" id="draft"></label><br><!-- frontmatterに保存 -->
+        
+        <label>GitHub Token: <input type="password" id="githubToken" placeholder="GitHub Personal Access Token>"</label><br>
+        
+        
+        <button type="submit">投稿</button>
+        
+    </form>
+    <div id="result"></div>
+    <script src="uuid.js"></script>
+    <script src="autofill-uuid.js"></script>
+    <script src="series-tags-lists.js"></script>
+    <script src="autofill-date.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
