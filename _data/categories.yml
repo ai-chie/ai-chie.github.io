@@ -1,46 +1,49 @@
 ja:
-  基本:
+  デザイン:
     order: 1
     items:
-      - name: サイト構成
-        description: Jekyllの基本構造について
-        image: /assets/icons/structure.svg
-        link: /ja/categories/サイト構成/
-        
-      - name: SEO
-        description: 検索エンジン最適化の基本
-        image: /assets/icons/seo.svg
-        link: /ja/categories/SEO/
-        
+      - name: レイアウト
+        color: "#007acc"
+        priority: 2
+        featured: true
+        draft: false
+        hidden: false
+        private: false
+        description: ページレイアウトの設計
+        image: /assets/icons/layout.svg
+        link: /ja/categories/レイアウト/
+      - name: タイポグラフィ
+        color: "#d97706"
+        priority: 1
+        featured: false
+        draft: false
+        hidden: false
+        private: false
+        description: フォントや文字のデザイン
+        image: /assets/icons/typography.svg
+        link: /ja/categories/タイポグラフィ/
 
-  開発:
-    order: 2
+en:
+  Design:
+    order: 1
     items:
-      - name: ビルド
-        description: 自動ビルド環境の構築手順
-        image: /assets/icons/build.svg
-        link: /ja/categories/ビルド/
-        
-      - name: フロントエンド
-        description: JavaScriptやCSSの管理
-        image: /assets/icons/frontend.svg
-        link: /ja/categories/フロントエンド/
-        
-
-  運用:
-    order: 3
-    items:
-      - name: デプロイ
-        description: GitHub Pagesへの公開方法
-        image: /assets/icons/deploy.svg
-        link: /ja/categories/デプロイ/
-        
-
-  その他:
-    order: 4
-    items:
-      - name: 雑記
-        description: その他の話題
-        image: /assets/icons/misc.svg
-        link: /ja/categories/雑記/
-        
+      - name: Layout
+        color: "#007acc"
+        priority: 2
+        featured: true
+        draft: false
+        hidden: false
+        private: false
+        description: Page layout design
+        image: /assets/icons/layout.svg
+        link: /en/categories/layout/
+      - name: Typography
+        color: "#d97706"
+        priority: 1
+        featured: false
+        draft: false
+        hidden: false
+        private: false
+        description: Fonts and text design
+        image: /assets/icons/typography.svg
+        link: /en/categories/typography/

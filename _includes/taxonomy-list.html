@@ -28,16 +28,20 @@
     {% assign group = group_name[1] %}
     <h2 class="mt-8 mb-2 text-xl font-bold">{{ group_name[0] }}</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      {% for item in group.items %}
+      {% assign sorted_items = group.items | sort: 'priority' %}
+      {% for item in sorted_items %}
         {% assign count = counts[item.name] | default: 0 %}
+        {% unless item.hidden or item.draft or item.private %}
         <div class="p-4 border rounded-xl shadow {{ type }}-item" data-name="{{ item.name }}" data-count="{{ count }}" data-group="{{ group_name[0] }}">
           <a href="{{ item.link | default: '/' | append: lang | append: '/' | append: type | append: '/' | append: item.name | uri_escape | append: '/' }}" class="block">
             {% if item.image %}<img src="{{ item.image }}" alt="{{ item.name }}" class="w-10 h-10 mb-2">{% endif %}
-            <strong class="block text-lg font-semibold">{{ item.name }}</strong>
+            <strong class="block text-lg font-semibold" {% if item.color %}style="color: {{ item.color }}"{% endif %}>{{ item.name }}</strong>
             {% if item.description %}<p class="text-sm text-gray-600">{{ item.description }}</p>{% endif %}
             <small class="text-xs text-gray-500">({{ count }} 件)</small>
+            {% if item.featured %}<span class="text-xs text-yellow-600 ml-2 font-bold">★注目</span>{% endif %}
           </a>
         </div>
+        {% endunless %}
       {% endfor %}
     </div>
   {% endfor %}
