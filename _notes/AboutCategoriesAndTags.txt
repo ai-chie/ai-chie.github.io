@@ -26,3 +26,6 @@ _scripts/generate_taxonomy_pages.rb をリポジトリに追加
 _posts/ にカテゴリやタグを指定した記事があると、自動的に対応ページが生成されます
 
 コミット時または workflow_dispatch（手動実行）でトリガーされます
+
+
+test
