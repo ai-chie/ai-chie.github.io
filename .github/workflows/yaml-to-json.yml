@@ -1,0 +1,33 @@
+name: Convert YAML to JSON
+
+on:
+  push:
+    paths:
+      - '_data/*.yml'
+      - '.github/workflows/yaml-to-json.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ✅ Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 📦 Install dependencies
+        run: npm install
+
+      - name: 🔁 Convert YAML to JSON
+        run: npm run convert
+
+      - name: 🚀 Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data/*.json
+          git commit -m "🔄 Auto-convert YAML to JSON" || echo "No changes to commit"
+          git push
