@@ -2,7 +2,7 @@ require 'fileutils'
 require 'yaml'
 
 POSTS_DIR = '_posts'
-OUTPUT_DIR = '.'
+OUTPUT_ROOT = '_generated'
 LAYOUT = 'default'
 
 # カテゴリ・タグを収集
@@ -24,7 +24,6 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
     next
   end
 
-  # 条件：公開記事のみ対象
   next if data['draft'] == true || data['hidden'] == true
   lang = data['lang']
   next unless %w[ja en].include?(lang)
@@ -37,7 +36,7 @@ taxonomy.each do |lang, types|
   types.each do |type, terms|
     terms.uniq.each do |term|
       slug = term.downcase.strip.gsub(' ', '-').gsub(/[^\w\-]/, '')
-      dir = "#{lang}/#{type}/#{term}.md"
+      dir = "#{OUTPUT_ROOT}/#{lang}/#{type}/#{term}.md"
       FileUtils.mkdir_p(File.dirname(dir))
       File.write(dir, <<~MD)
         ---

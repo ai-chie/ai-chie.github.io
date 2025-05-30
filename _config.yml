@@ -1,24 +1,126 @@
-title: My MultiLang Site
-baseurl: "" # GitHub Pagesでルートに置く場合
-url: "https://ai-chie.github.io/"
+title: あなたのサイト名
+description: あなたのサイトの説明
+baseurl: "" # サブディレクトリに設置する場合は例: /blog
+url: "https://ai-chie.github.io/" # ご自身のドメインに変更
+
+# Markdown / テンプレートエンジン
 markdown: kramdown
-theme: minima
-defaults:
-  - scope:
-      path: ""
-    values:
-      layout: default
-collections:
-  posts:
-    output: true
-    permalink: /:collection/:path/
-plugins:
-  - jekyll-feed
+highlighter: rouge
+
+# 出力対象に含めるフォルダ（通常は処理されない）
+include:
+  - _generated
+
+# 除外対象（ビルドしないファイルやディレクトリ）
 exclude:
-  - Gemfile
-  - Gemfile.lock
   - node_modules
   - vendor
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - .github
+  - .gitignore
 
+# プラグイン（GitHub Pages上で使えるものは限定）
+plugins: []
+
+# デフォルト値の適用（投稿・カテゴリ・タグで共通化）
+defaults:
+  # 日本語コンテンツ全般
+  - scope:
+      path: "ja"
+    values:
+      lang: "ja"
+      layout: default
+
+  # 英語コンテンツ全般
+  - scope:
+      path: "en"
+    values:
+      lang: "en"
+      layout: default
+
+  # 投稿全体（_posts配下）への初期値（明示的な draft/hidden 対応）
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      draft: false
+      hidden: false
+
+# ページネーション（必要であれば有効化）
+ paginate: 10
+ paginate_path: "/page:num"
+
+#------------------
+#title: あなたのサイト名
+#description: あなたのサイトの説明
+#baseurl: "" # サブディレクトリに配置する場合は設定（例: /blog）
+#url: "https://ai-chie.github.io/" # あなたのドメインに置き換えてください
+#
+# ディレクトリ設定
+#collections:
+#  posts:
+#    output: true
+#
+## ページ出力対象に含めるファイル／ディレクトリ
+#include:
+#  - _generated
+#
+## 除外（不要ファイルなど）
+#exclude:
+#  - node_modules
+#  - vendor
+#  - README.md
+#  - Gemfile
+#  - Gemfile.lock
+#  - .github
+#  - .gitignore
+#
+## Markdown & テンプレートエンジン設定
+#markdown: kramdown
+#highlighter: rouge
+#
+## プラグイン（GitHub Pages 互換性を保つため、基本的には空でもOK）
+#plugins: []
+#
+## ローカリゼーション・カスタム変数（任意）
+#defaults:
+#  -
+#    scope:
+#      path: ""
+#      type: "posts"
+#    values:
+#      layout: "post"
+#      lang: "ja"
+#
+## カスタム変数（必要に応じて）
+#paginate: 10
+#paginate_path: "/page:num"
+
+#------------------
+#title: My MultiLang Site
+#baseurl: "" # GitHub Pagesでルートに置く場合
+#url: "https://ai-chie.github.io/"
+#markdown: kramdown
+#theme: minima
+#defaults:
+#  - scope:
+#      path: ""
+#    values:
+#      layout: default
+#collections:
+#  posts:
+#    output: true
+#    permalink: /:collection/:path/
+#plugins:
+#  - jekyll-feed
+#exclude:
+#  - Gemfile
+#  - Gemfile.lock
+#  - node_modules
+#  - vendor
+
+#------------------
 #plugins:
 #  - jekyll-sitemap

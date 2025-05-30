@@ -27,6 +27,6 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add .
+          git add _generated/
           git diff --quiet && git diff --staged --quiet || git commit -m "Auto-generate category/tag pages"
           git push
