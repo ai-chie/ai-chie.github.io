@@ -20,9 +20,11 @@ jobs:
 
       - name: 📦 Install dependencies
         run: npm install
+        working-directory: ./src/_data
 
       - name: 🔁 Convert YAML to JSON
         run: npm run convert
+        working-directory: ./src/_data
 
       - name: 🚀 Commit and push changes
         run: |
