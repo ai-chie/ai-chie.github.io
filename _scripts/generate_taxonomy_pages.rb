@@ -5,7 +5,7 @@ POSTS_DIR = '_posts'
 OUTPUT_DIR = '.'
 LAYOUT = 'default'
 
-# カテゴリ・タグを抽出する
+# カテゴリ・タグを収集
 taxonomy = { 'ja' => { categories: [], tags: [] }, 'en' => { categories: [], tags: [] } }
 
 Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
@@ -13,8 +13,19 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   front_matter = post.match(/---\s*\n(.*?)\n---/m)&.captures&.first
   next unless front_matter
 
-  data = YAML.load(front_matter)
-  next if data['draft'] == true || data['hidden'] == true  # ← 両方を除外
+  begin
+    data = YAML.safe_load(
+      front_matter,
+      permitted_classes: [Date, Time],
+      aliases: true
+    ) || {}
+  rescue Psych::Exception => e
+    warn "YAML parse error in #{path}: #{e}"
+    next
+  end
+
+  # 条件：公開記事のみ対象
+  next if data['draft'] == true || data['hidden'] == true
   lang = data['lang']
   next unless %w[ja en].include?(lang)
 
