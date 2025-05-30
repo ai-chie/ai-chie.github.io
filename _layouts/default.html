@@ -5,11 +5,14 @@
   <meta charset="utf-8">
   <title>{{ page.title }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <!-- <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}"> -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<!-- <body> -->
+<body class="font-sans text-gray-800">
   {% include header.html %}
-  <main>
+  <!-- <main> -->
+  <main class="p-4">
     {{ content }}
   </main>
   {% include footer.html %}

@@ -8,6 +8,17 @@ defaults:
       path: ""
     values:
       layout: default
+collections:
+  posts:
+    output: true
+    permalink: /:collection/:path/
+plugins:
+  - jekyll-feed
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
 
 #plugins:
 #  - jekyll-sitemap

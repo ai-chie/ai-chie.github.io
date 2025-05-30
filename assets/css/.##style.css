@@ -1,0 +1,29 @@
+/* Tailwind を使っているため、基本CSSは空でも可。
+   カスタムスタイルを加えたい場合にのみ記述します。 */
+
+/*
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+main {
+  padding: 1rem;
+}
+
+header, footer {
+  background-color: #f5f5f5;
+  padding: 1rem;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 0.95rem;
+  }
+}
+*/
