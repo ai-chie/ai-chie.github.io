@@ -1,6 +1,8 @@
 [
-  { "name": "AI" },
-  { "name": "UI" },
-  { "name": "Jekyll" },
-  { "name": "WebDev" }
+  {
+    "name": "Record"
+  },
+  {
+    "name": "Journal"
+  }
 ]
