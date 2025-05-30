@@ -5,6 +5,9 @@ on:
     paths:
       - 'src/_data/*.yml'
       - '.github/workflows/yaml-to-json.yml'
+      
+permissions:
+  contents: write       
 
 jobs:
   build:
