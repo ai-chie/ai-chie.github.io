@@ -3,7 +3,7 @@ name: Convert YAML to JSON
 on:
   push:
     paths:
-      - 'src/_data/*.yml'
+      - '_data/*.yml'
       - '.github/workflows/yaml-to-json.yml'
       
 permissions:
@@ -23,11 +23,11 @@ jobs:
 
       - name: 📦 Install dependencies
         run: npm install
-        #working-directory: src/_data
+        #working-directory: _data
 
       - name: 🔁 Convert YAML to JSON
         run: npm run convert
-        #working-directory: src/_data
+        #working-directory: _data
 
       - name: 🚀 Commit and push changes
         run: |
@@ -36,11 +36,11 @@ jobs:
           
       - name: Add JSON files if they exist
         run: |
-          if ls src/data/*.json 1> /dev/null 2>&1; then
-            git add src/data/*.json
+          if ls _data/_generated/*.json 1> /dev/null 2>&1; then
+            git add _data/_generated/*.json
           else
             echo "No JSON files to add."
           fi          
-          git add src/data/*.json
+          #git add _data/_generated/*.json
           git commit -m "🔄 Auto-convert YAML to JSON" || echo "No changes to commit"
           git push origin main

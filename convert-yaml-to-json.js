@@ -3,8 +3,8 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
 
-const inputDir = path.join(__dirname, 'src/_data');
-const outputDir = path.join(__dirname, 'src/data');
+const inputDir = path.join(__dirname, '_data');
+const outputDir = path.join(__dirname, '_data/_generated');
 
 // 出力先フォルダが存在しなければ作成
 if (!fs.existsSync(outputDir)) {

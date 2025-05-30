@@ -1,6 +1,6 @@
 async function loadTagsAndSeries() {
   // タグの読み込み
-  const tagRes = await fetch('../src/data/tags.json');
+  const tagRes = await fetch('../_data/_generated/tags.json');
   const tags = await tagRes.json();
   const tagSelect = document.getElementById('tags');
   tags.forEach(tag => {
@@ -11,7 +11,7 @@ async function loadTagsAndSeries() {
   });
 
   // シリーズの読み込み
-  const seriesRes = await fetch('../src/data/series.json');
+  const seriesRes = await fetch('../_data/_generated/series.json');
   const seriesList = await seriesRes.json();
   const seriesSelect = document.getElementById('series');
   seriesList.forEach(series => {
