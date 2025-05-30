@@ -37,8 +37,7 @@ jobs:
             git add src/data/*.json
           else
             echo "No JSON files to add."
-          fi
-          
+          fi          
           git add src/data/*.json
           git commit -m "🔄 Auto-convert YAML to JSON" || echo "No changes to commit"
           git push origin main
