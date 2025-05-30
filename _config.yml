@@ -1,2 +1,13 @@
-plugins:
-  - jekyll-sitemap
+title: My MultiLang Site
+baseurl: "" # GitHub Pagesでルートに置く場合
+url: "https://ai-chie.github.io/"
+markdown: kramdown
+theme: minima
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+#plugins:
+#  - jekyll-sitemap

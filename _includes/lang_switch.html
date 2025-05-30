@@ -1,0 +1,20 @@
+<!-- _includes/lang_switch.html -->
+{% assign current_lang = page.path | split: '/' | first %}
+{% if current_lang == 'ja' %}
+  <a href="/en/">English</a>
+{% else %}
+  <a href="/ja/">日本語</a>
+{% endif %}
+
+<!--
+{% assign current_lang = page.path | split: '/' | first %}
+{% if current_lang == 'ja' %}
+  <a href="/en/">English</a>
+{% else %}
+  <a href="/ja/">日本語</a>
+{% endif %}
+-->
+
+<!-- 例
+<a href="/en/">English</a> | <a href="/ja/">日本語</a>
+-->
