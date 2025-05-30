@@ -2,9 +2,9 @@
   "name": "yaml-to-json-converter",
   "version": "1.0.0",
   "description": "Convert YAML files to JSON format",
-  "main": "convert-yaml.js",
+  "main": "convert-yaml-to-json.js",
   "scripts": {
-    "convert": "node convert-yaml.js"
+    "convert": "node convert-yaml-to-json.js"
   },
   "dependencies": {
     "js-yaml": "^4.1.0",
