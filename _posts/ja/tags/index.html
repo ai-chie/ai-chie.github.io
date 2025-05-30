@@ -1,0 +1,14 @@
+---
+layout: default
+title: タグ一覧
+permalink: /ja/tags/
+---
+
+<!-- ja/tags/index.html -->
+<h1>タグ一覧</h1>
+<ul>
+  {% assign ja_tags = site.tags | where_exp: "tag", "tag[1].first.lang == 'ja'" %}
+  {% for tag in ja_tags %}
+    <li><a href="/ja/tags/{{ tag[0] | slugify }}/">{{ tag[0] }}</a></li>
+  {% endfor %}
+</ul>

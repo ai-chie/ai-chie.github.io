@@ -1,0 +1,28 @@
+個別のカテゴリ・タグファイルを YAML フロントマター付き Markdown ファイルとして配置する形
+カテゴリやタグが増えるたびに .md ファイルを1つ追加する形になる
+
+GitHub Actions を使った自動生成（中級以上向け）
+GitHub Actions に Ruby スクリプト（先ほどのもの）を仕込み、Pushごとに _posts を解析し、
+必要なカテゴリ・タグページを生成 → コミットに含める
+
+これなら GitHub 上だけで「見た目上自動生成されたように見せる」ことが可能
+
+以下のような構成になります：
+bash
+コピーする
+編集する
+.github/workflows/generate_taxonomy.yml
+scripts/generate_taxonomy_pages.rb
+GitHub Actions が scripts/*.rb を実行し、カテゴリ・タグ .md ファイルを生成して push。
+
+以下に、GitHub Actions + Ruby スクリプトで .md ファイル（カテゴリ・タグ別）を自動生成する構成を提示します。
+これにより、GitHub 上でコミット or PR をトリガーに .md ファイルを自動生成し、リポジトリに反映できます。
+
+✅ 手順まとめ
+_scripts/generate_taxonomy_pages.rb をリポジトリに追加
+
+.github/workflows/generate-taxonomy.yml を追加
+
+_posts/ にカテゴリやタグを指定した記事があると、自動的に対応ページが生成されます
+
+コミット時または workflow_dispatch（手動実行）でトリガーされます

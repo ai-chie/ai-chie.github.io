@@ -1,0 +1,14 @@
+---
+layout: default
+title: Categories
+permalink: /en/categories/
+---
+
+<!-- en/categories/index.html -->
+<h1>Categories</h1>
+<ul>
+  {% assign en_categories = site.categories | where_exp: "cat", "cat[1].first.lang == 'en'" %}
+  {% for category in en_categories %}
+    <li><a href="/en/categories/{{ category[0] | slugify }}/">{{ category[0] }}</a></li>
+  {% endfor %}
+</ul>
