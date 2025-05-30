@@ -2,17 +2,19 @@ require 'fileutils'
 require 'yaml'
 
 POSTS_DIR = '_posts'
-OUTPUT_ROOT = '.'
+OUTPUT_DIR = '.'
 LAYOUT = 'default'
 
+# カテゴリ・タグを抽出する
 taxonomy = { 'ja' => { categories: [], tags: [] }, 'en' => { categories: [], tags: [] } }
 
 Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
-  content = File.read(path)
-  front_matter = content.match(/---\s*\n(.*?)\n---/m)&.captures&.first
+  post = File.read(path)
+  front_matter = post.match(/---\s*\n(.*?)\n---/m)&.captures&.first
   next unless front_matter
 
-  data = YAML.safe_load(front_matter)
+  data = YAML.load(front_matter)
+  next if data['draft'] == true || data['hidden'] == true  # ← 両方を除外
   lang = data['lang']
   next unless %w[ja en].include?(lang)
 
@@ -20,13 +22,13 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   taxonomy[lang][:tags] += Array(data['tags'])
 end
 
-taxonomy.each do |lang, sets|
-  sets.each do |type, terms|
+taxonomy.each do |lang, types|
+  types.each do |type, terms|
     terms.uniq.each do |term|
       slug = term.downcase.strip.gsub(' ', '-').gsub(/[^\w\-]/, '')
-      filepath = File.join(lang, type.to_s, "#{term}.md")
-      FileUtils.mkdir_p(File.dirname(filepath))
-      File.write(filepath, <<~MARKDOWN)
+      dir = "#{lang}/#{type}/#{term}.md"
+      FileUtils.mkdir_p(File.dirname(dir))
+      File.write(dir, <<~MD)
         ---
         layout: #{LAYOUT}
         title: #{type.to_s.capitalize.chop}: #{term}
@@ -37,12 +39,12 @@ taxonomy.each do |lang, sets|
 
         <h1>#{type.to_s.capitalize.chop}: #{term}</h1>
         <ul>
-          {% assign posts = site.#{type}[page.#{type.to_s.chop}] | where: 'lang', '#{lang}' %}
+          {% assign posts = site.#{type}[page.#{type.to_s.chop}] | where: 'lang', '#{lang}' | where_exp: 'post', 'post.hidden != true and post.draft != true' %}
           {% for post in posts %}
             <li><a href="{{ post.url }}">{{ post.title }}</a> - {{ post.date | date: "%Y-%m-%d" }}</li>
           {% endfor %}
         </ul>
-      MARKDOWN
+      MD
     end
   end
 end

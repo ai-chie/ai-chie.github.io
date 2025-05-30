@@ -7,7 +7,7 @@ permalink: /ja/categories/
 <!-- ja/categories/index.html -->
 <h1>カテゴリ一覧</h1>
 <ul>
-  {% assign ja_categories = site.categories | where_exp: "cat", "cat[1].first.lang == 'ja'" %}
+  {% assign ja_categories = site.categories | where_exp: "cat", "cat[1].first.lang == 'ja' and cat[1].first.hidden != true and cat[1].first.draft != true" %}
   {% for category in ja_categories %}
     <li><a href="/ja/categories/{{ category[0] | slugify }}/">{{ category[0] }}</a></li>
   {% endfor %}

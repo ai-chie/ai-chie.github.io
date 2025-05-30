@@ -7,7 +7,7 @@ permalink: /en/tags/
 <!-- en/tags/index.html -->
 <h1>Tags</h1>
 <ul>
-  {% assign en_tags = site.tags | where_exp: "tag", "tag[1].first.lang == 'en'" %}
+  {% assign en_tags = site.tags | where_exp: "tag", "tag[1].first.lang == 'en' and tag[1].first.hidden != true and tag[1].first.draft != true" %}
   {% for tag in en_tags %}
     <li><a href="/en/tags/{{ tag[0] | slugify }}/">{{ tag[0] }}</a></li>
   {% endfor %}
