@@ -1,0 +1,73 @@
+{% assign lang = include.lang | default: page.lang | default: 'ja' %}
+{% assign type = include.type | default: 'categories' %}
+{% assign title = include.title | default: (type == 'tags' ? 'タグ一覧' : 'カテゴリ一覧') %}
+{% assign data = site.data[ type ][ lang ] %}
+{% assign counts = site.data[ 'generated_' | append: type | append: '_counts' ][ lang ] %}
+
+<h1>{{ title }}</h1>
+<div class="flex items-center gap-4 mb-4 flex-wrap">
+  <input type="text" placeholder="検索..." id="{{ type }}-search" class="p-2 border rounded w-full sm:w-auto">
+  <select id="{{ type }}-sort" class="p-2 border rounded">
+    <option value="count">件数順</option>
+    <option value="name">名前順</option>
+  </select>
+  <div id="{{ type }}-filters" class="flex gap-2 flex-wrap">
+    {% assign group_data = data | sort: 'last' %}
+    {% for group_name in group_data %}
+      <label class="inline-flex items-center">
+        <input type="checkbox" class="{{ type }}-group-filter" value="{{ group_name[0] }}" checked>
+        <span class="ml-1 text-sm">{{ group_name[0] }}</span>
+      </label>
+    {% endfor %}
+  </div>
+</div>
+
+<div id="{{ type }}-grid">
+  {% assign sorted_groups = data | sort: 'last.order' %}
+  {% for group_name in sorted_groups %}
+    {% assign group = group_name[1] %}
+    <h2 class="mt-8 mb-2 text-xl font-bold">{{ group_name[0] }}</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {% for item in group.items %}
+        {% assign count = counts[item.name] | default: 0 %}
+        <div class="p-4 border rounded-xl shadow {{ type }}-item" data-name="{{ item.name }}" data-count="{{ count }}" data-group="{{ group_name[0] }}">
+          <a href="{{ item.link | default: '/' | append: lang | append: '/' | append: type | append: '/' | append: item.name | uri_escape | append: '/' }}" class="block">
+            {% if item.image %}<img src="{{ item.image }}" alt="{{ item.name }}" class="w-10 h-10 mb-2">{% endif %}
+            <strong class="block text-lg font-semibold">{{ item.name }}</strong>
+            {% if item.description %}<p class="text-sm text-gray-600">{{ item.description }}</p>{% endif %}
+            <small class="text-xs text-gray-500">({{ count }} 件)</small>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+const search = document.getElementById('{{ type }}-search');
+const sort = document.getElementById('{{ type }}-sort');
+const checkboxes = document.querySelectorAll('.{{ type }}-group-filter');
+search.addEventListener('input', filter);
+sort.addEventListener('change', filter);
+checkboxes.forEach(cb => cb.addEventListener('change', filter));
+
+function filter() {
+  const query = search.value.toLowerCase();
+  const activeGroups = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+  const items = document.querySelectorAll('.{{ type }}-item');
+  items.forEach(item => {
+    const name = item.dataset.name.toLowerCase();
+    const group = item.dataset.group;
+    item.style.display = (name.includes(query) && activeGroups.includes(group)) ? 'block' : 'none';
+  });
+  const grids = document.querySelectorAll('#{{ type }}-grid .grid');
+  grids.forEach(grid => {
+    const children = Array.from(grid.children);
+    children.sort((a, b) => {
+      if (sort.value === 'name') return a.dataset.name.localeCompare(b.dataset.name);
+      return b.dataset.count - a.dataset.count;
+    });
+    children.forEach(child => grid.appendChild(child));
+  });
+}
+</script>

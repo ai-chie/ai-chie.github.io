@@ -4,8 +4,10 @@ require 'yaml'
 POSTS_DIR = '_posts'
 OUTPUT_ROOT = '_generated'
 LAYOUT = 'default'
+TAXONOMY_YML = '_data/generated_taxonomy.yml'
 
 taxonomy = { 'ja' => { categories: [], tags: [] }, 'en' => { categories: [], tags: [] } }
+counts = { 'ja' => { categories: Hash.new(0), tags: Hash.new(0) }, 'en' => { categories: Hash.new(0), tags: Hash.new(0) } }
 
 Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   post = File.read(path)
@@ -23,43 +25,74 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   lang = data['lang']
   next unless %w[ja en].include?(lang)
 
-  taxonomy[lang][:categories] += Array(data['categories'])
-  taxonomy[lang][:tags] += Array(data['tags'])
+  Array(data['categories']).each do |cat|
+    taxonomy[lang][:categories] << cat
+    counts[lang][:categories][cat] += 1
+  end
+
+  Array(data['tags']).each do |tag|
+    taxonomy[lang][:tags] << tag
+    counts[lang][:tags][tag] += 1
+  end
 end
 
+# 出力処理
+generated_data = {}
+
 taxonomy.each do |lang, types|
+  generated_data[lang] = {}
   types.each do |type, terms|
+    key = type.to_s.chop # categories -> category
+    generated_data[lang][type] = terms.uniq.sort.map do |term|
+      {
+        'name' => term,
+        'slug' => term.downcase.strip.gsub(' ', '-').gsub(/[^\w\-]/, ''),
+        'count' => counts[lang][type][term]
+      }
+    end
+
+    # 各 term に対応するページを生成
     terms.uniq.each do |term|
       slug = term.downcase.strip.gsub(' ', '-').gsub(/[^\w\-]/, '')
       dir = "#{OUTPUT_ROOT}/#{lang}/#{type}/#{term}.md"
+      label = type.to_s.capitalize.chop
       FileUtils.mkdir_p(File.dirname(dir))
       File.write(dir, <<~MD)
         ---
         layout: #{LAYOUT}
-        title: #{type.to_s.capitalize.chop}: #{term}
-        #{type.to_s.chop}: #{term}
+        title: #{label}: #{term}
+        #{key}: #{term}
         permalink: /#{lang}/#{type}/#{slug}/
         lang: #{lang}
         ---
 
-        <h1>#{type.to_s.capitalize.chop}: #{term}</h1>
-        <p>This #{type.to_s.chop} includes posts about "#{term}".</p>
+        <h1>#{label}: #{term}</h1>
+        <p>{{ site.data.#{key}s.#{lang}[page.#{key}] | default: 'この#{label}に関する記事を紹介します。' }}</p>
 
-        <h2>Featured Articles</h2>
+        {% assign posts = site.#{type}[page.#{key}] | where: 'lang', '#{lang}' | where_exp: 'post', 'post.hidden != true and post.draft != true' %}
+
+        {% if posts.size > 0 %}
+        <h2>おすすめ記事</h2>
         <ul>
-          {% assign posts = site.#{type}[page.#{type.to_s.chop}] | where: 'lang', '#{lang}' | where_exp: 'post', 'post.hidden != true and post.draft != true' %}
           {% for post in posts limit: 2 %}
             <li><a href="{{ post.url }}">{{ post.title }}</a> - {{ post.date | date: "%Y-%m-%d" }}</li>
           {% endfor %}
         </ul>
 
-        <h2>All Posts</h2>
+        <h2>すべての記事</h2>
         <ul>
           {% for post in posts offset: 2 %}
             <li><a href="{{ post.url }}">{{ post.title }}</a> - {{ post.date | date: "%Y-%m-%d" }}</li>
           {% endfor %}
         </ul>
+        {% else %}
+        <p>現在この#{label}に該当する記事はありません。</p>
+        {% endif %}
       MD
     end
   end
 end
+
+# YAMLファイルに保存
+FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
+File.write(TAXONOMY_YML, generated_data.to_yaml)

@@ -8,6 +8,7 @@ lang: en
 
 <!-- en/tags/sample.md -->
 <h1>Tag: Sample</h1>
+<p>{{ site.data.tags.en[page.tag] | default: 'This tag includes posts related to this topic.' }}</p>
 <ul>
   {% assign tag_posts = site.tags[page.tag] | where: 'lang', 'en' %}
   {% assign visible_tag_posts = tag_posts | where_exp: "post", "post.hidden != true and post.draft != true" %}

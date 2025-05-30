@@ -8,7 +8,7 @@ lang: en
 
 <!-- en/categories/test.md -->
 <h1>Category: Test</h1>
-<p>This category features English posts related to "Test". It includes tutorials and examples for Jekyll users.</p>
+<p>{{ site.data.categories.en[page.category] | default: 'This category includes posts related to this topic.' }}</p>
 
 <h2>Featured Articles</h2>
 <ul>
