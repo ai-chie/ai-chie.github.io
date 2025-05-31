@@ -1,4 +1,3 @@
-<!-- _layouts/default.html -->
 <!DOCTYPE html>
 <html lang="{% if page.path contains '/ja/' %}ja{% else %}en{% endif %}">
 <head>
@@ -12,9 +11,9 @@
 
   <main class="p-4">
     {% if page.layout == "post" %}
-      {% include post-attribute-check.html %}
+      {% include post-attribute-check.html post=page %}
 
-      {% if post_hidden or post_draft %}
+      {% if post_attrs.post_hidden or post_attrs.post_draft %}
         <div class="text-center text-gray-500 py-12">
           <p>このページは現在表示できません（非公開または下書きの可能性があります）。</p>
         </div>
@@ -25,18 +24,18 @@
             <p class="text-sm text-gray-500">{{ page.date | date: "%Y-%m-%d" }}</p>
 
             <div class="text-xs mt-2 space-x-2">
-              {% if post_featured %}
+              {% if post_attrs.post_featured %}
                 <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 rounded">★ 注目</span>
               {% endif %}
-              {% if post_beta %}
+              {% if post_attrs.post_beta %}
                 <span class="inline-block px-2 py-1 bg-indigo-100 text-indigo-700 rounded">🧪 Beta</span>
               {% endif %}
-              {% if post_deprecated %}
+              {% if post_attrs.post_deprecated %}
                 <span class="inline-block px-2 py-1 bg-red-100 text-red-700 rounded">⚠ 廃止予定</span>
               {% endif %}
-              {% if post_audience == 'internal' %}
+              {% if post_attrs.post_audience == 'internal' %}
                 <span class="inline-block px-2 py-1 bg-gray-100 text-gray-600 rounded">🔒 Internal</span>
-              {% elsif post_audience == 'external' %}
+              {% elsif post_attrs.post_audience == 'external' %}
                 <span class="inline-block px-2 py-1 bg-green-100 text-green-600 rounded">🌐 Public</span>
               {% endif %}
             </div>
@@ -55,22 +54,3 @@
   {% include footer.html %}
 </body>
 </html>
-
-<!--
-<!DOCTYPE html>
-<html lang="{% if page.path contains '/ja/' %}ja{% else %}en{% endif %}">
-<head>
-  <meta charset="utf-8">
-  <title>{{ page.title }}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
-</head>
-<body>
-  {% include header.html %}
-  <main>
-    {{ content }}
-  </main>
-  {% include footer.html %}
-</body>
-</html>
--->
