@@ -9,7 +9,7 @@ TAXONOMY_YML = '_data/generated_taxonomy.yml'
 taxonomy = { 'ja' => { categories: [], tags: [] }, 'en' => { categories: [], tags: [] } }
 counts = { 'ja' => { categories: Hash.new(0), tags: Hash.new(0) }, 'en' => { categories: Hash.new(0), tags: Hash.new(0) } }
 
-Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
+Dir.glob("\#{POSTS_DIR}/**/*.md").each do |path|
   post = File.read(path)
   front_matter = post.match(/---\s*\n(.*?)\n---/m)&.captures&.first
   next unless front_matter
@@ -17,7 +17,7 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   begin
     data = YAML.safe_load(front_matter, permitted_classes: [Date, Time], aliases: true) || {}
   rescue Psych::Exception => e
-    warn "YAML parse error in #{path}: #{e}"
+    warn "YAML parse error in \#{path}: \#{e}"
     next
   end
 
@@ -54,7 +54,7 @@ taxonomy.each do |lang, types|
     # 各 term に対応するページを生成
     terms.uniq.each do |term|
       slug = term.downcase.strip.gsub(' ', '-').gsub(/[^\w\-]/, '')
-      dir = "#{OUTPUT_ROOT}/#{lang}/#{type}/#{term}.md"
+      dir = "\#{OUTPUT_ROOT}/\#{lang}/\#{type}/\#{term}.md"
       label = type.to_s.capitalize.chop
       FileUtils.mkdir_p(File.dirname(dir))
       File.write(dir, <<~MD)
@@ -66,7 +66,7 @@ taxonomy.each do |lang, types|
         lang: #{lang}
         ---
 
-        <h1>#{label}: #{term}</h1>
+        <h1>{{ page.title }}</h1>
         <p>{{ site.data.#{key}s.#{lang}[page.#{key}] | default: 'この#{label}に関する記事を紹介します。' }}</p>
 
         {% assign posts = site.#{type}[page.#{key}] | where: 'lang', '#{lang}' | where_exp: 'post', 'post.hidden != true and post.draft != true' %}
@@ -75,14 +75,14 @@ taxonomy.each do |lang, types|
         <h2>おすすめ記事</h2>
         <ul>
           {% for post in posts limit: 2 %}
-            <li><a href="{{ post.url }}">{{ post.title }}</a> - {{ post.date | date: "%Y-%m-%d" }}</li>
+            {% include post-list-item.html post=post %}
           {% endfor %}
         </ul>
 
         <h2>すべての記事</h2>
         <ul>
           {% for post in posts offset: 2 %}
-            <li><a href="{{ post.url }}">{{ post.title }}</a> - {{ post.date | date: "%Y-%m-%d" }}</li>
+            {% include post-list-item.html post=post %}
           {% endfor %}
         </ul>
         {% else %}

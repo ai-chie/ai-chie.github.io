@@ -1,0 +1,16 @@
+{%- assign post_schema = site.data.post_schema -%}
+
+{%- assign post_hidden = post.post_hidden %}
+{%- if post_hidden == nil %}
+  {%- assign post_hidden = post_schema.post_hidden.default %}
+{%- endif %}
+
+{%- assign post_draft = post.post_draft %}
+{%- if post_draft == nil %}
+  {%- assign post_draft = post_schema.post_draft.default %}
+{%- endif %}
+
+{%- assign post_featured = post.post_featured %}
+{%- if post_featured == nil %}
+  {%- assign post_featured = post_schema.post_featured.default %}
+{%- endif %}

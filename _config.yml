@@ -1,30 +1,23 @@
-title: あなたのサイト名
-description: あなたのサイトの説明
-baseurl: "" # サブディレクトリに設置する場合は例: /blog
-url: "https://ai-chie.github.io/" # ご自身のドメインに変更
+title: サイトのタイトル
+description: サイトの説明
+baseurl: "" # ルートの場合は空に。サブディレクトリに配置する場合は設定（例: /blog）
+url: "https://ai-chie.github.io/"
 
-# Markdown / テンプレートエンジン
+# ビルド対象のディレクトリ
+source: .
+destination: ./_site
+
+# Markdownエンジン
 markdown: kramdown
 highlighter: rouge
 
-# 出力対象に含めるフォルダ（通常は処理されない）
-include:
-  - _generated
+# データ・レイアウトなどの読み込み
+layouts_dir: _layouts
+includes_dir: _includes
+data_dir: _data
+collections_dir: _collections
 
-# 除外対象（ビルドしないファイルやディレクトリ）
-exclude:
-  - node_modules
-  - vendor
-  - README.md
-  - Gemfile
-  - Gemfile.lock
-  - .github
-  - .gitignore
-
-# プラグイン（GitHub Pages上で使えるものは限定）
-plugins: []
-
-# デフォルト値の適用（投稿・カテゴリ・タグで共通化）
+# 投稿と記事
 defaults:
   # 日本語コンテンツ全般
   - scope:
@@ -45,12 +38,97 @@ defaults:
       path: ""
       type: "posts"
     values:
+      layout: post
+      permalink: /:categories/:title/
+      lang: ja
       draft: false
       hidden: false
 
+# 言語対応設定
+languages: ["ja", "en"]
+default_lang: "ja"
+
 # ページネーション（必要であれば有効化）
- paginate: 10
- paginate_path: "/page:num"
+paginate: 10
+paginate_path: "/page:num"
+
+# プラグイン（GitHub Pages 互換性を保つものを使用）
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# Exclude（ビルド対象から除外）
+exclude:
+  - node_modules
+  - vendor
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - .github
+  - .gitignore
+
+# Include（明示的に処理対象とするディレクトリ）
+include:
+  - _generated
+
+# GitHub Pages 対応（project pageでない場合は false）
+github:
+  is_project_page: false
+
+#------------------
+#title: あなたのサイト名
+#description: あなたのサイトの説明
+#baseurl: "" # サブディレクトリに設置する場合は例: /blog
+#url: "https://ai-chie.github.io/" # ご自身のドメインに変更
+#
+## Markdown / テンプレートエンジン
+#markdown: kramdown
+#highlighter: rouge
+#
+## 出力対象に含めるフォルダ（通常は処理されない）
+#include:
+#  - _generated
+#
+## 除外対象（ビルドしないファイルやディレクトリ）
+#exclude:
+#  - node_modules
+#  - vendor
+#  - README.md
+#  - Gemfile
+#  - Gemfile.lock
+#  - .github
+#  - .gitignore
+#
+## プラグイン（GitHub Pages上で使えるものは限定）
+#plugins: []
+#
+## デフォルト値の適用（投稿・カテゴリ・タグで共通化）
+#defaults:
+#  # 日本語コンテンツ全般
+#  - scope:
+#      path: "ja"
+#    values:
+#      lang: "ja"
+#      layout: default
+#
+#  # 英語コンテンツ全般
+#  - scope:
+#      path: "en"
+#    values:
+#      lang: "en"
+#      layout: default
+#
+#  # 投稿全体（_posts配下）への初期値（明示的な draft/hidden 対応）
+#  - scope:
+#      path: ""
+#      type: "posts"
+#    values:
+#      draft: false
+#      hidden: false
+#
+## ページネーション（必要であれば有効化）
+# paginate: 10
+# paginate_path: "/page:num"
 
 #------------------
 #title: あなたのサイト名

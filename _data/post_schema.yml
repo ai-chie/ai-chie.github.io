@@ -1,0 +1,65 @@
+# _data/post_schema.yml
+# 投稿（記事）に設定可能な属性の一覧とその意味、型、許容値、デフォルト値
+# タグ・カテゴリと競合した場合は、この記事設定を優先する
+
+post_draft:
+  type: boolean
+  default: false
+  unused: false  # この属性をテンプレートで有効にする場合は `unused: false` に変更するか、この行を削除してください。
+  description: 下書き状態。ビルドには含めない（_config_dev.ymlで明示すれば含まれる）。
+  # GitHub PagesではJekyllの機能が制限されているためJekyllの機能を使用せず、Liquidで簡易処理をしている？
+  # ビルドに含まれるがページに表示されないようにしている。URLを知っていれば見れる。
+  # 現状hiddenと挙動は同じ。将来的な拡張性におけるhiddenとの区別化のために設けている）
+  
+post_hidden:
+  type: boolean
+  default: false
+  unused: false  # この属性をテンプレートで有効にする場合は `unused: false` に変更するか、この行を削除してください。
+  description: 一覧や分類ページ等、全体的な表示から除外する。
+  # GitHub PagesではJekyllの機能が制限されているためJekyllの機能を使用せず、Liquidで簡易処理をしている？
+  # URLを知っていれば見れる。
+
+post_featured:
+  type: boolean
+  default: false
+  unused: false  # この属性をテンプレートで有効にする場合は `unused: false` に変更するか、この行を削除してください。
+  description: 注目記事として目立つように表示される可能性あり。
+  
+post_deprecated:
+  type: boolean
+  default: false
+  unused: true  # この属性をテンプレートで有効にする場合は `unused: false` に変更するか、この行を削除してください。
+  description: 非推奨・廃止予定のコンテンツ。警告表示などに使う。
+# バッジ表示などの装飾の判定にのみ使われている。チェックする属性が多くなるとパフォーマンスに影響すると考えらえるため、表示制御には現在使用されていない。
+
+post_beta:
+  type: boolean
+  default: false
+  unused: true  # この属性をテンプレートで有効にする場合は `unused: false` に変更するか、この行を削除してください。
+  description: ベータ・実験的な記事。試験中で安定していない内容。
+# バッジ表示などの装飾の判定にのみ使われている。チェックする属性が多くなるとパフォーマンスに影響すると考えらえるため、表示制御には現在使用されていない。
+
+post_audience:
+  type: enum
+  values:
+    - internal
+    - external
+  default: external
+  unused: true  # この属性をテンプレートで有効にする場合は `unused: false` に変更するか、この行を削除してください。
+  description: 誰向けの記事か。社内（internal）か外部公開（external）か。
+# バッジ表示などの装飾の判定にのみ使われている。チェックする属性が多くなるとパフォーマンスに影響すると考えらえるため、表示制御には現在使用されていない。
+  
+  post_private:
+  type: boolean
+  default: false
+  unused: true  # この属性をテンプレートで有効にする場合は `unused: false` に変更するか、この行を削除してください。
+  description: 社内限定・非公開コンテンツとしての分類。
+# システム的に現在使用されていない。
+  
+post_admin_only:
+  type: boolean
+  default: false
+  unused: true  # この属性をテンプレートで有効にする場合は `unused: false` に変更するか、この行を削除してください。
+  description: 管理者用コンテンツで一般閲覧には非表示。
+# システム的に現在使用されていない。
+  

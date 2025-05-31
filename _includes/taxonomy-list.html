@@ -4,6 +4,7 @@
 {% assign data = site.data.taxonomy[type][lang] %}
 {% assign counts = site.data['generated_' | append: type | append: '_counts'][lang] %}
 {% assign schema = site.data.taxonomy.schema %}
+{% assign post_schema = site.data.post_schema %}
 
 <h1>{{ title }}</h1>
 <div class="flex items-center gap-4 mb-4 flex-wrap">
@@ -12,7 +13,7 @@
     <option value="count">件数順</option>
     <option value="name">名前順</option>
   </select>
-  <div id="{{ type }}-filters" class="flex gap-2 flex-wrap">
+  <div id="{{ type }}-filters" class="flex gap-2 flex-wrap">susu
     {% assign group_data = data | sort: 'last' %}
     {% for group_name in group_data %}
       <label class="inline-flex items-center">
@@ -31,17 +32,22 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       {% assign sorted_items = group.items | sort: 'priority' %}
       {% for item in sorted_items %}
-        {% assign count = counts[item.name] | default: 0 %}
-        {% assign taxonomy_hidden = schema.taxonomy_hidden.unused or item.taxonomy_hidden | default: false %}
-        {% assign taxonomy_draft = schema.taxonomy_draft.unused or item.taxonomy_draft | default: false %}
-        {% assign taxonomy_private = schema.taxonomy_private.unused or item.taxonomy_private | default: false %}
-        {% assign taxonomy_admin_only = schema.taxonomy_admin_only.unused or item.taxonomy_admin_only | default: false %}
-        {% assign taxonomy_featured = schema.taxonomy_featured.unused or item.taxonomy_featured | default: false %}
-        {% assign taxonomy_beta = schema.taxonomy_beta.unused or item.taxonomy_beta | default: false %}
-        {% assign taxonomy_deprecated = schema.taxonomy_deprecated.unused or item.taxonomy_deprecated | default: false %}
-        {% assign taxonomy_audience = schema.taxonomy_audience.unused or item.taxonomy_audience | default: 'external' %}
+        {%- assign count = counts[item.name] | default: 0 -%}
+
+        {%- assign taxonomy_hidden = schema.taxonomy_hidden.unused or item.taxonomy_hidden | default: false -%}
+        {%- assign taxonomy_draft = schema.taxonomy_draft.unused or item.taxonomy_draft | default: false -%}
+        {%- assign taxonomy_private = schema.taxonomy_private.unused or item.taxonomy_private | default: false -%}
+        {%- assign taxonomy_admin_only = schema.taxonomy_admin_only.unused or item.taxonomy_admin_only | default: false -%}
+        {%- assign taxonomy_featured = schema.taxonomy_featured.unused or item.taxonomy_featured | default: false -%}
+        {%- assign taxonomy_beta = schema.taxonomy_beta.unused or item.taxonomy_beta | default: false -%}
+        {%- assign taxonomy_deprecated = schema.taxonomy_deprecated.unused or item.taxonomy_deprecated | default: false -%}
+        {%- assign taxonomy_audience = schema.taxonomy_audience.unused or item.taxonomy_audience | default: 'external' -%}
+
         {% unless taxonomy_hidden or taxonomy_draft or taxonomy_private or taxonomy_admin_only %}
-        <div class="p-4 border rounded-xl shadow {{ type }}-item" data-name="{{ item.name }}" data-count="{{ count }}" data-group="{{ group_name[0] }}">
+        <div class="p-4 border rounded-xl shadow {{ type }}-item"
+             data-name="{{ item.name }}"
+             data-count="{{ count }}"
+             data-group="{{ group_name[0] }}">
           <a href="{{ item.link | default: '/' | append: lang | append: '/' | append: type | append: '/' | append: item.name | uri_escape | append: '/' }}" class="block">
             {% if item.image %}<img src="{{ item.image }}" alt="{{ item.name }}" class="w-10 h-10 mb-2">{% endif %}
             <strong class="block text-lg font-semibold" {% if item.color %}style="color: {{ item.color }}"{% endif %}>{{ item.name }}</strong>
