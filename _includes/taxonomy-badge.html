@@ -1,0 +1,36 @@
+{%- assign schema = site.data.taxonomy.schema -%}
+
+<span class="inline-flex items-center space-x-1 text-xs">
+
+  {%- if include.featured or include.taxonomy_featured -%}
+    <span class="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded" title="注目トピックとして強調表示">★ 注目</span>
+  {%- endif -%}
+
+  {%- if include.beta or include.taxonomy_beta -%}
+    <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded" title="実験中の分類">🧪 Beta</span>
+  {%- endif -%}
+
+  {%- if include.deprecated or include.taxonomy_deprecated -%}
+    <span class="px-2 py-0.5 bg-red-100 text-red-700 rounded" title="非推奨または廃止予定">⚠ 廃止予定</span>
+  {%- endif -%}
+
+  {%- assign audience = include.audience | default: include.taxonomy_audience | default: schema.taxonomy_audience.default -%}
+  {%- if audience == 'internal' -%}
+    <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded" title="社内向け分類">🔒 Internal</span>
+  {%- elsif audience == 'external' -%}
+    <span class="px-2 py-0.5 bg-green-100 text-green-600 rounded" title="公開用分類">🌐 Public</span>
+  {%- endif -%}
+
+  {%- if include.tooltip -%}
+    <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded" title="{{ include.tooltip }}">🛈</span>
+  {%- endif -%}
+
+  {%- if include.icon -%}
+    <span class="px-2 py-0.5" title="アイコン"><span class="{{ include.icon }}"></span></span>
+  {%- endif -%}
+
+  {%- if include.hiddenReason -%}
+    <span class="px-2 py-0.5 text-red-500" title="非表示理由">🛈 {{ include.hiddenReason }}</span>
+  {%- endif -%}
+
+</span>

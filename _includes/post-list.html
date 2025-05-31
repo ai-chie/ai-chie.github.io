@@ -1,0 +1,8 @@
+<ul class="space-y-4">
+  {% for post in include.posts %}
+    {% include post-attribute-check.html context=post %}
+    {% unless post_hidden or post_draft %}
+      {% include post-list-item.html post=post %}
+    {% endunless %}
+  {% endfor %}
+</ul>
