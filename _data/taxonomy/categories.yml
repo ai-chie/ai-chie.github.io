@@ -1,0 +1,22 @@
+ja:
+  開発:
+    order: 1
+    items:
+      - name: 内部ツール
+        color: "#64748b"
+        priority: 1
+        featured: false
+        draft: false
+        hidden: false
+        private: false
+        adminOnly: true
+        audience: internal
+        description: 社内向けの開発カテゴリ
+        link: /ja/categories/内部ツール/
+      - name: 実験的機能
+        color: "#facc15"
+        priority: 2
+        beta: true
+        deprecated: false
+        description: テスト中の機能に関する記事
+        link: /ja/categories/実験的機能/

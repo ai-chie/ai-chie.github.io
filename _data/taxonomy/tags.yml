@@ -1,0 +1,23 @@
+en:
+  System:
+    order: 1
+    items:
+      - name: Admin Panel
+        color: "#ef4444"
+        priority: 1
+        adminOnly: true
+        audience: internal
+        private: true
+        description: Internal use only
+        link: /en/tags/admin-panel/
+      - name: Legacy
+        color: "#9ca3af"
+        priority: 2
+        deprecated: true
+        description: Deprecated or no longer maintained features
+        link: /en/tags/legacy/
+      - name: Labs
+        color: "#f59e0b"
+        beta: true
+        description: Experimental ideas and prototypes
+        link: /en/tags/labs/

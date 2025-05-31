@@ -1,0 +1,50 @@
+taxonomy_hidden:
+  type: boolean
+  default: false
+  unused: true
+  description: 一切の表示から除外する。記事一覧や一覧ページにも表示されない。
+
+taxonomy_draft:
+  type: boolean
+  default: false
+  unused: true
+  description: 準備中・下書き状態の分類。現時点では非公開としたいが、将来的に使う可能性がある。
+
+taxonomy_private:
+  type: boolean
+  default: false
+  unused: true
+  description: 社内限定、または内部資料用などの分類。基本的に外部には公開しない。
+
+taxonomy_admin_only:
+  type: boolean
+  default: false
+  unused: true
+  description: 管理用分類。一般閲覧者には非表示とし、管理者向けに内部処理で使う。
+
+taxonomy_featured:
+  type: boolean
+  default: false
+  unused: true
+  description: 注目トピック。目立つように表示される。
+
+taxonomy_beta:
+  type: boolean
+  default: false
+  unused: true
+  description: 実験的な分類（例：Betaテスト中の内容など）。不安定または暫定的な意味合い。
+
+taxonomy_deprecated:
+  type: boolean
+  default: false
+  unused: true
+  description: 廃止予定、または今後非推奨となる分類。注意喚起のためにラベル表示。
+
+taxonomy_audience:
+  type: enum
+  values:
+    - internal
+    - external
+  default: external
+  unused: true
+  description: 誰向けの分類かを示す。`internal`は社内用、`external`は公開用。
