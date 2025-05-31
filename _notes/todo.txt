@@ -5,16 +5,11 @@
 ご希望があれば、表示条件の切り替えやカスタムスタイルも対応できます。
 adminOnly だけを切り替えるスイッチや、audience フィルタUIの追加も対応可能です。
 
-taxonomy_schema.yml を使って、UIや編集画面で補助情報を表示する仕組み
-次は、これを部分的に有効化する運用にしますか？それとも schema 管理の自動化や UI 展開の方へ進めましょうか？
-
-将来的に taxonomy/generated_counts.yml や taxonomy/groups.yml などを追加しても整理しやすい
 
 
 ご希望あれば、記事側の draft や hidden に連動した処理の導入や、
 
 ご希望があれば、ローカル環境不要で GitHub Pages に最適な gh-pages ブランチ運用や _config_dev.yml（ローカル専用設定）分離の提案も可能です。必要ですか？
-
 _config_dev.yml の分離（開発用）なども必要であればお知らせください。
 ご希望であれば、あなたの現在の _config.yml に対応した _config_dev.yml のテンプレートもすぐに作成できます。作成しますか？
 
@@ -26,7 +21,38 @@ _config_dev.yml の分離（開発用）なども必要であればお知らせ�
 JSON-LD やメタ情報の埋め込み
 も実装可能です。必要な場合はお知らせください。
 
-アクセシビリティ改善
+taxonomy
+generated_taxonomy.yml を使った UI の動作確認
+検証ロジックをテストできる簡易記事サンプル生成
+
+taxonomy
+_data/generated_taxonomy.yml（スクリプト出力先）
+ 今後必要になりそうな拡張案（任意）
+カウント（count）の更新のみを別ファイル（例: generated_counts.yml）に分離して、UI 側だけ差し替える方式に。
+schema.yml 側に output: false 等の項目を追加して、生成対象に含めるかを明示的に制御。
+出力する generated_taxonomy.yml に group や lang なども埋め込んで、テンプレートロジックの負担を軽減。
+
+次に進めるタスクがあればお知らせください。
+例：
+実際の generated_taxonomy.yml の構造確認
+_includes/taxonomy-list.html 側で taxonomy_slug を使うように変更
+UIのカウント表示や並び順との整合チェック
+どれからでも対応可能です。
+
+将来的に taxonomy/generated_counts.yml や taxonomy/groups.yml などを追加しても整理しやすい
+taxonomy_schema.yml を使って、UIや編集画面で補助情報を表示する仕組み
+次は、これを部分的に有効化する運用にしますか？それとも schema 管理の自動化や UI 展開の方へ進めましょうか？
+
+投稿スキーマ _data/post_schema.yml への同様のチェック導入
+post_schema.yml 側との整合性を取りたい場合
+必要であれば、post_schema.yml 側の整備も taxonomy_schema.yml と同様の形式で進められますので、お申しつけください。
+必要があれば、プレフィックスの明示やコメントによるテンプレート内ガイドラインもご提供できます。
+
+必要に応じて、次の対応も可能です：
+使用頻度の高いタグ／カテゴリを taxonomy_featured: true でマーク
+説明文を多言語で書き分け
+icon や tooltip を追加して UI 装飾
+このまま導入してよければ、次のステップ（UI確認・整合性チェックなど）にも進めます
 
 post_featured をトップページ上部に優先表示（ピックアップ）
 post_deprecated 表示時に警告バッジ付与
@@ -38,6 +64,7 @@ post_audience, post_admin_only などへの対応強化
 audience や featured 属性による並び替え
 次に進めたい場合、追加したい要素をお知らせください。必要があれば自動生成スクリプトとの連携も提案できます。
 
+アクセシビリティ改善
 
 じゃあそれでお願い
 
