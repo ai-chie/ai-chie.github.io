@@ -1,0 +1,15 @@
+en:
+  tags:
+    - name: Admin Panel
+      slug: admin-panel
+      count: 1
+    - name: Legacy
+      slug: legacy
+      count: 2
+    - name: Labs
+      slug: labs
+      count: 1
+  categories: []
+ja:
+  tags: []
+  categories: []
