@@ -12,7 +12,7 @@ if (!fs.existsSync(outputDir)) {
 }
 
 fs.readdirSync(inputDir).forEach(file => {
-  if (file.endsWith('.yml') || file.endsWith('.yaml')) {
+  if (file.startsWith('initial') && (file.endsWith('.yml') || file.endsWith('.yaml'))) {
     const yamlPath = path.join(inputDir, file);
     const jsonPath = path.join(outputDir, file.replace(/\.ya?ml$/, '.json'));
 

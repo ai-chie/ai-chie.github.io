@@ -22,12 +22,12 @@ jobs:
           node-version: '18'
 
       - name: 📦 Install dependencies
+        working-directory: _scripts
         run: npm install
-        #working-directory: _data
 
       - name: 🔁 Convert YAML to JSON
+        working-directory: _scripts
         run: npm run convert
-        #working-directory: _data
 
       - name: 🚀 Commit and push changes
         run: |
