@@ -14,7 +14,7 @@ def dict_representer(dumper, data):
 
 NoPythonTagsDumper.add_representer(OrderedDict, dict_representer)
 
-# --- gitignore 判定 ---
+# --- .gitignore に準拠した除外チェック ---
 def is_ignored(path):
     try:
         result = subprocess.run(
@@ -26,9 +26,9 @@ def is_ignored(path):
     except Exception:
         return False
 
-# --- ディレクトリ構造の再帰構築 ---
+# --- ディレクトリ構造を再帰的に構築 ---
 def build_tree(root_dir):
-    tree = {}
+    tree = OrderedDict()
 
     for dirpath, dirnames, filenames in os.walk(root_dir):
         rel_dir = os.path.relpath(dirpath, root_dir)
@@ -46,28 +46,33 @@ def build_tree(root_dir):
         for part in parts:
             current = current.setdefault(part, OrderedDict())
 
+        has_entry = False
         for filename in filenames:
             rel_file = os.path.join(rel_dir, filename) if rel_dir else filename
             if not is_ignored(rel_file):
                 current[filename] = f'"{os.path.join(rel_dir, filename)}"'
+                has_entry = True
 
         if not filenames and not dirnames:
-            current.clear()
-            current.update([])
+            # 空ディレクトリを [] で記録する
+            parent = tree
+            for part in parts[:-1]:
+                parent = parent[part]
+            parent[parts[-1]] = []  # 空のディレクトリを [] として記録
 
     return tree
 
-# --- ディレクトリ→ファイル順に並べ替え ---
+# --- ディレクトリ→ファイル順に整列 ---
 def sort_dirs_first(d):
     if isinstance(d, dict):
-        dirs = {}
-        files = {}
-        for k, v in d.items():
+        dirs = OrderedDict()
+        files = OrderedDict()
+        for k, v in sorted(d.items()):
             if isinstance(v, dict) or isinstance(v, list):
                 dirs[k] = sort_dirs_first(v)
             else:
                 files[k] = v
-        return OrderedDict(sorted(dirs.items()) + sorted(files.items()))
+        return OrderedDict(**dirs, **files)
     return d
 
 # --- root_files を末尾に移動 ---
@@ -77,7 +82,7 @@ def move_root_files_to_end(tree):
         tree["root_files"] = root
     return tree
 
-# --- YAML保存 ---
+# --- YAMLに保存 ---
 def save_yaml(data, out_path):
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
@@ -91,7 +96,7 @@ def save_yaml(data, out_path):
         )
         f.write("# （省略）= 空ディレクトリ\n")
 
-# --- 実行 ---
+# --- メイン実行 ---
 if __name__ == "__main__":
     tree = build_tree(".")
     tree = sort_dirs_first(tree)
