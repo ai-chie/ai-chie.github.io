@@ -88,5 +88,6 @@ PC用・モバイル用・クローラー用　×　日本語・英語の６分�
 │       └── main.css                       # Tailwind カスタムスタイル等
 │
 ├── index.md                               # ルートトップ。必要ならルートリダイレクト用
-└── _config.yml
-
+├── _config.yml                            # PC表示（デフォルト）
+├── _config_mobile.yml                     # モバイル表示専用
+└── _config_text.yml                       # クローラー対応専用
