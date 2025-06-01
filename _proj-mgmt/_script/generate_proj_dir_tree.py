@@ -5,15 +5,6 @@ from collections import OrderedDict
 
 OUTPUT_FILE = "_proj-mgmt/_script/_output/proj_dir_tree.yml"
 
-# --- Safe YAML Dumper ---
-class NoPythonTagsDumper(yaml.SafeDumper):
-    pass
-
-def dict_representer(dumper, data):
-    return dumper.represent_dict(data.items())
-
-NoPythonTagsDumper.add_representer(OrderedDict, dict_representer)
-
 # --- .gitignore に準拠した除外チェック ---
 def is_ignored(path):
     try:
@@ -54,11 +45,10 @@ def build_tree(root_dir):
                 has_entry = True
 
         if not filenames and not dirnames:
-            # 空ディレクトリを [] で記録する
             parent = tree
             for part in parts[:-1]:
                 parent = parent[part]
-            parent[parts[-1]] = []  # 空のディレクトリを [] として記録
+            parent[parts[-1]] = []  # 空のディレクトリを []
 
     return tree
 
@@ -82,21 +72,30 @@ def move_root_files_to_end(tree):
         tree["root_files"] = root
     return tree
 
-# --- YAMLに保存 ---
+# ✅ --- OrderedDict → 通常のdictへ再帰変換（重要） ---
+def convert_ordered_to_dict(obj):
+    if isinstance(obj, OrderedDict):
+        return {k: convert_ordered_to_dict(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_ordered_to_dict(i) for i in obj]
+    else:
+        return obj
+
+# --- YAML保存 ---
 def save_yaml(data, out_path):
+    data = convert_ordered_to_dict(data)  # ←ここが決定的ポイント
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         yaml.dump(
             data,
             f,
-            Dumper=NoPythonTagsDumper,
             allow_unicode=True,
             sort_keys=False,
             default_flow_style=False
         )
         f.write("# （省略）= 空ディレクトリ\n")
 
-# --- メイン実行 ---
+# --- 実行 ---
 if __name__ == "__main__":
     tree = build_tree(".")
     tree = sort_dirs_first(tree)
