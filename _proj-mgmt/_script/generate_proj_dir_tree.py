@@ -89,7 +89,7 @@ def save_yaml(data, out_path):
         yaml.dump(
             data,
             f,
-            Dumper=yaml.SafeDumper
+            Dumper=yaml.SafeDumper,
             allow_unicode=True,
             sort_keys=False,
             default_flow_style=False
