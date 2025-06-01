@@ -1,0 +1,105 @@
+GitHub Pages +  Jekyll 
+PC用・モバイル用・クローラー用　×　日本語・英語の６分岐構成に最適化されたJekyllサイト構成図
+📁 全体構成（6分岐 × 多言語 対応）
+
+/
+├── _posts/
+│   ├── ja/
+│   │   ├── 2025-05-30-T135040+0900-UUID-ja/
+│   │   │   └── 2025-05-30-T135040+0900-UUID-ja.md
+│   │   └── 2025-05-31-T135040+0900-UUID-ja/
+│   │       └── 2025-05-31-T135040+0900-UUID-ja.md
+│   └── en/
+│       ├── 2025-05-30-T135040+0900-UUID-en/
+│       │   └── 2025-05-30-T135040+0900-UUID-en.md
+│       └── 2025-05-31-T135040+0900-UUID-en/
+│           └── 2025-05-31-T135040+0900-UUID-en.md
+│
+├── _pages/
+│   ├── desktop/
+│   │   ├── ja/
+│   │   │   ├── index.html                  # PC日本語トップ
+│   │   │   ├── categories/index.html       # PC日本語カテゴリ一覧
+│   │   │   └── tags/index.html             # PC日本語タグ一覧
+│   │   └── en/
+│   │        ├── index.html                  # PC英語トップ
+│   │        ├── categories/index.html
+│   │        └── tags/index.html
+│   ├── mobile/
+│   │   ├── ja/
+│   │   │   ├── index.html                  # モバイル日本語トップ
+│   │   │   ├── categories/index.html
+│   │   │   └── tags/index.html
+│   │   └── en/
+│   │        ├── index.html
+│   │        ├── categories/index.html
+│   │        └── tags/index.html
+│   └── text/
+│       ├── ja/
+│       │   ├── index.html                  # クローラー日本語トップ
+│       │   ├── categories/index.html
+│       │   └── tags/index.html
+│       └── en/
+│            ├── index.html
+│            ├── categories/index.html
+│            └── tags/index.html
+│
+├── _data/
+│   ├── taxonomy/
+│   │   ├── schema.yml                      # カテゴリ・タグ共通スキーマ定義
+│   │   ├── categories.yml                  # カテゴリ一覧（定義）（ja / en 含む）
+│   │   └── tags.yml                        # タグ一覧（定義）（ja / en 含む）
+│   ├── post_schema.yml                     # 投稿の属性定義スキーマ
+│   ├── lang.yml                            # 多言語切替や表示名に使用。言語名・フラグ等の設定。言語コード（ja/en）と表示名（日本語/English）の対応づけ。言語コードと表示名、フラグなど。（言語切替UI（_includes/lang_switch.html など）多言語ナビゲーション表示、メタデータ出力（<html lang="..."> など））国旗・表示ラベルなどもここで管理。
+│   └── generated_taxonomy.yml              # 自動生成された分類情報（スクリプト出力）
+│
+├── _generated/                             # 自動生成された分類ページ
+│   ├── ja/
+│   │   ├── desktop/
+│   │   │   ├── categories/xxxx.md
+│   │   │   └── tags/yyyy.md
+│   │   ├── mobile/
+│   │   └── text/
+│   └── en/
+│       ├── desktop/
+│       ├── mobile/
+│       └── text/
+│
+├── _scripts/                               # 自動生成や前処理を行うユーティリティ
+│   ├── generate_taxonomy_pages.rb         # タグ・カテゴリページの自動生成スクリプト。タクソノミ自動生成スクリプト。
+│
+├── _includes/
+│   ├── header.html
+│   ├── footer.html
+│   ├── post-attribute-check.html          # 記事ごとの属性（下書き、非表示、社内限定等）を展開。投稿ページ用属性展開（共通版）。_data/post_schema.yml を元に各種属性を展開
+│   ├── post-list.html                     # 共通投稿リスト（一覧をループ表示）（個別要素に post-list-item.html を利用）
+│   ├── post-list-item.html                # 個別投稿アイテム。投稿1件表示。
+│   ├── taxonomy-list.html                 # 各言語ごとのカテゴリ・タグの表示に使う共通部品。カテゴリ・タグ一覧を出力する共通部品テンプレート（内部的には taxonomy-list-block.html を呼び出す）（トップページや分類ページに一覧を表示、_data/taxonomy/schema.yml に従って属性（非表示や制限付き）をフィルタリング、タグの色やアイコン、バッジ表示などに対応）
+│   ├── taxonomy-list-block.html           # カテゴリ・タグのリスト出力（ループ処理）
+│   ├── taxonomy-badge.html                # タグ・カテゴリのアイコン・バッジ・ラベル・装飾を出力
+│   ├── taxonomy-flags.html                # （オプション）（用途により使用）表示制御用フラグ出力。分類アイコン群。
+│   ├── lang_switch.html                   # 言語切替UI
+│
+├── _layouts/
+│   ├── default.html                       # 全体レイアウト。ベースレイアウト（投稿・ページ共通）。
+│   └── post.html                          # 投稿ページ用（必要であれば）
+│
+├── assets/                                # CSS, JS, 画像等
+│   └── css/
+│       └── main.css                       # Tailwind カスタムスタイル等
+│
+├── _admin/ 
+│   ├── index.html                         # 投稿支援UI
+│   ├── autofill-date.js
+│   ├── autofill-uuid.js
+│   ├── initial_categories-tags-lists.js
+│   ├── uuid.js
+│
+├── _export/ 
+│
+├── index.md                               # ルートトップ。必要ならルートリダイレクト用
+├── _config.yml                            # PC表示（デフォルト）
+├── _config_mobile.yml                     # モバイル表示専用
+├── _config_text.yml                       # クローラー対応専用
+├── robots.txt
+└── sitemap.xml
