@@ -1,5 +1,5 @@
-# 📁 generate_proj_dir_tree.py（理想形式出力対応・構造修正版）
-# ディレクトリ構造をネスト辞書で正しく出力
+# 📁 generate_proj_dir_tree.py（理想形式出力対応・完全修正版）
+# ファイルは [ファイル名, パス] で出力し、ディレクトリはネスト形式に
 
 import os
 import subprocess
@@ -19,28 +19,24 @@ def is_ignored(path):
     except Exception:
         return False
 
-# --- 再帰的に構造を辞書形式で構築 ---
-def build_dict(path):
-    structure = {}
-    files = []
+# --- 再帰的に構造を構築（期待形式で） ---
+def build_tree(path):
+    entries = []
     try:
         for name in sorted(os.listdir(path)):
             rel_path = os.path.join(path, name).replace("\\", "/")
             if is_ignored(rel_path):
                 continue
             if os.path.isdir(rel_path):
-                nested = build_dict(rel_path)
-                structure[name] = nested if nested else []
+                sub = build_tree(rel_path)
+                entries.append({name: sub if sub else []})
             else:
-                files.append([name, rel_path])
+                entries.append([name, rel_path])
     except Exception:
-        return []
-    if files:
-        file_dict = {f[0]: f[1] for f in files}  # 使わないが明示的整理可
-        structure.update({f[0]: f[1] for f in files})
-    return structure if structure else []
+        pass
+    return entries
 
-# --- トップレベルを辞書構造に ---
+# --- トップレベル構造を構築 ---
 def build_root_tree():
     tree = {}
     root_files = []
@@ -49,7 +45,7 @@ def build_root_tree():
             continue
         path = name.replace("\\", "/")
         if os.path.isdir(path):
-            nested = build_dict(path)
+            nested = build_tree(path)
             tree[name] = nested if nested else []
         else:
             root_files.append([name, path])
