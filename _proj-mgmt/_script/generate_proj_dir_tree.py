@@ -33,7 +33,10 @@ def sort_entries(entries):
             item.fa.set_flow_style()
             files.append(item)
     result = CommentedMap()
-    result.update(dirs)
+    for i, (k, v) in enumerate(dirs.items()):
+        result[k] = v
+        if i < len(dirs) - 1:
+            result.yaml_set_comment_before_after_key(k, before="")
     if files:
         result["__files__"] = files
     return result
