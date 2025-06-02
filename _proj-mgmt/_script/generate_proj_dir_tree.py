@@ -32,7 +32,11 @@ def sort_entries(entries):
             item = CommentedSeq([key, value])
             item.fa.set_flow_style()
             files.append(item)
-    return {**dirs, **{"__files__": files} if files else {}}
+    result = CommentedMap()
+    result.update(dirs)
+    if files:
+        result["__files__"] = files
+    return result
 
 # --- 再帰的に構造を構築（相対パス引き継ぎ） ---
 def build_tree(path, prefix=""):
