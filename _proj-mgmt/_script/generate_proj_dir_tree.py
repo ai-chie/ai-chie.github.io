@@ -1,9 +1,10 @@
-# 📁 generate_proj_dir_tree.py（最終修正版：相対パス維持 + トップ辞書構造）
+# 📁 generate_proj_dir_tree.py（並べ替え・省略コメント対応）
 # ファイルは [ファイル名, パス]、ディレクトリは {dirname: [...]} のリスト形式でネスト出力
 
 import os
 import subprocess
 from ruamel.yaml import YAML
+from ruamel.yaml.comments import CommentedSeq, CommentedMap
 
 OUTPUT_FILE = "_proj-mgmt/_script/_output/proj_dir_tree.yml"
 EXCLUDE_NAMES = {".git", ".github", ".gitignore", ".DS_Store", "node_modules"}
@@ -19,6 +20,17 @@ def is_ignored(path):
     except Exception:
         return False
 
+# --- 並べ替え: ディレクトリ→ファイル、アルファベット順 ---
+def sort_entries(entries):
+    dirs = []
+    files = []
+    for entry in entries:
+        if isinstance(entry, dict):
+            dirs.append(entry)
+        else:
+            files.append(entry)
+    return sorted(dirs, key=lambda x: list(x.keys())[0]) + sorted(files, key=lambda x: x[0])
+
 # --- 再帰的に構造を混在リスト形式で構築（相対パス引き継ぎ） ---
 def build_tree(path, prefix=""):
     entries = []
@@ -30,16 +42,22 @@ def build_tree(path, prefix=""):
                 continue
             if os.path.isdir(full_path):
                 subentries = build_tree(full_path, rel_path)
-                entries.append({name: subentries if subentries else []})
+                subentries = sort_entries(subentries)
+                if not subentries:
+                    empty = CommentedSeq()
+                    empty.yaml_add_eol_comment("（省略）", 0)
+                    entries.append({name: empty})
+                else:
+                    entries.append({name: subentries})
             else:
                 entries.append([name, rel_path])
     except Exception:
         pass
-    return entries
+    return sort_entries(entries)
 
 # --- トップレベル構造構築（辞書で開始） ---
 def build_root_tree():
-    root = {}
+    root = CommentedMap()
     try:
         for name in sorted(os.listdir(".")):
             if is_ignored(name):
@@ -47,10 +65,19 @@ def build_root_tree():
             full_path = os.path.join(".", name)
             if os.path.isdir(full_path):
                 subtree = build_tree(full_path, name)
-                root[name] = subtree if subtree else []
+                subtree = sort_entries(subtree)
+                if not subtree:
+                    empty = CommentedSeq()
+                    empty.yaml_add_eol_comment("（省略）", 0)
+                    root[name] = empty
+                else:
+                    root[name] = subtree
             else:
                 rel_path = name.replace("\\", "/")
                 root.setdefault("root_files", []).append([name, rel_path])
+        if "root_files" in root:
+            rf = root.pop("root_files")
+            root["root_files"] = sorted(rf, key=lambda x: x[0])
     except Exception:
         pass
     return root
@@ -64,7 +91,6 @@ def save_yaml(data, out_path):
     yaml.width = 4096
     with open(out_path, "w", encoding="utf-8") as f:
         yaml.dump(data, f)
-        f.write("# （省略）= 空ディレクトリ\n")
 
 # --- 実行 ---
 if __name__ == "__main__":
