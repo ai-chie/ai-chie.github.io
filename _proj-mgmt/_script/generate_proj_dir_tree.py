@@ -70,8 +70,18 @@ def move_root_files_to_end(tree):
         tree["root_files"] = root
     return tree
 
-# --- YAML保存 ---
+# ✅ --- 全データを純粋な dict に変換（ruamel.yaml対策） ---
+def deep_convert(obj):
+    if isinstance(obj, dict):
+        return {str(k): deep_convert(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [deep_convert(i) for i in obj]
+    else:
+        return obj
+
+# --- YAML保存（ruamel.yamlでクリーン出力） ---
 def save_yaml(data, out_path):
+    data = deep_convert(data)
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     yaml = YAML()
     yaml.default_flow_style = False
