@@ -1,5 +1,6 @@
 .github:
   workflows:
+
     __files__:
     - [generate-category-counts.yml, .github/workflows/generate-category-counts.yml]
     - [generate-proj-dir-tree.yml, .github/workflows/generate-proj-dir-tree.yml]
@@ -7,6 +8,7 @@
     - [generate-taxonomy.yml, .github/workflows/generate-taxonomy.yml]
     - [yaml-to-json.yml, .github/workflows/yaml-to-json.yml]
 _admin:
+
   __files__:
   - [autofill-date.js, _admin/autofill-date.js]
   - [autofill-uuid.js, _admin/autofill-uuid.js]
@@ -15,21 +17,29 @@ _admin:
   - [uuid.js, _admin/uuid.js]
 _data:
   _generated:
+
     __files__:
     - [initial_categories_list.json, _data/_generated/initial_categories_list.json]
     - [initial_tags_list.json, _data/_generated/initial_tags_list.json]
+
   taxonomy:
+
     __files__:
     - [categories.yml, _data/taxonomy/categories.yml]
     - [schema.yml, _data/taxonomy/schema.yml]
     - [tags.yml, _data/taxonomy/tags.yml]
+
   welcome:
     en:
+
       __files__:
       - [welcome-en.md, _data/welcome/en/welcome-en.md]
+
     ja:
+
       __files__:
       - [welcome-ja.md, _data/welcome/ja/welcome-ja.md]
+
   __files__:
   - [generated_category_counts.yml, _data/generated_category_counts.yml]
   - [generated_tag_counts.yml, _data/generated_tag_counts.yml]
@@ -41,19 +51,27 @@ _data:
 _generated:
   en:
     categories:
+
       __files__:
       - [test.md, _generated/en/categories/test.md]
+
     tags:
+
       __files__:
       - [sample.md, _generated/en/tags/sample.md]
+
   ja:
     categories:
+
       __files__:
       - [テスト.md, _generated/ja/categories/テスト.md]
+
     tags:
+
       __files__:
       - [サンプル.md, _generated/ja/tags/サンプル.md]
 _includes:
+
   __files__:
   - [footer.html, _includes/footer.html]
   - [header.html, _includes/header.html]
@@ -65,41 +83,58 @@ _includes:
   - [taxonomy-list-block.html, _includes/taxonomy-list-block.html]
   - [taxonomy-list.html, _includes/taxonomy-list.html]
 _layouts:
+
   __files__:
   - [default.html, _layouts/default.html]
 _posts:
   en:
     2025-05-30-T135040+0900-UUID-en:
+
       __files__:
       - [2025-05-30-T135040+0900-UUID-en.md, _posts/en/2025-05-30-T135040+0900-UUID-en/2025-05-30-T135040+0900-UUID-en.md]
+
     categories:
+
       __files__:
       - [index.html, _posts/en/categories/index.html]
+
     tags:
+
       __files__:
       - [index.html, _posts/en/tags/index.html]
+
     __files__:
     - [index.md, _posts/en/index.md]
+
   ja:
     2025-05-30-T135040+0900-UUID-ja:
+
       __files__:
       - [2025-05-30-T135040+0900-UUID-ja.md, _posts/ja/2025-05-30-T135040+0900-UUID-ja/2025-05-30-T135040+0900-UUID-ja.md]
+
     categories:
+
       __files__:
       - [index.html, _posts/ja/categories/index.html]
+
     tags:
+
       __files__:
       - [index.html, _posts/ja/tags/index.html]
+
     __files__:
     - [index.md, _posts/ja/index.md]
 _proj-mgmt:
   _script:
     _output:
+
       __files__:
       - [proj_dir_tree.yml, _proj-mgmt/_script/_output/proj_dir_tree.yml]
+
     __files__:
     - [generate_proj_dir_tree.py, _proj-mgmt/_script/generate_proj_dir_tree.py]
 _scripts:
+
   __files__:
   - [convert-yaml-to-json.js, _scripts/convert-yaml-to-json.js]
   - [generate_category_counts.rb, _scripts/generate_category_counts.rb]
@@ -110,12 +145,17 @@ assets:
   images:
     article:
       2025-05-30-T135040+0900-UUID-en:
+
         __files__:
         - [image_1-en.png, assets/images/article/2025-05-30-T135040+0900-UUID-en/image_1-en.png]
+
       2025-05-30-T135040+0900-UUID-ja:
+
         __files__:
         - [image_1-ja.png, assets/images/article/2025-05-30-T135040+0900-UUID-ja/image_1-ja.png]
+
 root_files:
+
   __files__:
   - [README.md, README.md]
   - [_config.yml, _config.yml]
