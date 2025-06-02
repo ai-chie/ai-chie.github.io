@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>記事投稿フォーム</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>記事投稿フォーム</h1>
+    <form id="postForm">
+    
+        <label>記事ID: <input type="text" id="articleId" required readonly></label><br><!-- frontmatterに保存 -->
+        
+        <!--<label>カテゴリ（カンマ区切り）: <input type="text" id="categories"></label><br>-->
+        <!--<label>タグ（カンマ区切り）: <input type="text" id="tags"></label><br>-->
+        
+        <label for="categories">カテゴリ（複数可）<!--（カンマ区切り-->）:</label><br>
+        <select id="categories" name="categories" multiple size="3"></select><br><!-- frontmatterに保存 -->
+        <label for="tags">タグ（複数可）<!--（カンマ区切り-->）:</label><br>
+        <select id="tags" name="tags" multiple size="3"></select><br><!-- frontmatterに保存 -->
+        
+        
+        <label>投稿日: <input type="datetime-local" id="postDate" required></label><br><!-- frontmatterに保存 -->
+        <!-- 他のサイトに投稿した記事を投稿する場合など、元のサイトに投稿した過去の日時も指定できる。 -->
+        <!-- 更新日時も投稿時に自動でfrontmatterに保存 -->
+        <label>表示順（デフォルト）: <input type="text" id="displayOrder" placeholder="例: 202505291558"></label><br><!-- frontmatterに保存 -->
+        
+        <label>タイトル（日本語）: <input type="text" id="titleJp" required></label><br><!-- frontmatterに保存 -->
+        <label>本文（日本語）: <br><textarea id="bodyJp" rows="10" cols="60" required></textarea></label><br>
+        <label>画像（日本語記事用）: <input type="file" id="imagesJp" multiple></label><br>
+        
+        <label>タイトル（英語）: <input type="text" id="titleEn" required></label><br><!-- frontmatterに保存 -->
+        <label>本文（英語）: <br><textarea id="bodyEn" rows="10" cols="60" required></textarea></label><br>
+        <label>画像（英語記事用）: <input type="file" id="imagesEn" multiple></label><br>
+        
+        <label>関連記事（英語/日本語）ファイル: <input type="text" id="relatedArticle" placeholder="相対パス（フォルダ名 + ファイル名）"></label><br><!-- frontmatterに保存 -->
+        <!-- 日本語記事（例：ja/index.md）と対応する英語版記事（例：en/index.md）を結びつけるためのフィールド -->
+        <!-- 用途
+             カテゴリや関連記事のナビゲーションにおける切り替え対応
+             日本語記事の表示中に、「この内容の英語版を読む」ボタンを表示
+             そのボタンが、指定された英語ファイル（例：en/index.md）へのリンクになる
+             WXR出力やエクスポート連携で、日英セットとしてまとめる用途
+             タグ・カテゴリ・統計処理などで、対応言語の記事をまとめて扱うための基準情報 -->
+        <!-- 注意点
+             入力欄には「相対パス（フォルダ名 + ファイル名）」を入力するのが基本。
+             対象記事が未投稿でまだ存在しない場合でも、予定されているファイル名で構わない。（仕様保留） -->
+        <!-- 日本語版と英語版の記事を同時投稿した場合は、それぞれの記事は自動で紐づけられる。
+             どちらか片方のみ先に投稿された場合には、後に手動で明示的に「関連記事（英語/日本語）ファイル」のフィールドで指定することによって指定された記事が紐づけられる。
+             紐づけられた記事同士は、それぞれの記事のfrontmatterにお互いのファイルの相対パスが保存される。 -->
+        <!-- 仕様：日本語・英語版を同時投稿した場合の自動紐づけ
+        
+             自動紐づけの方針：
+             投稿UIで日本語・英語の両方の入力欄が埋められていた場合、
+             同時に2つのフォルダ（ja/*, en/*）を生成し、
+             双方の Frontmatter に related_lang_post: 相手のファイル名 を自動で書き込む。
+        
+             自動紐づけの他に追加で保持する「関連記事（英語/日本語）ファイル」フィールドの扱い
+             このフィールドは明示的に片方だけ投稿された場合の手動紐づけ用。
+             フィールドが未入力で、かつ両言語が同時投稿された場合は自動補完。（同時投稿時は UIが自動補完（内部的に related_lang_post を生成））
+        
+             実装対応内容
+             投稿UIで両言語が入力されていたら、自動で related_lang_post を双方向に記述
+            「関連記事（英語/日本語）ファイル」フィールドを設け、後からも編集可に
+             記事同士の紐づけロジックを一覧表示や関連ナビゲーションに活用 -->
+        <!--フィールドは後からの編集も可能。 -->
+        
+        <label>下書き: <input type="checkbox" id="draft"></label><br><!-- frontmatterに保存 -->
+        
+        <label>GitHub Token: <input type="password" id="githubToken" placeholder="GitHub Personal Access Token>"</label><br>
+        
+        
+        <button type="submit">投稿</button>
+        
+    </form>
+    <div id="result"></div>
+    <script src="uuid.js"></script>
+    <script src="autofill-uuid.js"></script>
+    <script src="initial_categories-tags-lists.js"></script>
+    <script src="autofill-date.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
