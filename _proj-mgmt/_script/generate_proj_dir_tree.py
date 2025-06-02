@@ -65,6 +65,7 @@ def build_tree(path, prefix=""):
 def build_root_tree():
     root = CommentedMap()
     try:
+        root_files_map = CommentedMap()
         for name in sorted(os.listdir(".")):
             if is_ignored(name):
                 continue
@@ -79,17 +80,18 @@ def build_root_tree():
                     root[name] = sort_entries(subtree)
             else:
                 rel_path = name.replace("\\", "/")
-                root.setdefault("root_files", CommentedMap())[name] = rel_path
+                root_files_map[name] = rel_path
+        if root_files_map:
+            sorted_rf = CommentedSeq()
+            for k in sorted(root_files_map):
+                item = CommentedSeq([k, root_files_map[k]])
+                item.fa.set_flow_style()
+                sorted_rf.append(item)
+            wrapper = CommentedMap()
+            wrapper["__files__"] = sorted_rf
+            root["root_files"] = wrapper
     except Exception:
         pass
-    if "root_files" in root:
-        rf_items = root.pop("root_files")
-        sorted_rf = CommentedSeq()
-        for k in sorted(rf_items):
-            item = CommentedSeq([k, rf_items[k]])
-            item.fa.set_flow_style()
-            sorted_rf.append(item)
-        root["root_files"] = sorted_rf
     return root
 
 # --- YAML保存 ---
