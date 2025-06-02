@@ -71,17 +71,16 @@ def move_root_files_to_end(tree):
     return tree
 
 # --- YAML保存 ---
+from ruamel.yaml import YAML
+
 def save_yaml(data, out_path):
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    yaml = YAML()
+    yaml.default_flow_style = False
+    yaml.allow_unicode = True
+    yaml.preserve_quotes = True
     with open(out_path, "w", encoding="utf-8") as f:
-        yaml.dump(
-            data,
-            f,
-            Dumper=yaml.SafeDumper,
-            allow_unicode=True,
-            sort_keys=False,
-            default_flow_style=False
-        )
+        yaml.dump(data, f)
         f.write("# （省略）= 空ディレクトリ\n")
 
 # --- 実行 ---

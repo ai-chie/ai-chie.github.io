@@ -20,13 +20,13 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: 📦 Install PyYAML 最新版
-        run: pip install --upgrade pyyaml==6.0.1
+      - name: 📦 Install ruamel.yaml
+        run: pip install ruamel.yaml
 
-      - name: 🔍 Check Python & PyYAML version
+      - name: 🔍 Check Python & ruamel.yaml version
         run: |
           python --version
-          pip show pyyaml
+          pip show ruamel.yaml
 
       - name: 🏗️ Run generate_proj_dir_tree.py
         run: python _proj-mgmt/_script/generate_proj_dir_tree.py
