@@ -1,4 +1,6 @@
+
 .github:
+
   workflows:
 
     __files__:
@@ -7,6 +9,7 @@
     - [generate-tag-counts.yml.yml, .github/workflows/generate-tag-counts.yml.yml]
     - [generate-taxonomy.yml, .github/workflows/generate-taxonomy.yml]
     - [yaml-to-json.yml, .github/workflows/yaml-to-json.yml]
+
 _admin:
 
   __files__:
@@ -15,7 +18,9 @@ _admin:
   - [index.html, _admin/index.html]
   - [initial_categories-tags-lists.js, _admin/initial_categories-tags-lists.js]
   - [uuid.js, _admin/uuid.js]
+
 _data:
+
   _generated:
 
     __files__:
@@ -30,6 +35,7 @@ _data:
     - [tags.yml, _data/taxonomy/tags.yml]
 
   welcome:
+
     en:
 
       __files__:
@@ -48,8 +54,11 @@ _data:
   - [initial_tags_list.yml, _data/initial_tags_list.yml]
   - [lang.yml, _data/lang.yml]
   - [post_schema.yml, _data/post_schema.yml]
+
 _generated:
+
   en:
+
     categories:
 
       __files__:
@@ -61,6 +70,7 @@ _generated:
       - [sample.md, _generated/en/tags/sample.md]
 
   ja:
+
     categories:
 
       __files__:
@@ -70,6 +80,7 @@ _generated:
 
       __files__:
       - [サンプル.md, _generated/ja/tags/サンプル.md]
+
 _includes:
 
   __files__:
@@ -82,12 +93,16 @@ _includes:
   - [taxonomy-badge.html, _includes/taxonomy-badge.html]
   - [taxonomy-list-block.html, _includes/taxonomy-list-block.html]
   - [taxonomy-list.html, _includes/taxonomy-list.html]
+
 _layouts:
 
   __files__:
   - [default.html, _layouts/default.html]
+
 _posts:
+
   en:
+
     2025-05-30-T135040+0900-UUID-en:
 
       __files__:
@@ -107,6 +122,7 @@ _posts:
     - [index.md, _posts/en/index.md]
 
   ja:
+
     2025-05-30-T135040+0900-UUID-ja:
 
       __files__:
@@ -124,8 +140,11 @@ _posts:
 
     __files__:
     - [index.md, _posts/ja/index.md]
+
 _proj-mgmt:
+
   _script:
+
     _output:
 
       __files__:
@@ -133,6 +152,7 @@ _proj-mgmt:
 
     __files__:
     - [generate_proj_dir_tree.py, _proj-mgmt/_script/generate_proj_dir_tree.py]
+
 _scripts:
 
   __files__:
@@ -141,9 +161,13 @@ _scripts:
   - [generate_tag_counts.rb, _scripts/generate_tag_counts.rb]
   - [generate_taxonomy_pages.rb, _scripts/generate_taxonomy_pages.rb]
   - [package.json, _scripts/package.json]
+
 assets:
+
   images:
+
     article:
+
       2025-05-30-T135040+0900-UUID-en:
 
         __files__:
