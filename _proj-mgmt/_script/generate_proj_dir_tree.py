@@ -98,3 +98,8 @@ if __name__ == "__main__":
     tree = move_root_files_to_end(tree)
     save_yaml(tree, OUTPUT_FILE)
     print(f"✅ Directory tree saved to: {OUTPUT_FILE}")
+
+import sys
+print("----- YAML Dump Preview -----", file=sys.stderr)
+with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
+    print(f.read(), file=sys.stderr)
