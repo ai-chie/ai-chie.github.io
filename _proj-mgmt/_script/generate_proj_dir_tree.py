@@ -1,4 +1,4 @@
-# 📁 generate_proj_dir_tree.py（フロー形式 [ファイル名, パス] 対応 + ソート修正）
+# 📁 generate_proj_dir_tree.py（辞書ベース形式修正済み）
 # ファイルは [ファイル名, パス]、ディレクトリは {dirname: [...]} のリスト形式でネスト出力
 
 import os
@@ -7,7 +7,6 @@ from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedSeq, CommentedMap
 
 OUTPUT_FILE = "_proj-mgmt/_script/_output/proj_dir_tree.yml"
-# EXCLUDE_NAMES = {".git", ".github", ".gitignore", ".DS_Store", "node_modules"}
 EXCLUDE_NAMES = {".git", ".gitignore", ".DS_Store", "node_modules"}
 
 # --- 除外チェック（.gitignore + 明示除外） ---
@@ -23,18 +22,21 @@ def is_ignored(path):
 
 # --- 並べ替え: ディレクトリ→ファイル、アルファベット順 ---
 def sort_entries(entries):
-    dirs = []
-    files = []
-    for entry in entries:
-        if isinstance(entry, dict):
-            dirs.append(entry)
+    dirs = CommentedMap()
+    files = CommentedSeq()
+    for key in sorted(entries.keys()):
+        value = entries[key]
+        if isinstance(value, (CommentedMap, dict)):
+            dirs[key] = sort_entries(value)
         else:
-            files.append(entry)
-    return sorted(dirs, key=lambda x: list(x.keys())[0]) + sorted(files, key=lambda x: str(x[0]))
+            item = CommentedSeq([key, value])
+            item.fa.set_flow_style()
+            files.append(item)
+    return {**dirs, **{"__files__": files} if files else {}}
 
-# --- 再帰的に構造を混在リスト形式で構築（相対パス引き継ぎ） ---
+# --- 再帰的に構造を構築（相対パス引き継ぎ） ---
 def build_tree(path, prefix=""):
-    entries = []
+    entries = CommentedMap()
     try:
         for name in sorted(os.listdir(path)):
             full_path = os.path.join(path, name)
@@ -43,20 +45,17 @@ def build_tree(path, prefix=""):
                 continue
             if os.path.isdir(full_path):
                 subentries = build_tree(full_path, rel_path)
-                subentries = sort_entries(subentries)
                 if not subentries:
                     empty = CommentedSeq()
                     empty.yaml_add_eol_comment("（省略）", 0)
-                    entries.append({name: empty})
+                    entries[name] = empty
                 else:
-                    entries.append({name: subentries})
+                    entries[name] = subentries
             else:
-                item = CommentedSeq([name, rel_path])
-                item.fa.set_flow_style()
-                entries.append(item)
+                entries[name] = rel_path
     except Exception:
         pass
-    return sort_entries(entries)
+    return entries
 
 # --- トップレベル構造構築（辞書で開始） ---
 def build_root_tree():
@@ -68,23 +67,25 @@ def build_root_tree():
             full_path = os.path.join(".", name)
             if os.path.isdir(full_path):
                 subtree = build_tree(full_path, name)
-                subtree = sort_entries(subtree)
                 if not subtree:
                     empty = CommentedSeq()
                     empty.yaml_add_eol_comment("（省略）", 0)
                     root[name] = empty
                 else:
-                    root[name] = subtree
+                    root[name] = sort_entries(subtree)
             else:
                 rel_path = name.replace("\\", "/")
-                item = CommentedSeq([name, rel_path])
-                item.fa.set_flow_style()
-                root.setdefault("root_files", CommentedSeq()).append(item)
-        if "root_files" in root:
-            rf = root.pop("root_files")
-            root["root_files"] = sorted(rf, key=lambda x: str(x[0]))
+                root.setdefault("root_files", CommentedMap())[name] = rel_path
     except Exception:
         pass
+    if "root_files" in root:
+        rf_items = root.pop("root_files")
+        sorted_rf = CommentedSeq()
+        for k in sorted(rf_items):
+            item = CommentedSeq([k, rf_items[k]])
+            item.fa.set_flow_style()
+            sorted_rf.append(item)
+        root["root_files"] = sorted_rf
     return root
 
 # --- YAML保存 ---
