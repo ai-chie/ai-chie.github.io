@@ -1,6 +1,6 @@
 import os
 import subprocess
-import yaml
+from ruamel.yaml import YAML
 
 OUTPUT_FILE = "_proj-mgmt/_script/_output/proj_dir_tree.yml"
 
@@ -71,8 +71,6 @@ def move_root_files_to_end(tree):
     return tree
 
 # --- YAML保存 ---
-from ruamel.yaml import YAML
-
 def save_yaml(data, out_path):
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     yaml = YAML()
