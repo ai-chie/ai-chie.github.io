@@ -116,7 +116,8 @@ assets:
         __files__:
         - [image_1-ja.png, assets/images/article/2025-05-30-T135040+0900-UUID-ja/image_1-ja.png]
 root_files:
-- [README.md, README.md]
-- [_config.yml, _config.yml]
-- [robots.txt, robots.txt]
-- [sitemap.xml, sitemap.xml]
+  __files__:
+  - [README.md, README.md]
+  - [_config.yml, _config.yml]
+  - [robots.txt, robots.txt]
+  - [sitemap.xml, sitemap.xml]
