@@ -1,0 +1,33 @@
+name: Generate Project Directory Tree (JSON)
+
+on:
+  push:
+    paths:
+      - '_proj-mgmt/_script/generate_proj_dir_tree_json.py'
+      - '.github/workflows/generate-proj-dir-tree-json.yml'
+  workflow_dispatch:
+
+jobs:
+  generate-json-tree:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ✅ Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install dependencies (none needed)
+        run: echo "No extra dependencies"
+
+      - name: 🏗️ Run generate_proj_dir_tree_json.py
+        run: python _proj-mgmt/_script/generate_proj_dir_tree_json.py
+
+      - name: 📤 Upload proj_dir_tree.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: proj-dir-tree-json
+          path: _proj-mgmt/_script/_output/proj_dir_tree.json
