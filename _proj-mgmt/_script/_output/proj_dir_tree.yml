@@ -1,3 +1,10 @@
+.github:
+- workflows:
+  - [generate-category-counts.yml, .github/workflows/generate-category-counts.yml]
+  - [generate-proj-dir-tree.yml, .github/workflows/generate-proj-dir-tree.yml]
+  - [generate-tag-counts.yml.yml, .github/workflows/generate-tag-counts.yml.yml]
+  - [generate-taxonomy.yml, .github/workflows/generate-taxonomy.yml]
+  - [yaml-to-json.yml, .github/workflows/yaml-to-json.yml]
 _admin:
 - [autofill-date.js, _admin/autofill-date.js]
 - [autofill-uuid.js, _admin/autofill-uuid.js]
@@ -83,7 +90,6 @@ assets:
     - 2025-05-30-T135040+0900-UUID-ja:
       - [image_1-ja.png, assets/images/article/2025-05-30-T135040+0900-UUID-ja/image_1-ja.png]
 root_files:
-- [.gitignore, .gitignore]
 - [README.md, README.md]
 - [_config.yml, _config.yml]
 - [robots.txt, robots.txt]
