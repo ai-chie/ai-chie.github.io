@@ -1,5 +1,5 @@
-# 📁 generate_proj_dir_tree.py（理想形式出力対応・完全修正版）
-# ファイルは [ファイル名, パス] で出力し、ディレクトリはネスト形式に
+# 📁 generate_proj_dir_tree.py（辞書ネスト形式・理想構造版）
+# ファイルは [ファイル名, パス]、ディレクトリはキーとネストリスト形式で出力
 
 import os
 import subprocess
@@ -19,39 +19,35 @@ def is_ignored(path):
     except Exception:
         return False
 
-# --- 再帰的に構造を構築（期待形式で） ---
+# --- 再帰的に構造を辞書形式で構築 ---
 def build_tree(path):
-    entries = []
+    result = {}
     try:
-        for name in sorted(os.listdir(path)):
-            rel_path = os.path.join(path, name).replace("\\", "/")
+        entries = sorted(os.listdir(path))
+        files = []
+        for name in entries:
+            full_path = os.path.join(path, name)
+            rel_path = full_path.replace("\\", "/")
             if is_ignored(rel_path):
                 continue
-            if os.path.isdir(rel_path):
-                sub = build_tree(rel_path)
-                entries.append({name: sub if sub else []})
+            if os.path.isdir(full_path):
+                subtree = build_tree(full_path)
+                result[name] = subtree if subtree else []
             else:
-                entries.append([name, rel_path])
+                files.append([name, rel_path])
+        if files:
+            result["files"] = files
     except Exception:
         pass
-    return entries
+    return result
 
-# --- トップレベル構造を構築 ---
+# --- トップレベル構造構築 ---
 def build_root_tree():
-    tree = {}
-    root_files = []
-    for name in sorted(os.listdir(".")):
-        if is_ignored(name):
-            continue
-        path = name.replace("\\", "/")
-        if os.path.isdir(path):
-            nested = build_tree(path)
-            tree[name] = nested if nested else []
-        else:
-            root_files.append([name, path])
+    full_tree = build_tree(".")
+    root_files = full_tree.pop("files", [])
     if root_files:
-        tree["root_files"] = root_files
-    return tree
+        full_tree["root_files"] = root_files
+    return full_tree
 
 # --- YAML保存 ---
 def save_yaml(data, out_path):
