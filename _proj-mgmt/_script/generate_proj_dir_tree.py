@@ -34,15 +34,14 @@ def sort_entries(entries):
             files.append(item)
     result = CommentedMap()
     for i, (k, v) in enumerate(dirs.items()):
-        if i > 0:
-            result.yaml_set_comment_before_after_key(k, before="\n")
+        result.yaml_set_comment_before_after_key(k, before="\n")
         result[k] = v
     if files:
         result.yaml_set_comment_before_after_key("__files__", before="\n")
         result["__files__"] = files
     return result
 
-# --- 再帰的に構造を構築（相対パス引き継ぎ） ---
+# --- 再引的に構造を構築（相対パス引き続き） ---
 def build_tree(path, prefix=""):
     entries = CommentedMap()
     try:
@@ -79,9 +78,12 @@ def build_root_tree():
                 if not subtree:
                     empty = CommentedSeq()
                     empty.yaml_add_eol_comment("（省略）", 0)
+                    root.yaml_set_comment_before_after_key(name, before="\n")
                     root[name] = empty
                 else:
-                    root[name] = sort_entries(subtree)
+                    sorted_subtree = sort_entries(subtree)
+                    root.yaml_set_comment_before_after_key(name, before="\n")
+                    root[name] = sorted_subtree
             else:
                 rel_path = name.replace("\\", "/")
                 root_files_map[name] = rel_path
