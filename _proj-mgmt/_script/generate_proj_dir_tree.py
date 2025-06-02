@@ -1,4 +1,4 @@
-# 📁 generate_proj_dir_tree.py（トップレベル辞書＋混在リスト構造版）
+# 📁 generate_proj_dir_tree.py（最終修正版：相対パス維持 + トップ辞書構造）
 # ファイルは [ファイル名, パス]、ディレクトリは {dirname: [...]} のリスト形式でネスト出力
 
 import os
@@ -19,17 +19,17 @@ def is_ignored(path):
     except Exception:
         return False
 
-# --- 再帰的に構造を混在リスト形式で構築 ---
-def build_tree(path):
+# --- 再帰的に構造を混在リスト形式で構築（相対パス引き継ぎ） ---
+def build_tree(path, prefix=""):
     entries = []
     try:
         for name in sorted(os.listdir(path)):
             full_path = os.path.join(path, name)
-            rel_path = full_path.replace("\\", "/")
+            rel_path = os.path.join(prefix, name).replace("\\", "/")
             if is_ignored(rel_path):
                 continue
             if os.path.isdir(full_path):
-                subentries = build_tree(full_path)
+                subentries = build_tree(full_path, rel_path)
                 entries.append({name: subentries if subentries else []})
             else:
                 entries.append([name, rel_path])
@@ -45,11 +45,11 @@ def build_root_tree():
             if is_ignored(name):
                 continue
             full_path = os.path.join(".", name)
-            rel_path = full_path.replace("\\", "/")
             if os.path.isdir(full_path):
-                subtree = build_tree(full_path)
+                subtree = build_tree(full_path, name)
                 root[name] = subtree if subtree else []
             else:
+                rel_path = name.replace("\\", "/")
                 root.setdefault("root_files", []).append([name, rel_path])
     except Exception:
         pass
