@@ -7,7 +7,8 @@ from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedSeq, CommentedMap
 
 OUTPUT_FILE = "_proj-mgmt/_script/_output/proj_dir_tree.yml"
-EXCLUDE_NAMES = {".git", ".github", ".gitignore", ".DS_Store", "node_modules"}
+# EXCLUDE_NAMES = {".git", ".github", ".gitignore", ".DS_Store", "node_modules"}
+EXCLUDE_NAMES = {".git", ".github", ".DS_Store", "node_modules"}
 
 # --- 除外チェック（.gitignore + 明示除外） ---
 def is_ignored(path):
