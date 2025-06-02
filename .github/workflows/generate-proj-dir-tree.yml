@@ -9,6 +9,9 @@ on:
       - '.github/workflows/generate-proj-dir-tree.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write  # ← これを追加！重要！
+
 jobs:
   generate-and-commit:
     runs-on: ubuntu-latest
