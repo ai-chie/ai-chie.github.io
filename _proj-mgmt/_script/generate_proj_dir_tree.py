@@ -33,8 +33,12 @@ def sort_entries(entries):
             item.fa.set_flow_style()
             files.append(item)
     result = CommentedMap()
-    result.update(dirs)
+    for i, (k, v) in enumerate(dirs.items()):
+        if i > 0:
+            result.yaml_set_comment_before_after_key(k, before="\n")
+        result[k] = v
     if files:
+        result.yaml_set_comment_before_after_key("__files__", before="\n")
         result["__files__"] = files
     return result
 
@@ -88,7 +92,9 @@ def build_root_tree():
                 item.fa.set_flow_style()
                 sorted_rf.append(item)
             wrapper = CommentedMap()
+            wrapper.yaml_set_comment_before_after_key("__files__", before="\n")
             wrapper["__files__"] = sorted_rf
+            root.yaml_set_comment_before_after_key("root_files", before="\n")
             root["root_files"] = wrapper
     except Exception:
         pass
