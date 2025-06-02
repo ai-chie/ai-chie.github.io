@@ -1,92 +1,63 @@
+# 📁 generate_proj_dir_tree.py
+# 場所: _proj-mgmt/_script/
+
 import os
 import subprocess
 from ruamel.yaml import YAML
+from collections import OrderedDict
 
 OUTPUT_FILE = "_proj-mgmt/_script/_output/proj_dir_tree.yml"
+EXCLUDE_NAMES = {".git", ".github", ".gitignore", ".DS_Store", "node_modules"}
 
-# --- .gitignore に準拠した除外チェック ---
+# --- 除外チェック（.gitignore + ハードコード） ---
 def is_ignored(path):
+    name = os.path.basename(path)
+    if name in EXCLUDE_NAMES:
+        return True
     try:
-        result = subprocess.run(
-            ["git", "check-ignore", path],
-            capture_output=True,
-            text=True
-        )
+        result = subprocess.run(["git", "check-ignore", path], capture_output=True, text=True)
         return result.returncode == 0
     except Exception:
         return False
 
-# --- ディレクトリ構造を構築（通常dictを使用） ---
-def build_tree(root_dir):
-    tree = {}
+# --- ディレクトリ構造を構築 ---
+def build_tree(base_dir):
+    def walk_dir(path):
+        entries = []
+        full_path = os.path.abspath(path)
+        try:
+            for name in sorted(os.listdir(full_path)):
+                rel_path = os.path.join(path, name)
+                if is_ignored(rel_path):
+                    continue
+                abs_entry = os.path.join(full_path, name)
+                if os.path.isdir(abs_entry):
+                    sub = walk_dir(rel_path)
+                    entries.append(OrderedDict([(name, sub if sub else [])]))
+                else:
+                    entries.append([name, rel_path.replace("\\", "/")])
+        except Exception:
+            pass
+        return entries
 
-    for dirpath, dirnames, filenames in os.walk(root_dir):
-        rel_dir = os.path.relpath(dirpath, root_dir)
-        if rel_dir == ".":
-            rel_dir = ""
-        if is_ignored(dirpath):
-            dirnames[:] = []
+    tree = OrderedDict()
+    for name in sorted(os.listdir(base_dir)):
+        if name in EXCLUDE_NAMES:
             continue
-
-        dirnames.sort()
-        filenames.sort()
-
-        parts = rel_dir.split(os.sep) if rel_dir else []
-        current = tree
-        for part in parts:
-            current = current.setdefault(part, {})
-
-        if not filenames and not dirnames:
-            parent = tree
-            for part in parts[:-1]:
-                parent = parent[part]
-            parent[parts[-1]] = []  # 空ディレクトリを []
-
-        for filename in filenames:
-            rel_file = os.path.join(rel_dir, filename) if rel_dir else filename
-            if not is_ignored(rel_file):
-                current[filename] = f'"{rel_file}"'
-
+        path = os.path.join(base_dir, name)
+        if os.path.isdir(path):
+            tree[name] = walk_dir(name)
+        else:
+            tree.setdefault("root_files", []).append([name, name])
     return tree
 
-# --- ディレクトリ→ファイルの順にソート ---
-def sort_dirs_first(d):
-    if isinstance(d, dict):
-        dirs = {}
-        files = {}
-        for k in sorted(d):
-            v = d[k]
-            if isinstance(v, dict) or isinstance(v, list):
-                dirs[k] = sort_dirs_first(v)
-            else:
-                files[k] = v
-        return {**dirs, **files}
-    return d
-
-# --- root_files を末尾に移動 ---
-def move_root_files_to_end(tree):
-    if "root_files" in tree:
-        root = tree.pop("root_files")
-        tree["root_files"] = root
-    return tree
-
-# ✅ --- 全データを純粋な dict に変換（ruamel.yaml対策） ---
-def deep_convert(obj):
-    if isinstance(obj, dict):
-        return {str(k): deep_convert(v) for k, v in obj.items()}
-    elif isinstance(obj, list):
-        return [deep_convert(i) for i in obj]
-    else:
-        return obj
-
-# --- YAML保存（ruamel.yamlでクリーン出力） ---
+# --- YAML保存 ---
 def save_yaml(data, out_path):
-    data = deep_convert(data)
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     yaml = YAML()
     yaml.default_flow_style = False
     yaml.allow_unicode = True
-    yaml.preserve_quotes = True
+    yaml.width = 4096
     with open(out_path, "w", encoding="utf-8") as f:
         yaml.dump(data, f)
         f.write("# （省略）= 空ディレクトリ\n")
@@ -94,12 +65,8 @@ def save_yaml(data, out_path):
 # --- 実行 ---
 if __name__ == "__main__":
     tree = build_tree(".")
-    tree = sort_dirs_first(tree)
-    tree = move_root_files_to_end(tree)
+    if "root_files" in tree:
+        root_files = tree.pop("root_files")
+        tree["root_files"] = root_files  # root_filesを末尾に
     save_yaml(tree, OUTPUT_FILE)
     print(f"✅ Directory tree saved to: {OUTPUT_FILE}")
-
-import sys
-print("----- YAML Dump Preview -----", file=sys.stderr)
-with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
-    print(f.read(), file=sys.stderr)

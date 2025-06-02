@@ -1,3 +1,5 @@
+# .github/workflows/generate-proj-dir-tree.yml
+
 name: Generate Project Directory Tree
 
 on:
@@ -8,12 +10,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  generate-directory-tree:
+  generate-and-commit:
     runs-on: ubuntu-latest
-
     steps:
-      - name: ✅ Checkout repository
-        uses: actions/checkout@v3
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: 🐍 Set up Python
         uses: actions/setup-python@v4
@@ -23,17 +26,22 @@ jobs:
       - name: 📦 Install ruamel.yaml
         run: pip install ruamel.yaml
 
-      - name: 🔍 Check Python & ruamel.yaml version
-        run: |
-          python --version
-          pip show ruamel.yaml
-
-      - name: 🏗️ Run generate_proj_dir_tree.py
+      - name: 🛠️ Generate proj_dir_tree.yml
         run: python _proj-mgmt/_script/generate_proj_dir_tree.py
 
-      - name: 📤 Upload proj_dir_tree.yml
-        uses: actions/upload-artifact@v4
-        with:
-          name: proj-dir-tree
-          path: _proj-mgmt/_script/_output/proj_dir_tree.yml
+      - name: 🔍 Show output preview
+        run: |
+          echo "----- YAML Dump Preview -----"
+          cat _proj-mgmt/_script/_output/proj_dir_tree.yml
 
+      - name: 📤 Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add _proj-mgmt/_script/_output/proj_dir_tree.yml
+          if git diff --cached --quiet; then
+            echo "✅ No changes to commit"
+          else
+            git commit -m "🔄 Update project directory tree [auto]"
+            git push
+            
