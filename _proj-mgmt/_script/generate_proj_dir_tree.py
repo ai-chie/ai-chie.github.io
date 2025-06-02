@@ -1,5 +1,5 @@
-# 📁 generate_proj_dir_tree.py（辞書ネスト形式・理想構造版）
-# ファイルは [ファイル名, パス]、ディレクトリはキーとネストリスト形式で出力
+# 📁 generate_proj_dir_tree.py（最終版：混在リスト構造）
+# ファイルは [ファイル名, パス]、ディレクトリは {dirname: [...]} のリストとして出力
 
 import os
 import subprocess
@@ -19,35 +19,28 @@ def is_ignored(path):
     except Exception:
         return False
 
-# --- 再帰的に構造を辞書形式で構築 ---
+# --- 再帰的に構造を混在リスト形式で構築 ---
 def build_tree(path):
-    result = {}
+    result = []
     try:
-        entries = sorted(os.listdir(path))
-        files = []
-        for name in entries:
+        for name in sorted(os.listdir(path)):
             full_path = os.path.join(path, name)
             rel_path = full_path.replace("\\", "/")
             if is_ignored(rel_path):
                 continue
             if os.path.isdir(full_path):
                 subtree = build_tree(full_path)
-                result[name] = subtree if subtree else []
+                result.append({name: subtree if subtree else []})
             else:
-                files.append([name, rel_path])
-        if files:
-            result["files"] = files
+                result.append([name, rel_path])
     except Exception:
         pass
     return result
 
 # --- トップレベル構造構築 ---
 def build_root_tree():
-    full_tree = build_tree(".")
-    root_files = full_tree.pop("files", [])
-    if root_files:
-        full_tree["root_files"] = root_files
-    return full_tree
+    tree = build_tree(".")
+    return {entry_key: entry_val for e in tree for entry_key, entry_val in (e.items() if isinstance(e, dict) else [("root_files", [e])])}
 
 # --- YAML保存 ---
 def save_yaml(data, out_path):
