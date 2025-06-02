@@ -1,4 +1,4 @@
-# 📁 generate_proj_dir_tree.py（完全ネストリスト構造版）
+# 📁 generate_proj_dir_tree.py（トップレベル辞書＋混在リスト構造版）
 # ファイルは [ファイル名, パス]、ディレクトリは {dirname: [...]} のリスト形式でネスト出力
 
 import os
@@ -37,9 +37,9 @@ def build_tree(path):
         pass
     return entries
 
-# --- トップレベル構造構築（辞書 + リスト） ---
+# --- トップレベル構造構築（辞書で開始） ---
 def build_root_tree():
-    tree = []
+    root = {}
     try:
         for name in sorted(os.listdir(".")):
             if is_ignored(name):
@@ -48,12 +48,12 @@ def build_root_tree():
             rel_path = full_path.replace("\\", "/")
             if os.path.isdir(full_path):
                 subtree = build_tree(full_path)
-                tree.append({name: subtree if subtree else []})
+                root[name] = subtree if subtree else []
             else:
-                tree.append([name, rel_path])
+                root.setdefault("root_files", []).append([name, rel_path])
     except Exception:
         pass
-    return tree
+    return root
 
 # --- YAML保存 ---
 def save_yaml(data, out_path):
