@@ -44,4 +44,5 @@ jobs:
           else
             git commit -m "🔄 Update project directory tree [auto]"
             git push
-            
+          fi
+          
