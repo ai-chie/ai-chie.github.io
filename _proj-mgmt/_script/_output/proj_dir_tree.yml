@@ -14,16 +14,19 @@ _admin:
   - [initial_categories-tags-lists.js, _admin/initial_categories-tags-lists.js]
   - [uuid.js, _admin/uuid.js]
 _data:
+
   _generated:
     __files__:
     - [initial_categories_list.json, _data/_generated/initial_categories_list.json]
     - [initial_tags_list.json, _data/_generated/initial_tags_list.json]
+
   taxonomy:
     __files__:
     - [categories.yml, _data/taxonomy/categories.yml]
     - [schema.yml, _data/taxonomy/schema.yml]
     - [tags.yml, _data/taxonomy/tags.yml]
   welcome:
+
     en:
       __files__:
       - [welcome-en.md, _data/welcome/en/welcome-en.md]
@@ -39,7 +42,9 @@ _data:
   - [lang.yml, _data/lang.yml]
   - [post_schema.yml, _data/post_schema.yml]
 _generated:
+
   en:
+
     categories:
       __files__:
       - [test.md, _generated/en/categories/test.md]
@@ -47,6 +52,7 @@ _generated:
       __files__:
       - [sample.md, _generated/en/tags/sample.md]
   ja:
+
     categories:
       __files__:
       - [テスト.md, _generated/ja/categories/テスト.md]
@@ -68,10 +74,13 @@ _layouts:
   __files__:
   - [default.html, _layouts/default.html]
 _posts:
+
   en:
+
     2025-05-30-T135040+0900-UUID-en:
       __files__:
       - [2025-05-30-T135040+0900-UUID-en.md, _posts/en/2025-05-30-T135040+0900-UUID-en/2025-05-30-T135040+0900-UUID-en.md]
+
     categories:
       __files__:
       - [index.html, _posts/en/categories/index.html]
@@ -81,9 +90,11 @@ _posts:
     __files__:
     - [index.md, _posts/en/index.md]
   ja:
+
     2025-05-30-T135040+0900-UUID-ja:
       __files__:
       - [2025-05-30-T135040+0900-UUID-ja.md, _posts/ja/2025-05-30-T135040+0900-UUID-ja/2025-05-30-T135040+0900-UUID-ja.md]
+
     categories:
       __files__:
       - [index.html, _posts/ja/categories/index.html]
@@ -109,6 +120,7 @@ _scripts:
 assets:
   images:
     article:
+
       2025-05-30-T135040+0900-UUID-en:
         __files__:
         - [image_1-en.png, assets/images/article/2025-05-30-T135040+0900-UUID-en/image_1-en.png]
