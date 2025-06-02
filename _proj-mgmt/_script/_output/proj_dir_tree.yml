@@ -47,9 +47,6 @@ _includes:
 - [taxonomy-list.html, _includes/taxonomy-list.html]
 _layouts:
 - [default.html, _layouts/default.html]
-_notes:
-- [AboutCategoriesAndTags.txt, _notes/AboutCategoriesAndTags.txt]
-- [frontmatter.txt, _notes/frontmatter.txt]
 _posts:
 - en:
   - 2025-05-30-T135040+0900-UUID-en:
@@ -71,8 +68,6 @@ _proj-mgmt:
 - _script:
   - _output:
     - [proj_dir_tree.yml, _proj-mgmt/_script/_output/proj_dir_tree.yml]
-  - [.#generate_proj_dir_tree_bk_1.py, _proj-mgmt/_script/.#generate_proj_dir_tree_bk_1.py]
-  - [.#generate_proj_dir_tree_json.py, _proj-mgmt/_script/.#generate_proj_dir_tree_json.py]
   - [generate_proj_dir_tree.py, _proj-mgmt/_script/generate_proj_dir_tree.py]
 _scripts:
 - [convert-yaml-to-json.js, _scripts/convert-yaml-to-json.js]
@@ -88,8 +83,8 @@ assets:
     - 2025-05-30-T135040+0900-UUID-ja:
       - [image_1-ja.png, assets/images/article/2025-05-30-T135040+0900-UUID-ja/image_1-ja.png]
 root_files:
+- [.gitignore, .gitignore]
 - [README.md, README.md]
 - [_config.yml, _config.yml]
 - [robots.txt, robots.txt]
 - [sitemap.xml, sitemap.xml]
-- [todo_1.txt, todo_1.txt]
