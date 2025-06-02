@@ -1,14 +1,3 @@
-root_files:
-- - README.md
-  - README.md
-- - _config.yml
-  - _config.yml
-- - robots.txt
-  - robots.txt
-- - sitemap.xml
-  - sitemap.xml
-- - todo_1.txt
-  - todo_1.txt
 _admin:
 - - autofill-date.js
   - _admin/autofill-date.js
@@ -26,20 +15,6 @@ _data:
     - _data/_generated/initial_categories_list.json
   - - initial_tags_list.json
     - _data/_generated/initial_tags_list.json
-- - generated_category_counts.yml
-  - _data/generated_category_counts.yml
-- - generated_tag_counts.yml
-  - _data/generated_tag_counts.yml
-- - generated_taxonomy.yml
-  - _data/generated_taxonomy.yml
-- - initial_categories_list.yml
-  - _data/initial_categories_list.yml
-- - initial_tags_list.yml
-  - _data/initial_tags_list.yml
-- - lang.yml
-  - _data/lang.yml
-- - post_schema.yml
-  - _data/post_schema.yml
 - taxonomy:
   - - categories.yml
     - _data/taxonomy/categories.yml
@@ -54,6 +29,20 @@ _data:
   - ja:
     - - welcome-ja.md
       - _data/welcome/ja/welcome-ja.md
+- - generated_category_counts.yml
+  - _data/generated_category_counts.yml
+- - generated_tag_counts.yml
+  - _data/generated_tag_counts.yml
+- - generated_taxonomy.yml
+  - _data/generated_taxonomy.yml
+- - initial_categories_list.yml
+  - _data/initial_categories_list.yml
+- - initial_tags_list.yml
+  - _data/initial_tags_list.yml
+- - lang.yml
+  - _data/lang.yml
+- - post_schema.yml
+  - _data/post_schema.yml
 _generated:
 - en:
   - categories:
@@ -104,11 +93,11 @@ _posts:
   - categories:
     - - index.html
       - _posts/en/categories/index.html
-  - - index.md
-    - _posts/en/index.md
   - tags:
     - - index.html
       - _posts/en/tags/index.html
+  - - index.md
+    - _posts/en/index.md
 - ja:
   - 2025-05-30-T135040+0900-UUID-ja:
     - - 2025-05-30-T135040+0900-UUID-ja.md
@@ -116,11 +105,11 @@ _posts:
   - categories:
     - - index.html
       - _posts/ja/categories/index.html
-  - - index.md
-    - _posts/ja/index.md
   - tags:
     - - index.html
       - _posts/ja/tags/index.html
+  - - index.md
+    - _posts/ja/index.md
 _proj-mgmt:
 - _script:
   - _output:
@@ -150,4 +139,14 @@ assets:
     - 2025-05-30-T135040+0900-UUID-ja:
       - - image_1-ja.png
         - assets/images/article/2025-05-30-T135040+0900-UUID-ja/image_1-ja.png
-# （省略）= 空ディレクトリ
+root_files:
+- - README.md
+  - README.md
+- - _config.yml
+  - _config.yml
+- - robots.txt
+  - robots.txt
+- - sitemap.xml
+  - sitemap.xml
+- - todo_1.txt
+  - todo_1.txt
