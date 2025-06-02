@@ -1,15 +1,24 @@
-# 📁 generate_proj_dir_tree.py
-# 場所: _proj-mgmt/_script/
+# 📁 generate_proj_dir_tree.py（理想形式出力対応版）
+# リポジトリ全体を走査し、以下の形式でYAML出力：
+#
+# _posts:
+#   ja:
+#     - [index.html, _posts/ja/index.html]
+#     - categories:
+#         - [index.html, _posts/ja/categories/index.html]
+#     - tags:
+#         - [index.html, _posts/ja/tags/index.html]
+# root_files:
+#   - [README.md, README.md]
 
 import os
 import subprocess
 from ruamel.yaml import YAML
-from collections import OrderedDict
 
 OUTPUT_FILE = "_proj-mgmt/_script/_output/proj_dir_tree.yml"
 EXCLUDE_NAMES = {".git", ".github", ".gitignore", ".DS_Store", "node_modules"}
 
-# --- 除外チェック（.gitignore + ハードコード） ---
+# --- 除外チェック（.gitignore + 明示除外） ---
 def is_ignored(path):
     name = os.path.basename(path)
     if name in EXCLUDE_NAMES:
@@ -20,35 +29,38 @@ def is_ignored(path):
     except Exception:
         return False
 
-# --- ディレクトリ構造を構築 ---
-def build_tree(base_dir):
-    def walk_dir(path):
-        entries = []
-        full_path = os.path.abspath(path)
-        try:
-            for name in sorted(os.listdir(full_path)):
-                rel_path = os.path.join(path, name)
-                if is_ignored(rel_path):
-                    continue
-                abs_entry = os.path.join(full_path, name)
-                if os.path.isdir(abs_entry):
-                    sub = walk_dir(rel_path)
-                    entries.append(OrderedDict([(name, sub if sub else [])]))
-                else:
-                    entries.append([name, rel_path.replace("\\", "/")])
-        except Exception:
-            pass
-        return entries
+# --- ディレクトリ構造を再帰的に構築 ---
+def walk(path):
+    entries = []
+    try:
+        for name in sorted(os.listdir(path)):
+            rel_path = os.path.join(path, name).replace("\\", "/")
+            if is_ignored(rel_path):
+                continue
+            if os.path.isdir(rel_path):
+                sub = walk(rel_path)
+                entries.append({name: sub if sub else []})
+            else:
+                entries.append([name, rel_path])
+    except Exception:
+        pass
+    return entries
 
-    tree = OrderedDict()
-    for name in sorted(os.listdir(base_dir)):
-        if name in EXCLUDE_NAMES:
+# --- ルート構造を構築（ディレクトリ + root_files分離） ---
+def build_tree(root_dir):
+    tree = {}
+    root_files = []
+    for name in sorted(os.listdir(root_dir)):
+        rel_path = os.path.join(root_dir, name).replace("\\", "/")
+        if is_ignored(name):
             continue
-        path = os.path.join(base_dir, name)
-        if os.path.isdir(path):
-            tree[name] = walk_dir(name)
+        if os.path.isdir(rel_path):
+            sub_tree = walk(rel_path)
+            tree[name] = sub_tree if sub_tree else []
         else:
-            tree.setdefault("root_files", []).append([name, name])
+            root_files.append([name, name])
+    if root_files:
+        tree["root_files"] = root_files
     return tree
 
 # --- YAML保存 ---
@@ -65,8 +77,5 @@ def save_yaml(data, out_path):
 # --- 実行 ---
 if __name__ == "__main__":
     tree = build_tree(".")
-    if "root_files" in tree:
-        root_files = tree.pop("root_files")
-        tree["root_files"] = root_files  # root_filesを末尾に
     save_yaml(tree, OUTPUT_FILE)
     print(f"✅ Directory tree saved to: {OUTPUT_FILE}")
