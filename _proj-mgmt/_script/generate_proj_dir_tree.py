@@ -1,4 +1,4 @@
-# 📁 generate_proj_dir_tree.py（フロー形式 [ファイル名, パス] 対応）
+# 📁 generate_proj_dir_tree.py（フロー形式 [ファイル名, パス] 対応 + ソート修正）
 # ファイルは [ファイル名, パス]、ディレクトリは {dirname: [...]} のリスト形式でネスト出力
 
 import os
@@ -29,7 +29,7 @@ def sort_entries(entries):
             dirs.append(entry)
         else:
             files.append(entry)
-    return sorted(dirs, key=lambda x: list(x.keys())[0]) + sorted(files, key=lambda x: x[0].value)
+    return sorted(dirs, key=lambda x: list(x.keys())[0]) + sorted(files, key=lambda x: str(x[0]))
 
 # --- 再帰的に構造を混在リスト形式で構築（相対パス引き継ぎ） ---
 def build_tree(path, prefix=""):
@@ -81,7 +81,7 @@ def build_root_tree():
                 root.setdefault("root_files", CommentedSeq()).append(item)
         if "root_files" in root:
             rf = root.pop("root_files")
-            root["root_files"] = sorted(rf, key=lambda x: x[0].value)
+            root["root_files"] = sorted(rf, key=lambda x: str(x[0]))
     except Exception:
         pass
     return root
@@ -101,4 +101,3 @@ if __name__ == "__main__":
     tree = build_root_tree()
     save_yaml(tree, OUTPUT_FILE)
     print(f"✅ Directory tree saved to: {OUTPUT_FILE}")
-
