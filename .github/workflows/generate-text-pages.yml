@@ -1,0 +1,43 @@
+name: Generate /text/ Pages (Ruby)
+
+on:
+  push:
+    paths:
+      - '_posts/ja/**'
+      - '_scripts/generate_text_posts.rb'
+      - '.github/workflows/generate-text-pages.yml'
+  workflow_dispatch:
+
+jobs:
+  generate-text:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.1'  # 必要に応じて指定バージョン変更
+
+    - name: Install bundler (if needed)
+      run: gem install bundler
+
+    - name: Run text post generator script
+      run: ruby _scripts/generate_text_posts.rb
+      
+    - name: Generate category index
+      run: ruby _scripts/generate_text_category_index.rb
+      
+    - name: Generate category detail pages
+      run: ruby _scripts/generate_text_category_pages.rb
+
+
+    - name: Commit and push generated files
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add _pages/text/ja/
+        git diff --cached --quiet || git commit -m "Auto-generate text posts [bot]"
+        git push

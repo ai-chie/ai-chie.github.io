@@ -1,0 +1,45 @@
+# _config_text.yml
+title: AI対応テキスト版サイト
+description: ChatGPTなどのAI向けに最適化された読み取りやすいHTML構成
+lang: ja
+permalink: pretty
+
+# 出力ディレクトリ（上書き可）
+destination: ./_site_text
+
+# 対象ファイルを制限（任意）
+include:
+  - _pages
+  - _layouts
+  - _includes
+  - _data
+  - _posts
+  - _config.yml  # ベース設定読み込み（オプション）
+
+# テキスト版専用のトップ・投稿・カテゴリ・タグを優先
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: text
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: text-post
+
+# マークダウン設定
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
+
+# URL・構造調整（任意）
+url: "https://example.com"
+baseurl: "/text"
+
+# メタ情報など（authorや構造化データ用）
+author:
+  name: "AI-Optimized Site"
