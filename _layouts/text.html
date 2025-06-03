@@ -9,11 +9,7 @@ description: "AIが読みやすいように最適化されたプレーンHTML構
 <!DOCTYPE html>
 <html lang="{{ page.lang }}">
 <head>
-  <meta charset="UTF-8" />
-  <title>{{ page.title }}</title>
-  <meta name="description" content="{{ page.description }}" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="{{ site.url }}{{ page.url }}" />
+    {% include head-meta.html %}
 </head>
 <body>
   <main>
