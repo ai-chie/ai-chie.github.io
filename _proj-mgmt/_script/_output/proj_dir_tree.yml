@@ -181,7 +181,13 @@ assets:
 root_files:
 
   __files__:
+  - [DeepResearch用プロンプト_分析依頼.md, DeepResearch用プロンプト_分析依頼.md]
   - [README.md, README.md]
   - [_config.yml, _config.yml]
   - [robots.txt, robots.txt]
   - [sitemap.xml, sitemap.xml]
+  - [プロジェクト改善ログ_初版_2.md, プロジェクト改善ログ_初版_2.md]
+  - [予定構成図７.yml, 予定構成図７.yml]
+  - [構成図_202506031306.yml, 構成図_202506031306.yml]
+  - [要件定義書.md, 要件定義書.md]
+  - [開発手順書_6分岐Jekyllサイト構築.md, 開発手順書_6分岐Jekyllサイト構築.md]
