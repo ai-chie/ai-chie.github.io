@@ -1,3 +1,9 @@
 User-agent: *
-Allow: /
+Disallow:
+
+# 🔎 クローラーに明示する重点パス
+Allow: /text/
+
+# 🌐 サイトマップ（通常 + AI向け）を両方通知
 Sitemap: https://ai-chie.github.io/sitemap.xml
+Sitemap: https://ai-chie.github.io/text/sitemap_text.xml

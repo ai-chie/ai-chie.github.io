@@ -15,6 +15,9 @@ include:
   - _data
   - _posts
   - _config.yml  # ベース設定読み込み（オプション）
+  - sitemap.xml
+  - sitemap_text.xml
+  - robots.txt
 
 # テキスト版専用のトップ・投稿・カテゴリ・タグを優先
 defaults:
@@ -43,3 +46,10 @@ baseurl: "/text"
 # メタ情報など（authorや構造化データ用）
 author:
   name: "AI-Optimized Site"
+
+defaults:
+  - scope:
+      path: "sitemap_text.xml"
+    values:
+      sitemap: true
+       

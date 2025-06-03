@@ -32,8 +32,13 @@ jobs:
       
     - name: Generate category detail pages
       run: ruby _scripts/generate_text_category_pages.rb
+      
+    - name: Generate tag index
+      run: ruby _scripts/generate_text_tag_index.rb
 
-
+    - name: Generate tag detail pages
+      run: ruby _scripts/generate_text_tag_pages.rb
+  
     - name: Commit and push generated files
       run: |
         git config --global user.name "github-actions[bot]"
