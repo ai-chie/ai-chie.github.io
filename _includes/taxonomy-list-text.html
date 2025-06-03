@@ -1,0 +1,32 @@
+{%- assign schema = site.data.taxonomy.schema -%}
+{%- assign type = include.type | default: 'categories' -%}
+{%- assign lang = include.lang | default: page.lang | default: 'ja' -%}
+{%- assign data = site.data.taxonomy[type][lang] -%}
+
+{%- for group_name in data %}
+  {%- assign group = group_name[1] %}
+  <section>
+    <h2>{{ group_name[0] }}</h2>
+    <ul>
+      {%- assign items = group.items | sort: 'taxonomy_priority' %}
+      {%- for item in items %}
+        {%- assign name = item.taxonomy_name | default: '無名' %}
+        {%- assign slug = item.taxonomy_slug | default: '' %}
+        {%- assign link = item.taxonomy_link | default: '/' | append: lang | append: '/' | append: type | append: '/' | append: slug | append: '/' %}
+        {%- assign audience = item.taxonomy_audience | default: schema.taxonomy_audience.default %}
+        {%- assign draft = item.taxonomy_draft | default: schema.taxonomy_draft.default %}
+        {%- assign hidden = item.taxonomy_hidden | default: schema.taxonomy_hidden.default %}
+        {%- assign private = item.taxonomy_private | default: schema.taxonomy_private.default %}
+        {%- assign admin_only = item.taxonomy_admin_only | default: schema.taxonomy_admin_only.default %}
+        {%- assign badges = "" -%}
+        {%- if item.taxonomy_featured %}{% assign badges = badges | append: "注目 " %}{% endif -%}
+        {%- if item.taxonomy_beta %}{% assign badges = badges | append: "Beta " %}{% endif -%}
+        {%- if item.taxonomy_deprecated %}{% assign badges = badges | append: "廃止予定 " %}{% endif -%}
+        {%- if audience != 'external' or draft or hidden or private or admin_only or name == '' or slug == '' %}
+          {%- continue %}
+        {%- endif %}
+        <li><a href="{{ link }}">{{ name }}</a>{% if badges != "" %}（{{ badges | strip }}）{% endif %}</li>
+      {%- endfor %}
+    </ul>
+  </section>
+{%- endfor %}
