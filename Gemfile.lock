@@ -3,9 +3,10 @@ GEM
   specs:
     jekyll (4.3.2)
     jekyll-feed (0.17.0)
-    jekyll-sitemap (1.4.0)
-    jekyll-seo-tag (2.8.0)
     jekyll-include-cache (0.2.1)
+      jekyll (>= 3.7, < 5.0)
+    jekyll-seo-tag (2.8.0)
+    jekyll-sitemap (1.4.0)
     webrick (1.7.0)
 
 PLATFORMS
@@ -14,9 +15,9 @@ PLATFORMS
 DEPENDENCIES
   jekyll (~> 4.3.2)
   jekyll-feed (~> 0.17)
+  jekyll-include-cache (~> 0.2.1)
+  jekyll-seo-tag
   jekyll-sitemap (~> 1.4)
-  jekyll-seo-tag (~> 2.8)
-  jekyll-include-cache (~> 0.2)
   webrick (~> 1.7)
 
 BUNDLED WITH
