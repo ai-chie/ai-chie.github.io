@@ -2,13 +2,22 @@ GEM
   remote: https://rubygems.org/
   specs:
     jekyll (4.3.2)
-    jekyll-feed
-    jekyll-sitemap
+    jekyll-feed (0.17.0)
+    jekyll-sitemap (1.4.0)
+    jekyll-seo-tag (2.8.0)
+    jekyll-include-cache (0.2.1)
+    webrick (1.7.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   jekyll (~> 4.3.2)
-  jekyll-feed
-  jekyll-sitemap
+  jekyll-feed (~> 0.17)
+  jekyll-sitemap (~> 1.4)
+  jekyll-seo-tag (~> 2.8)
+  jekyll-include-cache (~> 0.2)
+  webrick (~> 1.7)
+
+BUNDLED WITH
+   2.4.22
