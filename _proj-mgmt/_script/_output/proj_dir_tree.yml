@@ -75,12 +75,12 @@ _generated:
     categories:
 
       __files__:
-      - [テスト.md, _generated/ja/categories/テスト.md]
+      - [tesuto.md, _generated/ja/categories/tesuto.md]
 
     tags:
 
       __files__:
-      - [サンプル.md, _generated/ja/tags/サンプル.md]
+      - [sanpuru.md, _generated/ja/tags/sanpuru.md]
 
 _includes:
 
