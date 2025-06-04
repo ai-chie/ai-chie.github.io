@@ -1,0 +1,183 @@
+.github:
+  workflows:
+    # タクソノミ集計など補助的な自動化（保持）
+    - generate-category-counts.yml        # カテゴリ使用数カウント
+    - generate-tag-counts.yml.yml         # タグ使用数カウント
+    - generate-taxonomy.yml               # taxonomyデータ生成（統合ファイル）
+    - generate-proj-dir-tree.yml          # 構成ツリーYAML出力（管理用）
+    - yaml-to-json.yml                    # YAML -> JSON変換（クライアント処理用）
+    # 主要自動生成フロー
+    - generate-text-pages.yml             # text出力自動生成
+    - generate-pc-pages.yml               # pc出力（予定）
+    - generate-mobile-pages.yml           # mobile出力（予定）
+
+_admin:
+  # 投稿支援UI（JS・フォーム生成補助）
+  - index.html
+  - autofill-date.js
+  - autofill-uuid.js
+  - uuid.js
+  - initial_categories-tags-lists.js
+
+_data:
+  _generated:
+    # 初期分類一覧（JSON）— 投稿支援やUIに使用
+    - initial_categories_list.json
+    - initial_tags_list.json
+  taxonomy:
+    # タクソノミ構造と定義
+    - categories.yml
+    - tags.yml
+    - schema.yml
+  welcome:
+    # 初期表示コンテンツ（言語別）
+    ja:
+      - welcome-ja.md
+    en:
+      - welcome-en.md
+  # 自動生成された分類数など（SEO補助やUI）
+  - generated_category_counts.yml
+  - generated_tag_counts.yml
+  - generated_taxonomy.yml
+  # 定義ファイル
+  - initial_categories_list.yml
+  - initial_tags_list.yml
+  - lang.yml
+  - post_schema.yml
+
+_generated:
+  pc:
+    ja:
+      categories:
+        - {slug}.md
+      tags:
+        - {slug}.md
+    en:
+      categories:
+        - {slug}.md
+      tags:
+        - {slug}.md
+  text:
+    ja:
+      categories:
+        - {slug}.md
+      tags:
+        - {slug}.md
+    en:
+      categories:
+        - {slug}.md
+      tags:
+        - {slug}.md
+
+_includes:
+  # 共通テンプレートパーツ（UI・構造）
+  - footer.html
+  - header.html
+  - lang_switch.html
+  - post-attribute-check.html
+  - post-list-item.html
+  - post-list.html
+  - taxonomy-badge.html
+  - taxonomy-flags.html
+  - taxonomy-list.html
+  - taxonomy-list-block.html
+  - head-meta.html
+
+_layouts:
+  # レイアウトテンプレート
+  - default.html
+  - post.html
+  - text.html
+  - text-post.html
+
+_posts:
+  ja:
+    2025-05-30-T135040+0900-UUID-ja:
+      - 2025-05-30-T135040+0900-UUID-ja.md
+    2025-05-31-T135040+0900-UUID-ja:
+      - 2025-05-31-T135040+0900-UUID-ja.md
+  en:
+    2025-05-30-T135040+0900-UUID-en:
+      - 2025-05-30-T135040+0900-UUID-en.md
+    2025-05-31-T135040+0900-UUID-en:
+      - 2025-05-31-T135040+0900-UUID-en.md
+
+_pages:
+  pc:
+    ja:
+      - index.html
+      - categories/index.html
+      - categories/{slug}/index.html
+      - tags/index.html
+      - tags/{slug}/index.html
+    en:
+      - index.html
+      - categories/index.html
+      - categories/{slug}/index.html
+      - tags/index.html
+      - tags/{slug}/index.html
+  mobile:
+    ja:
+      - index.html
+    en:
+      - index.html
+  text:
+    ja:
+      - index.html
+      - categories/index.html
+      - categories/{slug}/index.html
+      - tags/index.html
+      - tags/{slug}/index.html
+      - {uuid}/index.html
+    en:
+      - index.html
+      - categories/index.html
+      - categories/{slug}/index.html
+      - tags/index.html
+      - tags/{slug}/index.html
+      - {uuid}/index.html
+
+_proj-mgmt:
+  _script:
+    - generate_proj_dir_tree.py     # ディレクトリ構成自動出力（管理補助）
+    _output:
+      - proj_dir_tree.yml           # 出力ファイル（管理用）
+
+_scripts:
+  # Rubyスクリプト自動生成群（text向けは実装済／pc等は予定）
+  - convert-yaml-to-json.js
+  - generate_category_counts.rb
+  - generate_tag_counts.rb
+  - generate_taxonomy_pages.rb
+  - package.json
+  - generate_text_posts.rb
+  - generate_text_category_index.rb
+  - generate_text_category_pages.rb
+  - generate_text_tag_index.rb
+  - generate_text_tag_pages.rb
+  - generate_pc_category_pages.rb        # 予定
+  - generate_pc_tag_pages.rb             # 予定
+
+assets:
+  css:
+    - main.css  # TailwindベースカスタムCSS
+  images:
+    article:
+      - {uuid}/image_1-ja.png
+      - {uuid}/image_1-en.png
+
+root_files:
+  - _config.yml
+  - _config_text.yml
+  - _config_mobile.yml
+  - index.md
+  - sitemap.xml
+  - sitemap_text.xml
+  - robots.txt
+  - README.md
+  - DeepResearch用プロンプト_分析依頼.md
+  - プロジェクト改善ログ_初版_2.md
+  - 予定構成図７.yml
+  - 構成図_202506031306.yml
+  - 要件定義書.md
+  - 開発手順書_6分岐Jekyllサイト構築.md
