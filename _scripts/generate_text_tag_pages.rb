@@ -1,22 +1,21 @@
-
 require 'fileutils'
 require 'yaml'
 
 LANGS = %w[ja en]
 DEVICES = %w[text]
-TYPE = "categories"
+TYPE = "tags"
 
 LANGS.each do |lang|
   taxonomy = YAML.load_file("_data/taxonomy/#{TYPE}.yml")[lang]
   DEVICES.each do |device|
     taxonomy.each do |group_name, group_data|
       group_data["items"].each do |item|
-        name  = item["taxonomy_name"]
-        slug  = item["taxonomy_slug"]
-        draft = item["taxonomy_draft"] || false
-        hidden = item["taxonomy_hidden"] || false
-        private_ = item["taxonomy_private"] || false
-        audience = item["taxonomy_audience"] || "external"
+        name      = item["taxonomy_name"]
+        slug      = item["taxonomy_slug"]
+        draft     = item["taxonomy_draft"] || false
+        hidden    = item["taxonomy_hidden"] || false
+        private_  = item["taxonomy_private"] || false
+        audience  = item["taxonomy_audience"] || "external"
 
         next if name.nil? || slug.nil? || draft || hidden || private_ || audience != "external"
 
@@ -30,15 +29,15 @@ LANGS.each do |lang|
             layout: text
             lang: #{lang}
             device: #{device}
-            title: "#{name} - カテゴリ"
-            description: "このページはカテゴリ「#{name}」に関連する内容をAIやクローラーが読み取れるように整備したものです。"
+            title: "#{name} - タグ"
+            description: "このページはタグ「#{name}」に関連する内容をAIやクローラーが読み取れるように整備したものです。"
             permalink: /#{device}/#{lang}/#{TYPE}/#{slug}/
             ---
 
             <section>
-              <h2>カテゴリ名: #{name}</h2>
-              <p>このカテゴリに属する記事や情報を対象としています。</p>
-              <p>対応URL: /#{lang}/#{TYPE}/#{slug}/</p>
+              <h2>タグ名: #{name}</h2>
+              <p>このタグに属する記事や情報を対象としています。</p>
+              <p>対応URL: <code>/#{lang}/#{TYPE}/#{slug}/</code></p>
             </section>
           MD
         end

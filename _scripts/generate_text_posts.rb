@@ -2,8 +2,8 @@ require 'fileutils'
 require 'yaml'
 require 'kramdown'
 
-DEVICES = %w[text]          # 将来は ["pc", "mobile", "text"]
-LANGS = %w[ja en]           # 言語対応
+DEVICES = %w[text]
+LANGS = %w[ja en]
 POSTS_ROOT = "_posts"
 OUTPUT_ROOT = "_pages"
 
@@ -21,6 +21,7 @@ LANGS.each do |lang|
   POSTS_DIR = "#{POSTS_ROOT}/#{lang}"
   Dir.entries(POSTS_DIR).each do |dir_name|
     next if dir_name.start_with?('.') || !File.directory?(File.join(POSTS_DIR, dir_name))
+
     uuid, iso_date, detected_lang = extract_metadata(dir_name)
     next unless detected_lang == lang
 
@@ -28,19 +29,29 @@ LANGS.each do |lang|
     post_path = File.join(POSTS_DIR, dir_name, filename)
     next unless File.exist?(post_path)
 
-    content_md = File.read(post_path, encoding: 'utf-8').sub(/\A---\s*.*?---\s*/m, '')
+    raw = File.read(post_path, encoding: 'utf-8')
+    if raw =~ /\A---\s*\n(.*?)\n---\s*\n/m
+      front_matter = YAML.safe_load($1)
+      content_md = raw.sub(/\A---\s*.*?---\s*/m, '')
+    else
+      front_matter = {}
+      content_md = raw
+    end
+
     content_html = Kramdown::Document.new(content_md).to_html
+    title = front_matter['title'] || uuid
 
     DEVICES.each do |device|
       output_dir = File.join(OUTPUT_ROOT, device, lang, uuid)
       FileUtils.mkdir_p(output_dir)
+
       File.write(File.join(output_dir, "index.html"), <<~HTML)
         ---
         layout: text-post
         lang: #{lang}
         device: #{device}
-        title: "#{uuid}"
-        description: ""
+        title: "#{title}"
+        description: "#{front_matter['description'] || ''}"
         date: #{iso_date}
         permalink: /#{device}/#{lang}/#{uuid}/index.html
         ---

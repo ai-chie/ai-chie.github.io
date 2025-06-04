@@ -14,7 +14,7 @@
     {% assign icon           = item.taxonomy_icon | default: '' %}
     {% assign hidden_reason  = item.taxonomy_hidden_reason | default: '' %}
 
-    {% if name == '' or slug == '' or admin_only or hidden or draft or audience != 'external' %}
+    {% if slug == '' or admin_only or hidden or draft or audience != 'external' %}
       {% continue %}
     {% endif %}
 

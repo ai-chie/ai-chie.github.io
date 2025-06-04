@@ -15,7 +15,7 @@ DEVICES.each do |device|
         lang: #{lang}
         device: #{device}
         title: "タグ一覧 - #{lang.upcase} - #{device.capitalize}"
-        description: "このページは#{lang.upcase}の#{device}デバイス向けタグ一覧です。"
+        description: "このページは #{lang.upcase} の #{device} デバイス向けタグ一覧ページです。"
         permalink: /#{device}/#{lang}/tags/index.html
         ---
 

@@ -31,8 +31,9 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       {% assign sorted_items = group.items | sort: 'taxonomy_priority' %}
       {% for item in sorted_items %}
-        {% assign count = counts[item.name] | default: 0 %}
-        {% assign taxonomy_name = item.name | default: schema.taxonomy_name.default %}
+        {% assign slug = item.taxonomy_slug %}
+        {% assign count = counts[slug] | default: 0 %}
+        {% assign taxonomy_name = item.taxonomy_name | default: schema.taxonomy_name.default %}
         {% assign taxonomy_hidden = item.taxonomy_hidden | default: schema.taxonomy_hidden.default %}
         {% assign taxonomy_draft = item.taxonomy_draft | default: schema.taxonomy_draft.default %}
         {% assign taxonomy_private = item.taxonomy_private | default: schema.taxonomy_private.default %}
@@ -44,10 +45,9 @@
         {% assign taxonomy_color = item.taxonomy_color | default: schema.taxonomy_color.default %}
         {% assign taxonomy_description = item.taxonomy_description | default: schema.taxonomy_description.default %}
         {% assign taxonomy_icon = item.taxonomy_icon | default: schema.taxonomy_icon.default %}
-        {% assign taxonomy_link = item.taxonomy_link | default: schema.taxonomy_link.default %}
-        {% unless taxonomy_name == "" or taxonomy_hidden or taxonomy_draft or taxonomy_private or taxonomy_admin_only %}
-        <div class="p-4 border rounded-xl shadow {{ type }}-item" data-name="{{ taxonomy_name }}" data-count="{{ count }}" data-group="{{ group_name[0] }}">
-          <a href="{{ taxonomy_link | default: '/' | append: lang | append: '/' | append: type | append: '/' | append: taxonomy_name | uri_escape | append: '/' }}" class="block">
+        {% unless slug == "" or taxonomy_hidden or taxonomy_draft or taxonomy_private or taxonomy_admin_only %}
+        <div class="p-4 border rounded-xl shadow {{ type }}-item" data-name="{{ slug }}" data-count="{{ count }}" data-group="{{ group_name[0] }}">
+          <a href="/text/{{ lang }}/{{ type }}/{{ slug }}/" class="block">
             {% if item.image %}<img src="{{ item.image }}" alt="{{ taxonomy_name }}" class="w-10 h-10 mb-2">{% endif %}
             <strong class="block text-lg font-semibold" {% if taxonomy_color %}style="color: {{ taxonomy_color }}"{% endif %}>{{ taxonomy_icon }} {{ taxonomy_name }}</strong>
             {% if taxonomy_description %}<p class="text-sm text-gray-600">{{ taxonomy_description }}</p>{% endif %}
