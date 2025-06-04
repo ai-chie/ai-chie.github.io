@@ -12,14 +12,12 @@ en:
   categories: []
  ja:
   tags:
-    - name: Admin Panel
-      slug: admin-panel
+    - name: サンプルタグ
+      slug: sample-tag
       count: 1
-    - name: Legacy
-      slug: legacy
-      count: 2
-    - name: Labs
-      slug: labs
+  categories:
+    - name: カテゴリテスト
+      slug: category-test
       count: 1
-  categories: [] 
+
 
