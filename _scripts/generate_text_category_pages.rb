@@ -31,6 +31,7 @@ taxonomy.each do |group_name, group_data|
         device: text
         title: "#{name} - カテゴリ"
         description: "このページはカテゴリ「#{name}」に関連する内容をAIやクローラーが読み取れるように整備したものです。"
+        permalink: /text/ja/categories/#{slug}/index.html
         ---
 
         <section>

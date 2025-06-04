@@ -77,7 +77,7 @@ taxonomy.each do |lang, types|
 
       items << item
 
-      dir = "#{OUTPUT_ROOT}/#{lang}/#{type}/#{name}.md"
+      dir = "#{OUTPUT_ROOT}/#{lang}/#{type}/#{slug}.md"
       label = type.to_s.capitalize.chop
       FileUtils.mkdir_p(File.dirname(dir))
       File.write(dir, <<~MD)
