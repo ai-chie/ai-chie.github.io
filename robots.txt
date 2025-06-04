@@ -1,9 +1,11 @@
 User-agent: *
-Disallow:
+Allow: /
 
-# 🔎 クローラーに明示する重点パス
-Allow: /text/
-
-# 🌐 サイトマップ（通常 + AI向け）を両方通知
 Sitemap: https://ai-chie.github.io/sitemap.xml
-Sitemap: https://ai-chie.github.io/text/sitemap_text.xml
+Sitemap: https://ai-chie.github.io/sitemap_text.xml
+
+
+# 備考:
+# Allow: / により全文書アクセス可能
+# Sitemap: を2本明示することで、通常ページとtextページ両方をクローラーに通知
+# robots.txt はルートディレクトリ直下に配置（GitHub Pages対応）
