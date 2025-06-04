@@ -8,6 +8,7 @@
     - [generate-proj-dir-tree.yml, .github/workflows/generate-proj-dir-tree.yml]
     - [generate-tag-counts.yml.yml, .github/workflows/generate-tag-counts.yml.yml]
     - [generate-taxonomy.yml, .github/workflows/generate-taxonomy.yml]
+    - [generate-text-pages.yml, .github/workflows/generate-text-pages.yml]
     - [yaml-to-json.yml, .github/workflows/yaml-to-json.yml]
 
 _admin:
@@ -85,6 +86,7 @@ _includes:
 
   __files__:
   - [footer.html, _includes/footer.html]
+  - [head-meta.html, _includes/head-meta.html]
   - [header.html, _includes/header.html]
   - [lang_switch.html, _includes/lang_switch.html]
   - [post-attribute-check.html, _includes/post-attribute-check.html]
@@ -92,12 +94,34 @@ _includes:
   - [post-list.html, _includes/post-list.html]
   - [taxonomy-badge.html, _includes/taxonomy-badge.html]
   - [taxonomy-list-block.html, _includes/taxonomy-list-block.html]
+  - [taxonomy-list-text.html, _includes/taxonomy-list-text.html]
   - [taxonomy-list.html, _includes/taxonomy-list.html]
 
 _layouts:
 
   __files__:
   - [default.html, _layouts/default.html]
+  - [text-post.html, _layouts/text-post.html]
+  - [text.html, _layouts/text.html]
+
+_pages:
+
+  text:
+
+    ja:
+
+      categories:
+
+        __files__:
+        - [index.html, _pages/text/ja/categories/index.html]
+
+      tags:
+
+        __files__:
+        - [index.html, _pages/text/ja/tags/index.html]
+
+      __files__:
+      - [index.html, _pages/text/ja/index.html]
 
 _posts:
 
@@ -108,38 +132,12 @@ _posts:
       __files__:
       - [2025-05-30-T135040+0900-UUID-en.md, _posts/en/2025-05-30-T135040+0900-UUID-en/2025-05-30-T135040+0900-UUID-en.md]
 
-    categories:
-
-      __files__:
-      - [index.html, _posts/en/categories/index.html]
-
-    tags:
-
-      __files__:
-      - [index.html, _posts/en/tags/index.html]
-
-    __files__:
-    - [index.md, _posts/en/index.md]
-
   ja:
 
     2025-05-30-T135040+0900-UUID-ja:
 
       __files__:
       - [2025-05-30-T135040+0900-UUID-ja.md, _posts/ja/2025-05-30-T135040+0900-UUID-ja/2025-05-30-T135040+0900-UUID-ja.md]
-
-    categories:
-
-      __files__:
-      - [index.html, _posts/ja/categories/index.html]
-
-    tags:
-
-      __files__:
-      - [index.html, _posts/ja/tags/index.html]
-
-    __files__:
-    - [index.md, _posts/ja/index.md]
 
 _proj-mgmt:
 
@@ -157,9 +155,16 @@ _scripts:
 
   __files__:
   - [convert-yaml-to-json.js, _scripts/convert-yaml-to-json.js]
+  - [generate-text-pages.no-push.yml, _scripts/generate-text-pages.no-push.yml]
+  - [generate-text-pages.push.yml, _scripts/generate-text-pages.push.yml]
   - [generate_category_counts.rb, _scripts/generate_category_counts.rb]
   - [generate_tag_counts.rb, _scripts/generate_tag_counts.rb]
   - [generate_taxonomy_pages.rb, _scripts/generate_taxonomy_pages.rb]
+  - [generate_text_category_index.rb, _scripts/generate_text_category_index.rb]
+  - [generate_text_category_pages.rb, _scripts/generate_text_category_pages.rb]
+  - [generate_text_posts.rb, _scripts/generate_text_posts.rb]
+  - [generate_text_tag_index.rb, _scripts/generate_text_tag_index.rb]
+  - [generate_text_tag_pages.rb, _scripts/generate_text_tag_pages.rb]
   - [package.json, _scripts/package.json]
 
 assets:
@@ -178,16 +183,27 @@ assets:
         __files__:
         - [image_1-ja.png, assets/images/article/2025-05-30-T135040+0900-UUID-ja/image_1-ja.png]
 
+docs:
+
+  __files__:
+  - [README.md, docs/README.md]
+  - [build_instructions.md, docs/build_instructions.md]
+  - [final_detailed_structure_commented.yml, docs/final_detailed_structure_commented.yml]
+  - [project_docs_combined.md, docs/project_docs_combined.md]
+  - [project_purpose_notes.md, docs/project_purpose_notes.md]
+  - [scripts_overview.md, docs/scripts_overview.md]
+  - [structure_guide.md, docs/structure_guide.md]
+  - [taxonomy_schema_spec.md, docs/taxonomy_schema_spec.md]
+  - [workflow_guide.md, docs/workflow_guide.md]
+
 root_files:
 
   __files__:
-  - [DeepResearch用プロンプト_分析依頼.md, DeepResearch用プロンプト_分析依頼.md]
+  - [Gemfile, Gemfile]
+  - [Gemfile.lock, Gemfile.lock]
   - [README.md, README.md]
   - [_config.yml, _config.yml]
+  - [_config_text.yml, _config_text.yml]
   - [robots.txt, robots.txt]
   - [sitemap.xml, sitemap.xml]
-  - [プロジェクト改善ログ_初版_2.md, プロジェクト改善ログ_初版_2.md]
-  - [予定構成図７.yml, 予定構成図７.yml]
-  - [構成図_202506031306.yml, 構成図_202506031306.yml]
-  - [要件定義書.md, 要件定義書.md]
-  - [開発手順書_6分岐Jekyllサイト構築.md, 開発手順書_6分岐Jekyllサイト構築.md]
+  - [sitemap_text.xml, sitemap_text.xml]
