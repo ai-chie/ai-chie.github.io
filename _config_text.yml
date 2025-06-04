@@ -40,7 +40,7 @@ kramdown:
   syntax_highlighter: rouge
 
 # URL・構造調整（任意）
-url: "https://example.com"
+url: "https://ai-chie.github.io/"
 baseurl: "/text"
 
 # メタ情報など（authorや構造化データ用）
