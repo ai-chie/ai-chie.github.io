@@ -1,4 +1,7 @@
 title: サイトのタイトル
+email: your-email@example.com
+description: >- 
+  AI向け多言語サイト構成
 description: サイトの説明
 baseurl: "" # ルートの場合は空に。サブディレクトリに配置する場合は設定（例: /blog）
 url: "https://ai-chie.github.io/"
@@ -6,6 +9,9 @@ url: "https://ai-chie.github.io/"
 # ビルド対象のディレクトリ
 source: .
 destination: ./_site
+
+permalink: 
+theme: minima
 
 # Markdownエンジン
 markdown: kramdown
@@ -43,6 +49,15 @@ defaults:
       lang: ja
       draft: false
       hidden: false
+  - scope:
+      path: "_posts/ja"
+    values:
+      lang: ja
+  - scope:
+      path: "_posts/en"
+    values:
+      lang: en
+
 
 # 言語対応設定
 languages: ["ja", "en"]
@@ -69,6 +84,12 @@ exclude:
 
 # Include（明示的に処理対象とするディレクトリ）
 include:
+  - .htaccess
+  - _pages
+  - _data
+  - _includes
+  - _layouts
+  - _scripts
   - _generated
 
 # GitHub Pages 対応（project pageでない場合は false）
