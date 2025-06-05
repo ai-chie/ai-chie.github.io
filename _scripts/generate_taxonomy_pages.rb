@@ -13,7 +13,6 @@ def normalize_slug(name)
 end
 
 def parse_front_matter(file_path)
-  require 'date'
   content = File.read(file_path)
   if content =~ /\A---\s*\n(.*?)\n---/m
     yaml = Regexp.last_match(1)
@@ -35,7 +34,6 @@ rescue => e
   abort "❌ Failed to load taxonomy schema: #{e}"
 end
 
-# ✅ 静的に正しく初期化
 taxonomy = {
   'ja' => { categories: [], tags: [] },
   'en' => { categories: [], tags: [] }
@@ -61,10 +59,13 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
       next if term_str.empty?
       taxonomy[lang][type] << term_str
       counts[lang][type][term_str] += 1
-      puts "📥 Added #{type}: '#{term_str}' to #{lang}"
+      puts "📥 Added #{type}: '#{term_str}' to taxonomy[#{lang}][#{type}]"
     end
   end
 end
+
+puts "🔍 Final collected taxonomy structure:"
+puts taxonomy.inspect
 
 generated_data = {}
 
@@ -75,6 +76,8 @@ taxonomy.each do |lang, types|
     key = type.to_s.chop
     items = []
     seen_slugs = {}
+
+    puts "🔍 Terms to generate for #{lang}/#{type}: #{terms.uniq.sort.inspect}"
 
     terms.uniq.sort.each do |name|
       slug = normalize_slug(name)
@@ -97,6 +100,7 @@ taxonomy.each do |lang, types|
       end
 
       items << item
+      puts "📘 Added item to #{lang}/#{type}: #{item.inspect}"
 
       dir = "#{OUTPUT_ROOT}/#{lang}/#{type}/#{slug}.md"
       label = type.to_s.capitalize.chop
