@@ -7,6 +7,9 @@ on:
       - '.github/workflows/generate-taxonomy.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write  # ← 🔧 これを必ず指定
+  
 jobs:
   generate-pages:
     runs-on: ubuntu-latest
