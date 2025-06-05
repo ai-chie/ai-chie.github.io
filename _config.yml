@@ -71,6 +71,8 @@ paginate_path: "/page:num"
 plugins:
   - jekyll-feed
   - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-include-cache
 
 # Exclude（ビルド対象から除外）
 exclude:

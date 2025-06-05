@@ -1,0 +1,29 @@
+name: Generate Gemfile.lock and Upload as Artifact
+
+on:
+  workflow_dispatch:  # 手動トリガー限定（安全）
+
+jobs:
+  generate-lock:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Generate Gemfile.lock
+        run: bundle lock
+
+      - name: Upload Gemfile.lock as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: generated-gemfile-lock
+          path: Gemfile.lock

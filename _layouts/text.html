@@ -7,17 +7,12 @@ description: "AIが読みやすいように最適化されたプレーンHTML構
 ---
 
 <!DOCTYPE html>
-<html lang="{{ page.lang }}">
-<head>
-    {% include head-meta.html %}
-</head>
-<body>
-  <main>
-    <h1>{{ page.title }}</h1>
+<html lang="{{ page.lang | default: 'ja' }}">
+  <head>
+    {% include head-minimal.html %}
+  </head>
+  <body>
     {{ content }}
-  </main>
-  <footer>
-    <p>&copy; {{ site.time | date: "%Y" }} {{ site.title }}</p>
-  </footer>
-</body>
+  </body>
 </html>
+
