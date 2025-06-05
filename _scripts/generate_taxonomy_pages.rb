@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'yaml'
+require 'date'
 
 POSTS_DIR = '_posts'
 OUTPUT_ROOT = '_generated'
