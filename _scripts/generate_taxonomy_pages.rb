@@ -57,8 +57,8 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
     Array(data[type]).each do |term|
       term_str = term.to_s.strip
       next if term_str.empty?
-      taxonomy[lang][type] << term_str
-      counts[lang][type][term_str] += 1
+      taxonomy[lang][type.to_sym] << term_str
+      counts[lang][type.to_sym][term_str] += 1
       puts "📥 Added #{type}: '#{term_str}' to taxonomy[#{lang}][#{type}]"
     end
   end
@@ -87,7 +87,7 @@ taxonomy.each do |lang, types|
       item = {
         'taxonomy_name' => name,
         'taxonomy_slug' => slug,
-        'count' => counts[lang][type][name]
+        'count' => counts[lang][type.to_sym][name]
       }
 
       schema.each do |attr, meta|
