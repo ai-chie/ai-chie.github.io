@@ -56,7 +56,10 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   %i[categories tags].each do |type|
     Array(data[type]).each do |term|
       term_str = term.to_s.strip
-      next if term_str.empty?
+      if term_str.empty?
+        warn "⚠️ Skipped empty term for #{type} in #{lang} from post #{path}"
+        next
+      end
       taxonomy[lang][type.to_sym] << term_str
       counts[lang][type.to_sym][term_str] += 1
       puts "📥 Added #{type}: '#{term_str}' to taxonomy[#{lang}][#{type}]"
