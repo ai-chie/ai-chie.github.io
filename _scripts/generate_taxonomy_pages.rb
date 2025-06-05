@@ -12,23 +12,32 @@ def normalize_slug(name)
   name.to_s.downcase.strip.gsub(' ', '-').gsub(/[^\w\-]/, '')
 end
 
-schema = YAML.load_file(SCHEMA_PATH)
-taxonomy = { 'ja' => { categories: [], tags: [] }, 'en' => { categories: [], tags: [] } }
-counts = { 'ja' => { categories: Hash.new(0), tags: Hash.new(0) }, 'en' => { categories: Hash.new(0), tags: Hash.new(0) } }
-
-Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
-  post = File.read(path)
-  front_matter = post.match(/---\s*\n(.*?)\n---/m)&.captures&.first
-  next unless front_matter
-
-  begin
-    data = YAML.safe_load(front_matter, permitted_classes: [Date, Time], aliases: true) || {}
-  rescue Psych::Exception => e
-    warn "YAML parse error in #{path}: #{e}"
-    next
+def extract_front_matter(path)
+  content = File.read(path)
+  if content =~ /\A---\s*\n(.*?)\n---\s*\n/m
+    YAML.safe_load($1, permitted_classes: [Date, Time], aliases: true) || {}
+  else
+    warn "⚠️ Front matter not found in #{path}"
+    nil
   end
+rescue Psych::Exception => e
+  warn "⚠️ YAML parse error in #{path}: #{e}"
+  nil
+end
 
-  next if data['draft'] == true || data['hidden'] == true
+# Load schema
+schema = YAML.load_file(SCHEMA_PATH)
+
+# Prepare data structures
+taxonomy = { 'ja' => { categories: [], tags: [] }, 'en' => { categories: [], tags: [] } }
+counts   = { 'ja' => { categories: Hash.new(0), tags: Hash.new(0) }, 'en' => { categories: Hash.new(0), tags: Hash.new(0) } }
+
+# Parse posts
+Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
+  data = extract_front_matter(path)
+  next unless data
+
+  next if data['draft'] || data['hidden']
   lang = data['lang']
   next unless %w[ja en].include?(lang)
 
@@ -40,6 +49,7 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   end
 end
 
+# Generate taxonomy pages
 generated_data = {}
 
 taxonomy.each do |lang, types|
@@ -51,33 +61,29 @@ taxonomy.each do |lang, types|
 
     terms.uniq.sort.each do |term|
       name = term.to_s.strip
-      if name.empty?
-        warn "Skipped empty name for #{type} in #{lang}"
-        next
-      end
+      next if name.empty?
 
       slug = normalize_slug(name)
-      if seen_slugs[slug]
-        warn "Duplicate slug detected: #{slug} for term: #{name}"
-        next
-      end
+      next if seen_slugs[slug]
       seen_slugs[slug] = true
 
       item = { 'taxonomy_name' => name, 'taxonomy_slug' => slug, 'count' => counts[lang][type][name] }
 
+      # Set schema attributes
       schema.each do |attr, meta|
         next if attr == 'taxonomy_name' || meta['unused']
-        if meta['type'] == 'enum'
+        item[attr] = if meta['type'] == 'enum'
           valid_values = meta['values'] || []
           value = meta['default']
-          item[attr] = valid_values.include?(value) ? value : meta['default']
+          valid_values.include?(value) ? value : meta['default']
         else
-          item[attr] = meta['default']
+          meta['default']
         end
       end
 
       items << item
 
+      # Generate individual taxonomy page
       dir = "#{OUTPUT_ROOT}/#{lang}/#{type}/#{slug}.md"
       label = type.to_s.capitalize.chop
       FileUtils.mkdir_p(File.dirname(dir))
@@ -119,5 +125,6 @@ taxonomy.each do |lang, types|
   end
 end
 
+# Write output YAML
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
 File.write(TAXONOMY_YML, generated_data.to_yaml)

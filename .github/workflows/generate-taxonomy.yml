@@ -1,35 +1,46 @@
 name: Generate Taxonomy Pages
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - '_posts/**'
+      - '_data/taxonomy/**'
+      - '_scripts/generate_taxonomy_pages.rb'
       - '.github/workflows/generate-taxonomy.yml'
-  workflow_dispatch:
 
 permissions:
-  contents: write  # ← 🔧 これを必ず指定
-  
+  contents: write
+
 jobs:
-  generate-pages:
+  generate:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: 📥 Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Ruby
+      - name: 🛠 Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
 
-      - name: Run taxonomy generation script
+      - name: 📦 Install dependencies
+        run: bundle install
+
+      - name: 🧩 Run taxonomy generation script
         run: ruby _scripts/generate_taxonomy_pages.rb
 
-      - name: Commit changes
+      - name: ✅ Check generated results
+        run: |
+          echo "Checking generated files:"
+          ls -R _generated || echo "❌ _generated directory not found"
+          ls -l _data/generated_taxonomy.yml || echo "❌ generated_taxonomy.yml not found"
+
+      - name: 🚀 Commit and push if changes exist
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add _generated/
-          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-generate category/tag pages"
+          git add _generated/ _data/generated_taxonomy.yml
+          git diff --cached --quiet || git commit -m "Auto-generate taxonomy pages & data"
           git push
