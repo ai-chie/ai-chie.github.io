@@ -35,8 +35,15 @@ rescue => e
   abort "❌ Failed to load taxonomy schema: #{e}"
 end
 
-taxonomy = Hash.new { |h, k| h[k] = { categories: [], tags: [] } }
-counts   = Hash.new { |h, k| h[k] = { categories: Hash.new(0), tags: Hash.new(0) } }
+# ✅ 静的に正しく初期化
+taxonomy = {
+  'ja' => { categories: [], tags: [] },
+  'en' => { categories: [], tags: [] }
+}
+counts = {
+  'ja' => { categories: Hash.new(0), tags: Hash.new(0) },
+  'en' => { categories: Hash.new(0), tags: Hash.new(0) }
+}
 
 Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   data = parse_front_matter(path)
@@ -54,6 +61,7 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
       next if term_str.empty?
       taxonomy[lang][type] << term_str
       counts[lang][type][term_str] += 1
+      puts "📥 Added #{type}: '#{term_str}' to #{lang}"
     end
   end
 end
@@ -133,3 +141,4 @@ end
 
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
 File.write(TAXONOMY_YML, generated_data.to_yaml)
+puts "✅ YAML written to #{TAXONOMY_YML}"
