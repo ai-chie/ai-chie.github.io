@@ -1,11 +1,8 @@
 User-agent: *
-Allow: /
+Allow: /text/
+Disallow: /_admin/
+Disallow: /_scripts/
+Disallow: /_proj-mgmt/
+Disallow: /assets/
 
-Sitemap: https://ai-chie.github.io/sitemap.xml
 Sitemap: https://ai-chie.github.io/sitemap_text.xml
-
-
-# 備考:
-# Allow: / により全文書アクセス可能
-# Sitemap: を2本明示することで、通常ページとtextページ両方をクローラーに通知
-# robots.txt はルートディレクトリ直下に配置（GitHub Pages対応）

@@ -1,61 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- トップページ -->
   <url>
     <loc>https://ai-chie.github.io/text/ja/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
   </url>
-  <url>
-    <loc>https://ai-chie.github.io/text/en/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-
-  <!-- カテゴリ一覧 -->
   <url>
     <loc>https://ai-chie.github.io/text/ja/categories/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
-  <url>
-    <loc>https://ai-chie.github.io/text/en/categories/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- タグ一覧 -->
   <url>
     <loc>https://ai-chie.github.io/text/ja/tags/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
+  <!-- 動的に追加される投稿ページ例 -->
   <url>
-    <loc>https://ai-chie.github.io/text/en/tags/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- 以下はtaxonomy-page自動生成対象に追加 -->
-  <!-- サンプル -->
-  <url>
-    <loc>https://ai-chie.github.io/text/ja/categories/ai/</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ai-chie.github.io/text/ja/tags/llm/</loc>
-    <priority>0.6</priority>
+    <loc>https://ai-chie.github.io/text/ja/2025-05-30-T135040+0900-UUID-ja/</loc>
   </url>
 </urlset>
-
-<!--
-
-日本語・英語両対応
-
-備考:
-
-自動生成対象ページ（text/ja/categories/{slug}/ など）は generate_text_category_pages.rb 等で自動化済み
-
-優先度（priority）や更新頻度（changefreq）はSEOを意識した設定
-
--->

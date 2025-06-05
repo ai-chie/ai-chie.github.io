@@ -1,55 +1,50 @@
-# _config_text.yml
-title: AI対応テキスト版サイト
-description: ChatGPTなどのAI向けに最適化された読み取りやすいHTML構成
 lang: ja
-permalink: pretty
+device: text
 
-# 出力ディレクトリ（上書き可）
-destination: ./_site_text
+# 出力ディレクトリ
+destination: ./_site
 
-# 対象ファイルを制限（任意）
-include:
-  - _pages
-  - _layouts
-  - _includes
-  - _data
-  - _posts
-  - _config.yml  # ベース設定読み込み（オプション）
-  - sitemap.xml
-  - sitemap_text.xml
-  - robots.txt
-
-# テキスト版専用のトップ・投稿・カテゴリ・タグを優先
+# デフォルト設定（text専用）
 defaults:
   - scope:
       path: ""
-      type: "pages"
     values:
       layout: text
-  - scope:
-      path: ""
-      type: "posts"
-    values:
-      layout: text-post
+      device: text
+      lang: ja
 
-# マークダウン設定
-markdown: kramdown
-kramdown:
-  input: GFM
-  hard_wrap: false
-  syntax_highlighter: rouge
+# プラグイン（GitHub Pages互換）
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
 
-# URL・構造調整（任意）
-url: "https://ai-chie.github.io/"
-baseurl: "/text"
+# text 構成のルートページ群
+include:
+  - _pages
+  - _generated
+  - _data
+  - _includes
+  - _layouts
 
-# メタ情報など（authorや構造化データ用）
-author:
-  name: "AI-Optimized Site"
+# 除外（ビルド対象外）
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - .github
+  - _scripts
+  - _posts
+  - _proj-mgmt
+  - .gitignore
+  - node_modules
+  - vendor
 
-defaults:
-  - scope:
-      path: "sitemap_text.xml"
-    values:
-      sitemap: true
-       
+# SEO関連
+title: "AI向け構造化テキストページ"
+description: "AIと検索エンジンのための軽量・構造化Jekyllページ"
+url: "https://ai-chie.github.io"
+baseurl: ""
+
+# 言語
+languages: ["ja", "en"]
+default_lang: "ja"
