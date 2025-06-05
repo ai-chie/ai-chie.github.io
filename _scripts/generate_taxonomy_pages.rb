@@ -13,33 +13,47 @@ def normalize_slug(name)
 end
 
 def parse_front_matter(file_path)
+  require 'date'
   content = File.read(file_path)
   if content =~ /\A---\s*\n(.*?)\n---/m
     yaml = Regexp.last_match(1)
-    YAML.safe_load(yaml, permitted_classes: [Date, Time], aliases: true) || {}
+    data = YAML.safe_load(yaml, permitted_classes: [Date, Time], aliases: true) || {}
+    warn "✅ Parsed: #{file_path} → categories=#{data['categories'].inspect} tags=#{data['tags'].inspect} lang=#{data['lang']}"
+    return data
   else
-    {}
+    warn "❌ No front matter found in #{file_path}"
+    return {}
   end
 rescue Psych::SyntaxError => e
-  warn "YAML syntax error in #{file_path}: #{e.message}"
+  warn "❌ YAML syntax error in #{file_path}: #{e.message}"
   {}
 end
 
-schema = YAML.load_file(SCHEMA_PATH)
+begin
+  schema = YAML.load_file(SCHEMA_PATH)
+rescue => e
+  abort "❌ Failed to load taxonomy schema: #{e}"
+end
+
 taxonomy = Hash.new { |h, k| h[k] = { categories: [], tags: [] } }
-counts = Hash.new { |h, k| h[k] = { categories: Hash.new(0), tags: Hash.new(0) } }
+counts   = Hash.new { |h, k| h[k] = { categories: Hash.new(0), tags: Hash.new(0) } }
 
 Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   data = parse_front_matter(path)
-  next if data.empty? || data['draft'] == true || data['hidden'] == true
+  next if data.empty? || data['draft'] || data['hidden']
 
   lang = data['lang']
-  next unless %w[ja en].include?(lang)
+  unless %w[ja en].include?(lang)
+    warn "⚠️ Unsupported lang '#{lang}' in #{path}"
+    next
+  end
 
   %i[categories tags].each do |type|
     Array(data[type]).each do |term|
-      taxonomy[lang][type] << term
-      counts[lang][type][term] += 1
+      term_str = term.to_s.strip
+      next if term_str.empty?
+      taxonomy[lang][type] << term_str
+      counts[lang][type][term_str] += 1
     end
   end
 end
@@ -48,19 +62,17 @@ generated_data = {}
 
 taxonomy.each do |lang, types|
   generated_data[lang] = {}
+
   types.each do |type, terms|
     key = type.to_s.chop
     items = []
     seen_slugs = {}
 
-    terms.uniq.sort.each do |term|
-      name = term.to_s.strip
-      next if name.empty?
-
+    terms.uniq.sort.each do |name|
       slug = normalize_slug(name)
       next if seen_slugs[slug]
-
       seen_slugs[slug] = true
+
       item = {
         'taxonomy_name' => name,
         'taxonomy_slug' => slug,
@@ -70,9 +82,7 @@ taxonomy.each do |lang, types|
       schema.each do |attr, meta|
         next if %w[taxonomy_name taxonomy_slug].include?(attr) || meta['unused']
         if meta['type'] == 'enum'
-          valid = meta['values'] || []
-          def_val = meta['default']
-          item[attr] = valid.include?(def_val) ? def_val : valid.first
+          item[attr] = meta['values'].include?(meta['default']) ? meta['default'] : meta['values'].first
         else
           item[attr] = meta['default']
         end
