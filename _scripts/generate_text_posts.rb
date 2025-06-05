@@ -2,12 +2,13 @@ require 'fileutils'
 require 'yaml'
 require 'kramdown'
 
-DEVICES = %w[text]
-LANGS = %w[ja en]
-POSTS_ROOT = "_posts"
+DEVICES     = %w[text]
+LANGS       = %w[ja en]
+POSTS_ROOT  = "_posts"
 OUTPUT_ROOT = "_pages"
 
 def extract_metadata(dir_name)
+  # 例: 2025-05-30-T135040+0900-UUID-ja
   if dir_name =~ /^(\d{4}-\d{2}-\d{2})-T(\d{6})([+-]\d{4})-(.+)-(.+)$/
     date = "#{$1}T#{$2[0..1]}:#{$2[2..3]}:#{$2[4..5]}#{$3}"
     uuid = "#{$1}-T#{$2}#{$3}-#{$4}"
@@ -19,44 +20,38 @@ end
 
 LANGS.each do |lang|
   POSTS_DIR = "#{POSTS_ROOT}/#{lang}"
+
   Dir.entries(POSTS_DIR).each do |dir_name|
     next if dir_name.start_with?('.') || !File.directory?(File.join(POSTS_DIR, dir_name))
 
-    uuid, iso_date, detected_lang = extract_metadata(dir_name)
+    metadata = extract_metadata(dir_name)
+    next unless metadata
+
+    uuid, iso_date, detected_lang = metadata
     next unless detected_lang == lang
 
     filename = "#{uuid}-#{lang}.md"
     post_path = File.join(POSTS_DIR, dir_name, filename)
     next unless File.exist?(post_path)
 
-    raw = File.read(post_path, encoding: 'utf-8')
-    if raw =~ /\A---\s*\n(.*?)\n---\s*\n/m
-      front_matter = YAML.safe_load($1)
-      content_md = raw.sub(/\A---\s*.*?---\s*/m, '')
-    else
-      front_matter = {}
-      content_md = raw
-    end
-
-    content_html = Kramdown::Document.new(content_md).to_html
-    title = front_matter['title'] || uuid
+    body_md = File.read(post_path, encoding: 'utf-8').sub(/\A---\s*.*?---\s*/m, '')
+    body_html = Kramdown::Document.new(body_md).to_html
 
     DEVICES.each do |device|
       output_dir = File.join(OUTPUT_ROOT, device, lang, uuid)
       FileUtils.mkdir_p(output_dir)
-
       File.write(File.join(output_dir, "index.html"), <<~HTML)
         ---
         layout: text-post
         lang: #{lang}
         device: #{device}
-        title: "#{title}"
-        description: "#{front_matter['description'] || ''}"
+        title: "#{uuid}"
+        description: ""
         date: #{iso_date}
         permalink: /#{device}/#{lang}/#{uuid}/index.html
         ---
 
-        #{content_html.strip}
+        #{body_html.strip}
       HTML
     end
   end

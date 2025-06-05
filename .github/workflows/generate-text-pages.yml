@@ -1,12 +1,11 @@
-name: Generate text pages (no deploy/push)
+name: Generate text pages (no deploy)
 
 on:
   push:
     paths:
-      - '_posts/ja/**'
+      - '_posts/**'
       - '_data/taxonomy/**'
       - '_scripts/**'
-      - '_pages/text/**'
       - '_layouts/**'
       - '_includes/**'
       - '_config.yml'
@@ -15,9 +14,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -25,16 +24,21 @@ jobs:
           ruby-version: '3.1'
 
       - name: Install dependencies
-        run: bundle install
-
-      - name: Generate text pages
         run: |
-          ruby _scripts/generate_text_posts.rb
+          gem install bundler
+          bundle install
+
+      - name: Generate text taxonomy pages
+        run: |
+          ruby _scripts/generate_taxonomy_pages.rb
+
+      - name: Generate text structure pages
+        run: |
           ruby _scripts/generate_text_category_index.rb
           ruby _scripts/generate_text_category_pages.rb
           ruby _scripts/generate_text_tag_index.rb
           ruby _scripts/generate_text_tag_pages.rb
+          ruby _scripts/generate_text_posts.rb
 
       - name: Build Jekyll site with text config
         run: bundle exec jekyll build --config _config.yml,_config_text.yml
-        

@@ -1,46 +1,48 @@
 require 'fileutils'
 require 'yaml'
 
-LANGS = %w[ja en]
+TAXONOMY_FILE = "_data/taxonomy/tags.yml"
+LANGS   = %w[ja en]
 DEVICES = %w[text]
-TYPE = "tags"
+
+taxonomy_data = YAML.load_file(TAXONOMY_FILE)
 
 LANGS.each do |lang|
-  taxonomy = YAML.load_file("_data/taxonomy/#{TYPE}.yml")[lang]
+  taxonomy = taxonomy_data[lang]
+  next unless taxonomy
+
   DEVICES.each do |device|
     taxonomy.each do |group_name, group_data|
       group_data["items"].each do |item|
-        name      = item["taxonomy_name"]
-        slug      = item["taxonomy_slug"]
-        draft     = item["taxonomy_draft"] || false
-        hidden    = item["taxonomy_hidden"] || false
-        private_  = item["taxonomy_private"] || false
-        audience  = item["taxonomy_audience"] || "external"
+        name  = item["taxonomy_name"]
+        slug  = item["taxonomy_slug"]
+        draft = item["taxonomy_draft"] || false
+        hidden = item["taxonomy_hidden"] || false
+        private_ = item["taxonomy_private"] || false
+        audience = item["taxonomy_audience"] || "external"
 
         next if name.nil? || slug.nil? || draft || hidden || private_ || audience != "external"
 
-        dir = File.join("_pages", device, lang, TYPE, slug)
+        dir = File.join("_pages", device, lang, "tags", slug)
         FileUtils.mkdir_p(dir)
         path = File.join(dir, "index.html")
 
-        File.open(path, "w:utf-8") do |f|
-          f.puts <<~MD
-            ---
-            layout: text
-            lang: #{lang}
-            device: #{device}
-            title: "#{name} - タグ"
-            description: "このページはタグ「#{name}」に関連する内容をAIやクローラーが読み取れるように整備したものです。"
-            permalink: /#{device}/#{lang}/#{TYPE}/#{slug}/
-            ---
+        File.write(path, <<~MD)
+          ---
+          layout: text
+          lang: #{lang}
+          device: #{device}
+          title: "#{name} - タグ"
+          description: "このタグ「#{name}」に関連する内容をAIやクローラーが読み取れるように整備したページです。"
+          permalink: /#{device}/#{lang}/tags/#{slug}/
+          ---
 
-            <section>
-              <h2>タグ名: #{name}</h2>
-              <p>このタグに属する記事や情報を対象としています。</p>
-              <p>対応URL: <code>/#{lang}/#{TYPE}/#{slug}/</code></p>
-            </section>
-          MD
-        end
+          <section>
+            <h2>タグ名: #{name}</h2>
+            <p>このタグに関連する記事やリソースを掲載しています。</p>
+            <p>対応URL: /#{lang}/tags/#{slug}/</p>
+          </section>
+        MD
       end
     end
   end
