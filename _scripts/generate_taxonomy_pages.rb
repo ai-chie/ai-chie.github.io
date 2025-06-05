@@ -1,43 +1,37 @@
 require 'fileutils'
 require 'yaml'
-require 'date'
 
-POSTS_DIR = '_posts'
-OUTPUT_ROOT = '_generated'
-LAYOUT = 'default'
-TAXONOMY_YML = '_data/generated_taxonomy.yml'
-SCHEMA_PATH = '_data/taxonomy/schema.yml'
+POSTS_DIR     = '_posts'
+OUTPUT_ROOT   = '_generated'
+LAYOUT        = 'default'
+TAXONOMY_YML  = '_data/generated_taxonomy.yml'
+SCHEMA_PATH   = '_data/taxonomy/schema.yml'
 
 def normalize_slug(name)
   name.to_s.downcase.strip.gsub(' ', '-').gsub(/[^\w\-]/, '')
 end
 
-def extract_front_matter(path)
-  content = File.read(path)
-  if content =~ /\A---\s*\n(.*?)\n---\s*\n/m
-    YAML.safe_load($1, permitted_classes: [Date, Time], aliases: true) || {}
+def parse_front_matter(file_path)
+  content = File.read(file_path)
+  if content =~ /\A---\s*\n(.*?)\n---/m
+    yaml = Regexp.last_match(1)
+    YAML.safe_load(yaml, permitted_classes: [Date, Time], aliases: true) || {}
   else
-    warn "⚠️ Front matter not found in #{path}"
-    nil
+    {}
   end
-rescue Psych::Exception => e
-  warn "⚠️ YAML parse error in #{path}: #{e}"
-  nil
+rescue Psych::SyntaxError => e
+  warn "YAML syntax error in #{file_path}: #{e.message}"
+  {}
 end
 
-# Load schema
 schema = YAML.load_file(SCHEMA_PATH)
+taxonomy = Hash.new { |h, k| h[k] = { categories: [], tags: [] } }
+counts = Hash.new { |h, k| h[k] = { categories: Hash.new(0), tags: Hash.new(0) } }
 
-# Prepare data structures
-taxonomy = { 'ja' => { categories: [], tags: [] }, 'en' => { categories: [], tags: [] } }
-counts   = { 'ja' => { categories: Hash.new(0), tags: Hash.new(0) }, 'en' => { categories: Hash.new(0), tags: Hash.new(0) } }
-
-# Parse posts
 Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
-  data = extract_front_matter(path)
-  next unless data
+  data = parse_front_matter(path)
+  next if data.empty? || data['draft'] == true || data['hidden'] == true
 
-  next if data['draft'] || data['hidden']
   lang = data['lang']
   next unless %w[ja en].include?(lang)
 
@@ -49,7 +43,6 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   end
 end
 
-# Generate taxonomy pages
 generated_data = {}
 
 taxonomy.each do |lang, types|
@@ -65,25 +58,27 @@ taxonomy.each do |lang, types|
 
       slug = normalize_slug(name)
       next if seen_slugs[slug]
+
       seen_slugs[slug] = true
+      item = {
+        'taxonomy_name' => name,
+        'taxonomy_slug' => slug,
+        'count' => counts[lang][type][name]
+      }
 
-      item = { 'taxonomy_name' => name, 'taxonomy_slug' => slug, 'count' => counts[lang][type][name] }
-
-      # Set schema attributes
       schema.each do |attr, meta|
-        next if attr == 'taxonomy_name' || meta['unused']
-        item[attr] = if meta['type'] == 'enum'
-          valid_values = meta['values'] || []
-          value = meta['default']
-          valid_values.include?(value) ? value : meta['default']
+        next if %w[taxonomy_name taxonomy_slug].include?(attr) || meta['unused']
+        if meta['type'] == 'enum'
+          valid = meta['values'] || []
+          def_val = meta['default']
+          item[attr] = valid.include?(def_val) ? def_val : valid.first
         else
-          meta['default']
+          item[attr] = meta['default']
         end
       end
 
       items << item
 
-      # Generate individual taxonomy page
       dir = "#{OUTPUT_ROOT}/#{lang}/#{type}/#{slug}.md"
       label = type.to_s.capitalize.chop
       FileUtils.mkdir_p(File.dirname(dir))
@@ -125,6 +120,5 @@ taxonomy.each do |lang, types|
   end
 end
 
-# Write output YAML
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
 File.write(TAXONOMY_YML, generated_data.to_yaml)
