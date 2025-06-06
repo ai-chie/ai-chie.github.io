@@ -1,4 +1,4 @@
-name: Generate Taxonomy Pages
+name: Generate taxonomy pages (with slug validation)
 
 on:
   push:
@@ -36,10 +36,6 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add _generated/
-          git add _data/generated_taxonomy.yml
-          git add _data/slug_missing_report.yml
-          git add _data/slug_conflicts.yml
-          git add _data/slug_overrides.yml
-          git diff --quiet && git diff --staged --quiet || git commit -m "🔄 Auto-generate taxonomy & slug overrides"
+          git add _data/generated_taxonomy.yml _data/missing_slug_terms.yml _data/slug_conflicts.yml
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-generate taxonomy data"
           git push
