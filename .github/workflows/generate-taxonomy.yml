@@ -4,8 +4,9 @@ on:
   push:
     paths:
       - '_posts/**'
-      - '_scripts/generate_taxonomy_pages.rb'
-      - '_data/taxonomy/schema.yml'
+      - '_data/taxonomy/**'
+      - '_data/slug_overrides.yml'
+      - '_scripts/generate_taxonomy_pages_full.rb'
       - '.github/workflows/generate-taxonomy.yml'
   workflow_dispatch:
 
@@ -13,37 +14,32 @@ permissions:
   contents: write
 
 jobs:
-  generate:
-    name: 🏗️ Generate taxonomy data
+  generate-taxonomy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: ⬇️ Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: 📦 Set up Ruby 3.1 with bundler cache
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
-          bundler-cache: true
 
-      - name: 🔧 Run taxonomy generation script
-        run: ruby _scripts/generate_taxonomy_pages.rb
+      - name: Install dependencies
+        run: bundle install
 
-      - name: 🔍 Check generated files
-        run: |
-          echo "🗂 Checking _data/generated_taxonomy.yml..."
-          if [ -f "_data/generated_taxonomy.yml" ]; then
-            head -n 20 _data/generated_taxonomy.yml
-          else
-            echo "❌ _data/generated_taxonomy.yml was not created!"
-            exit 1
-          fi
+      - name: Generate taxonomy pages (with slug validation & overrides)
+        run: ruby _scripts/generate_taxonomy_pages_full.rb
 
-      - name: 📤 Commit changes if any
+      - name: Commit and push generated taxonomy files
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add _generated/ _data/generated_taxonomy.yml
-          git diff --cached --quiet || git commit -m "Auto-generate taxonomy data"
+          git add _generated/
+          git add _data/generated_taxonomy.yml
+          git add _data/slug_missing_report.yml
+          git add _data/slug_conflicts.yml
+          git add _data/slug_overrides.yml
+          git diff --quiet && git diff --staged --quiet || git commit -m "🔄 Auto-generate taxonomy & slug overrides"
           git push
