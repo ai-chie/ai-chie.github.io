@@ -1,97 +1,51 @@
----
-ja:
-  categories:
-  - taxonomy_name: テスト
-    taxonomy_slug: ''
-    count: 1
-    taxonomy_hidden: false
-    taxonomy_draft: false
-    taxonomy_private: false
-    taxonomy_admin_only: false
-    taxonomy_featured: false
-    taxonomy_beta: false
-    taxonomy_deprecated: false
-    taxonomy_color: "#cccccc"
-    taxonomy_priority: 99
-    taxonomy_description: ''
-    taxonomy_tooltip: ''
-    taxonomy_icon: ''
-    taxonomy_link: ''
-    taxonomy_hidden_reason: ''
-    taxonomy_audience: external
-  tags:
-  - taxonomy_name: サンプル
-    taxonomy_slug: ''
-    count: 1
-    taxonomy_hidden: false
-    taxonomy_draft: false
-    taxonomy_private: false
-    taxonomy_admin_only: false
-    taxonomy_featured: false
-    taxonomy_beta: false
-    taxonomy_deprecated: false
-    taxonomy_color: "#cccccc"
-    taxonomy_priority: 99
-    taxonomy_description: ''
-    taxonomy_tooltip: ''
-    taxonomy_icon: ''
-    taxonomy_link: ''
-    taxonomy_hidden_reason: ''
-    taxonomy_audience: external
-en:
-  categories:
-  - taxonomy_name: Test
-    taxonomy_slug: test
-    count: 1
-    taxonomy_hidden: false
-    taxonomy_draft: false
-    taxonomy_private: false
-    taxonomy_admin_only: false
-    taxonomy_featured: false
-    taxonomy_beta: false
-    taxonomy_deprecated: false
-    taxonomy_color: "#cccccc"
-    taxonomy_priority: 99
-    taxonomy_description: ''
-    taxonomy_tooltip: ''
-    taxonomy_icon: ''
-    taxonomy_link: ''
-    taxonomy_hidden_reason: ''
-    taxonomy_audience: external
-  tags:
-  - taxonomy_name: Post
-    taxonomy_slug: post
-    count: 1
-    taxonomy_hidden: false
-    taxonomy_draft: false
-    taxonomy_private: false
-    taxonomy_admin_only: false
-    taxonomy_featured: false
-    taxonomy_beta: false
-    taxonomy_deprecated: false
-    taxonomy_color: "#cccccc"
-    taxonomy_priority: 99
-    taxonomy_description: ''
-    taxonomy_tooltip: ''
-    taxonomy_icon: ''
-    taxonomy_link: ''
-    taxonomy_hidden_reason: ''
-    taxonomy_audience: external
-  - taxonomy_name: Sample
-    taxonomy_slug: sample
-    count: 1
-    taxonomy_hidden: false
-    taxonomy_draft: false
-    taxonomy_private: false
-    taxonomy_admin_only: false
-    taxonomy_featured: false
-    taxonomy_beta: false
-    taxonomy_deprecated: false
-    taxonomy_color: "#cccccc"
-    taxonomy_priority: 99
-    taxonomy_description: ''
-    taxonomy_tooltip: ''
-    taxonomy_icon: ''
-    taxonomy_link: ''
-    taxonomy_hidden_reason: ''
-    taxonomy_audience: external
+name: Generate Taxonomy Pages
+
+on:
+  push:
+    paths:
+      - '_posts/**'
+      - '_data/taxonomy/schema.yml'
+      - '_scripts/generate_taxonomy_pages_full.rb'
+      - '.github/workflows/generate-taxonomy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+
+      - name: Install dependencies
+        run: |
+          gem install i18n
+          gem install yaml
+
+      - name: Run taxonomy generation script
+        run: ruby _scripts/generate_taxonomy_pages_full.rb
+
+      - name: Show output logs
+        run: |
+          echo "== Generated Slugs =="
+          cat _log/generated_slugs.yml || echo "No slugs generated."
+          echo "== Missing Overrides =="
+          cat _data/missing_slug_overrides.yml || echo "No missing overrides."
+          echo "== Duplicate Slugs =="
+          cat _log/duplicate_slugs.yml || echo "No duplicates found."
+
+      - name: Commit changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add _generated/ _data/generated_taxonomy.yml _data/missing_slug_overrides.yml _log/
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-generate taxonomy data and logs"
+          git push
