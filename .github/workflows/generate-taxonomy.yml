@@ -7,7 +7,7 @@ on:
       - '_posts/**'
       - '_data/taxonomy/schema.yml'
       - '_data/slug_overrides.yml'
-      - '_scripts/generate_taxonomy_pages_full.rb'
+      - '_scripts/generate_taxonomy_pages.rb'
       - '.github/workflows/generate-taxonomy.yml'
 
 permissions:
@@ -32,7 +32,7 @@ jobs:
           gem install activesupport i18n
 
       - name: Generate taxonomy data
-        run: ruby _scripts/generate_taxonomy_pages_full.rb
+        run: ruby _scripts/generate_taxonomy_pages.rb
 
       - name: Commit generated taxonomy files
         run: |
