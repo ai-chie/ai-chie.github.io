@@ -4,6 +4,7 @@
   workflows:
 
     __files__:
+    - [gemfile-lock-artifact.yml, .github/workflows/gemfile-lock-artifact.yml]
     - [generate-category-counts.yml, .github/workflows/generate-category-counts.yml]
     - [generate-proj-dir-tree.yml, .github/workflows/generate-proj-dir-tree.yml]
     - [generate-tag-counts.yml.yml, .github/workflows/generate-tag-counts.yml.yml]
@@ -54,7 +55,15 @@ _data:
   - [initial_categories_list.yml, _data/initial_categories_list.yml]
   - [initial_tags_list.yml, _data/initial_tags_list.yml]
   - [lang.yml, _data/lang.yml]
+  - [missing_slug_terms.yml, _data/missing_slug_terms.yml]
   - [post_schema.yml, _data/post_schema.yml]
+  - [slug_conflicts.yml, _data/slug_conflicts.yml]
+  - [slug_overrides.yml, _data/slug_overrides.yml]
+
+_export:
+
+  __files__:
+  - [.keep, _export/.keep]
 
 _generated:
 
@@ -63,11 +72,14 @@ _generated:
     categories:
 
       __files__:
+      - [.keep, _generated/en/categories/.keep]
       - [test.md, _generated/en/categories/test.md]
 
     tags:
 
       __files__:
+      - [.keep, _generated/en/tags/.keep]
+      - [post.md, _generated/en/tags/post.md]
       - [sample.md, _generated/en/tags/sample.md]
 
   ja:
@@ -75,18 +87,23 @@ _generated:
     categories:
 
       __files__:
-      - [tesuto.md, _generated/ja/categories/tesuto.md]
+      - [.keep, _generated/ja/categories/.keep]
+      - [.md, _generated/ja/categories/.md]
 
     tags:
 
       __files__:
-      - [sanpuru.md, _generated/ja/tags/sanpuru.md]
+      - [.keep, _generated/ja/tags/.keep]
+      - [.md, _generated/ja/tags/.md]
 
 _includes:
 
   __files__:
   - [footer.html, _includes/footer.html]
+  - [head-ai.html, _includes/head-ai.html]
   - [head-meta.html, _includes/head-meta.html]
+  - [head-minimal.html, _includes/head-minimal.html]
+  - [head-ogp.html, _includes/head-ogp.html]
   - [header.html, _includes/header.html]
   - [lang_switch.html, _includes/lang_switch.html]
   - [post-attribute-check.html, _includes/post-attribute-check.html]
@@ -103,6 +120,11 @@ _layouts:
   - [default.html, _layouts/default.html]
   - [text-post.html, _layouts/text-post.html]
   - [text.html, _layouts/text.html]
+
+_log:
+
+  __files__:
+  - [.keep, _log/.keep]
 
 _pages:
 
@@ -155,9 +177,8 @@ _scripts:
 
   __files__:
   - [convert-yaml-to-json.js, _scripts/convert-yaml-to-json.js]
-  - [generate-text-pages.no-push.yml, _scripts/generate-text-pages.no-push.yml]
-  - [generate-text-pages.push.yml, _scripts/generate-text-pages.push.yml]
   - [generate_category_counts.rb, _scripts/generate_category_counts.rb]
+  - [generate_sitemap_text.rb, _scripts/generate_sitemap_text.rb]
   - [generate_tag_counts.rb, _scripts/generate_tag_counts.rb]
   - [generate_taxonomy_pages.rb, _scripts/generate_taxonomy_pages.rb]
   - [generate_text_category_index.rb, _scripts/generate_text_category_index.rb]
@@ -165,9 +186,16 @@ _scripts:
   - [generate_text_posts.rb, _scripts/generate_text_posts.rb]
   - [generate_text_tag_index.rb, _scripts/generate_text_tag_index.rb]
   - [generate_text_tag_pages.rb, _scripts/generate_text_tag_pages.rb]
+  - [merge_missing_slugs.rb, _scripts/merge_missing_slugs.rb]
+  - [merge_slug_dictionaries.rb, _scripts/merge_slug_dictionaries.rb]
   - [package.json, _scripts/package.json]
 
 assets:
+
+  css:
+
+    __files__:
+    - [.keep, assets/css/.keep]
 
   images:
 
@@ -183,18 +211,10 @@ assets:
         __files__:
         - [image_1-ja.png, assets/images/article/2025-05-30-T135040+0900-UUID-ja/image_1-ja.png]
 
-docs:
+  js:
 
-  __files__:
-  - [README.md, docs/README.md]
-  - [build_instructions.md, docs/build_instructions.md]
-  - [final_detailed_structure_commented.yml, docs/final_detailed_structure_commented.yml]
-  - [project_docs_combined.md, docs/project_docs_combined.md]
-  - [project_purpose_notes.md, docs/project_purpose_notes.md]
-  - [scripts_overview.md, docs/scripts_overview.md]
-  - [structure_guide.md, docs/structure_guide.md]
-  - [taxonomy_schema_spec.md, docs/taxonomy_schema_spec.md]
-  - [workflow_guide.md, docs/workflow_guide.md]
+    __files__:
+    - [.keep, assets/js/.keep]
 
 root_files:
 
@@ -206,4 +226,3 @@ root_files:
   - [_config_text.yml, _config_text.yml]
   - [robots.txt, robots.txt]
   - [sitemap.xml, sitemap.xml]
-  - [sitemap_text.xml, sitemap_text.xml]
