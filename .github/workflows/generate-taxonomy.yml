@@ -1,41 +1,43 @@
-name: Generate taxonomy pages (with slug validation)
+name: Generate Taxonomy Pages
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - '_posts/**'
-      - '_data/taxonomy/**'
+      - '_data/taxonomy/schema.yml'
       - '_data/slug_overrides.yml'
       - '_scripts/generate_taxonomy_pages_full.rb'
       - '.github/workflows/generate-taxonomy.yml'
-  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  generate-taxonomy:
+  build-taxonomy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Ruby
+      - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
+          bundler-cache: true
 
       - name: Install dependencies
-        run: bundle install
+        run: |
+          gem install activesupport i18n
 
-      - name: Generate taxonomy pages (with slug validation & overrides)
+      - name: Generate taxonomy data
         run: ruby _scripts/generate_taxonomy_pages_full.rb
 
-      - name: Commit and push generated taxonomy files
+      - name: Commit generated taxonomy files
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add _data/generated_taxonomy.yml _data/missing_slug_terms.yml _data/slug_conflicts.yml
-          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-generate taxonomy data"
+          git add _generated/ _data/generated_taxonomy.yml _data/missing_slug_terms.yml _data/slug_conflicts.yml
+          git diff --quiet || git commit -m "Auto-generate taxonomy YAML & pages"
           git push
