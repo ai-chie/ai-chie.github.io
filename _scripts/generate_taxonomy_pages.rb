@@ -35,12 +35,12 @@ rescue => e
 end
 
 taxonomy = {
-  'ja' => { categories: [], tags: [] },
-  'en' => { categories: [], tags: [] }
+  'ja' => { 'categories' => [], 'tags' => [] },
+  'en' => { 'categories' => [], 'tags' => [] }
 }
 counts = {
-  'ja' => { categories: Hash.new(0), tags: Hash.new(0) },
-  'en' => { categories: Hash.new(0), tags: Hash.new(0) }
+  'ja' => { 'categories' => Hash.new(0), 'tags' => Hash.new(0) },
+  'en' => { 'categories' => Hash.new(0), 'tags' => Hash.new(0) }
 }
 
 Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
@@ -53,15 +53,15 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
     next
   end
 
-  %i[categories tags].each do |type|
+  ['categories', 'tags'].each do |type|
     Array(data[type]).each do |term|
       term_str = term.to_s.strip
       if term_str.empty?
         warn "⚠️ Skipped empty term for #{type} in #{lang} from post #{path}"
         next
       end
-      taxonomy[lang][type.to_sym] << term_str
-      counts[lang][type.to_sym][term_str] += 1
+      taxonomy[lang][type] << term_str
+      counts[lang][type][term_str] += 1
       puts "📥 Added #{type}: '#{term_str}' to taxonomy[#{lang}][#{type}]"
     end
   end
@@ -76,7 +76,7 @@ taxonomy.each do |lang, types|
   generated_data[lang] = {}
 
   types.each do |type, terms|
-    key = type.to_s.chop
+    key = type[0..-2]  # "categories" => "category"
     items = []
     seen_slugs = {}
 
@@ -90,7 +90,7 @@ taxonomy.each do |lang, types|
       item = {
         'taxonomy_name' => name,
         'taxonomy_slug' => slug,
-        'count' => counts[lang][type.to_sym][name]
+        'count' => counts[lang][type][name]
       }
 
       schema.each do |attr, meta|
@@ -106,7 +106,7 @@ taxonomy.each do |lang, types|
       puts "📘 Added item to #{lang}/#{type}: #{item.inspect}"
 
       dir = "#{OUTPUT_ROOT}/#{lang}/#{type}/#{slug}.md"
-      label = type.to_s.capitalize.chop
+      label = type.capitalize.chop
       FileUtils.mkdir_p(File.dirname(dir))
       File.write(dir, <<~MD)
         ---
