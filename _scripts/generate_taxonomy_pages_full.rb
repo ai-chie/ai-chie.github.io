@@ -1,40 +1,49 @@
+#!/usr/bin/env ruby
 require 'fileutils'
 require 'yaml'
 require 'date'
 require 'i18n'
+require 'active_support/core_ext/string/inflections'
 
-# I18n transliteration for slugging
-I18n.available_locales = [:en, :ja]
+POSTS_DIR       = '_posts'
+OUTPUT_ROOT     = '_generated'
+LAYOUT          = 'default'
+TAXONOMY_YML    = '_data/generated_taxonomy.yml'
+SCHEMA_PATH     = '_data/taxonomy/schema.yml'
+SLUG_DICT_FILE  = '_data/slug_overrides.yml'
+MISSING_FILE    = '_data/missing_slug_terms.yml'
+CONFLICT_FILE   = '_data/slug_conflicts.yml'
 
-POSTS_DIR        = '_posts'
-OUTPUT_ROOT      = '_generated'
-LAYOUT           = 'default'
-SCHEMA_PATH      = '_data/taxonomy/schema.yml'
-TAXONOMY_YML     = '_data/generated_taxonomy.yml'
-OVERRIDES_PATH   = '_data/slug_overrides.yml'
-MISSING_OVERRIDES = '_data/missing_slug_overrides.yml'
-DUPLICATES_PATH  = '_log/duplicate_slugs.yml'
-GENERATED_SLUGS  = '_log/generated_slugs.yml'
-
-# 読み込みまたは空ハッシュ
-def load_yaml_safe(path)
-  File.exist?(path) ? YAML.load_file(path) : {}
+# YAML safe load with fallback
+def safe_load_yaml(path)
+  YAML.load_file(path)
+rescue => e
+  warn "YAML load error in #{path}: #{e.message}"
+  {}
 end
 
-def normalize_slug(name, lang, type, overrides, generated, missing)
-  overrides_for_lang = overrides.dig(lang, type.to_s) || {}
-  return overrides_for_lang[name] if overrides_for_lang[name]
+# カスタムスラッグの生成
+def generate_slug(term, lang, override_dict, used_slugs)
+  if override_dict.dig(lang, term)
+    slug = override_dict[lang][term]
+    source = 'override'
+  else
+    base = I18n.transliterate(term.to_s)
+    slug = base.parameterize
+    source = 'auto'
+  end
 
-  # フォールバックで生成
-  slug = I18n.transliterate(name.to_s).downcase.strip.gsub(' ', '-').gsub(/[^\w\-]/, '')
-  slug = slug.empty? ? name.to_s.parameterize : slug
+  original = slug.dup
+  if used_slugs.include?(slug)
+    slug = "#{lang}-#{slug}"
+    source += ' (conflict-resolved)'
+  end
+  used_slugs << slug
 
-  # ログ用に記録
-  generated[lang][type.to_s][name] = slug
-  missing[lang][type.to_s] << name unless missing[lang][type.to_s].include?(name)
-  slug
+  [slug, source]
 end
 
+# フロントマター抽出
 def parse_front_matter(file_path)
   content = File.read(file_path)
   if content =~ /\A---\s*
@@ -46,53 +55,58 @@ def parse_front_matter(file_path)
     {}
   end
 rescue Psych::SyntaxError => e
-  warn "YAML parse error in #{file_path}: #{e.message}"
+  warn "YAML error in #{file_path}: #{e.message}"
   {}
 end
 
-schema = load_yaml_safe(SCHEMA_PATH)
-overrides = load_yaml_safe(OVERRIDES_PATH)
-taxonomy = Hash.new { |h, k| h[k] = { categories: [], tags: [] } }
-counts = Hash.new { |h, k| h[k] = { categories: Hash.new(0), tags: Hash.new(0) } }
-generated_slugs = Hash.new { |h, k| h[k] = { 'categories' => {}, 'tags' => {} } }
-missing_slugs = Hash.new { |h, k| h[k] = { 'categories' => [], 'tags' => [] } }
-duplicates = Hash.new { |h, k| h[k] = { 'categories' => {}, 'tags' => {} } }
-seen_slugs = Hash.new { |h, k| h[k] = { 'categories' => {}, 'tags' => {} } }
+# 初期ロード
+schema = safe_load_yaml(SCHEMA_PATH)
+slug_dict = safe_load_yaml(SLUG_DICT_FILE)
 
+taxonomy = Hash.new { |h, k| h[k] = { categories: [], tags: [] } }
+counts   = Hash.new { |h, k| h[k] = { categories: Hash.new(0), tags: Hash.new(0) } }
+
+# 投稿処理
 Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   data = parse_front_matter(path)
   next if data.empty? || data['draft'] || data['hidden']
+
   lang = data['lang']
   next unless %w[ja en].include?(lang)
 
   %i[categories tags].each do |type|
     Array(data[type]).each do |term|
-      name = term.to_s.strip
-      next if name.empty?
-      taxonomy[lang][type] << name
-      counts[lang][type][name] += 1
+      term_str = term.to_s.strip
+      next if term_str.empty?
+      taxonomy[lang][type] << term_str
+      counts[lang][type][term_str] += 1
     end
   end
 end
 
+# 辞書未定義語・スラッグ衝突管理
+missing_terms = Hash.new { |h, k| h[k] = [] }
+conflicts = Hash.new { |h, k| h[k] = {} }
+
 generated_data = {}
+used_slugs = {}
 
 taxonomy.each do |lang, types|
   generated_data[lang] = {}
 
   types.each do |type, terms|
     key = type.to_s.chop
-    items = {}
+    items = []
+    seen = {}
 
     terms.uniq.sort.each do |name|
-      slug = normalize_slug(name, lang, type, overrides, generated_slugs, missing_slugs)
+      slug, source = generate_slug(name, lang, slug_dict, used_slugs)
 
-      # 重複検出
-      if seen_slugs[lang][type].key?(slug)
-        (duplicates[lang][type.to_s][slug] ||= []) << name
-        next
-      end
-      seen_slugs[lang][type][slug] = name
+      missing_terms[lang] << name if source.start_with?('auto') && !slug_dict.dig(lang, name)
+      conflicts[lang][slug] = [] if conflicts[lang].key?(slug)
+      conflicts[lang][slug] ||= []
+      conflicts[lang][slug] << name if seen[slug]
+      seen[slug] = true
 
       item = {
         'taxonomy_name' => name,
@@ -102,12 +116,16 @@ taxonomy.each do |lang, types|
 
       schema.each do |attr, meta|
         next if %w[taxonomy_name taxonomy_slug].include?(attr) || meta['unused']
-        item[attr] = meta['type'] == 'enum' ? (meta['values'].include?(meta['default']) ? meta['default'] : meta['values'].first) : meta['default']
+        if meta['type'] == 'enum'
+          item[attr] = meta['values'].include?(meta['default']) ? meta['default'] : meta['values'].first
+        else
+          item[attr] = meta['default']
+        end
       end
 
-      items[slug] = item
+      items << item
 
-      # 出力
+      # ページ出力
       dir = "#{OUTPUT_ROOT}/#{lang}/#{type}/#{slug}.md"
       FileUtils.mkdir_p(File.dirname(dir))
       File.write(dir, <<~MD)
@@ -118,42 +136,16 @@ taxonomy.each do |lang, types|
         permalink: /#{lang}/#{type}/#{slug}/
         lang: #{lang}
         ---
-
-        <h1>#{type.to_s.capitalize.chop}: #{name}</h1>
-        <p>{{ site.data.taxonomy.#{type}.#{lang}['#{name}'].taxonomy_description | default: 'この#{type.to_s.chop}に関する記事を紹介します。' }}</p>
-
-        {% assign posts = site.#{type}[page.#{key}] | where: 'lang', '#{lang}' | where_exp: 'post', 'post.hidden != true and post.draft != true' %}
-
-        {% if posts.size > 0 %}
-        <h2>おすすめ記事</h2>
-        <ul>
-        {% for post in posts limit: 2 %}
-          <li><a href="{{ post.url }}">{{ post.title }}</a> - {{ post.date | date: "%Y-%m-%d" }}</li>
-        {% endfor %}
-        </ul>
-        <h2>すべての記事</h2>
-        <ul>
-        {% for post in posts offset: 2 %}
-          <li><a href="{{ post.url }}">{{ post.title }}</a> - {{ post.date | date: "%Y-%m-%d" }}</li>
-        {% endfor %}
-        </ul>
-        {% else %}
-        <p>現在この#{type.to_s.chop}に該当する記事はありません。</p>
-        {% endif %}
       MD
     end
-
-    generated_data[lang][type] = items.values
+    generated_data[lang][type] = items
   end
 end
 
+# 出力
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
 File.write(TAXONOMY_YML, generated_data.to_yaml)
-File.write(MISSING_OVERRIDES, missing_slugs.to_yaml)
-File.write(DUPLICATES_PATH, duplicates.to_yaml)
-File.write(GENERATED_SLUGS, generated_slugs.to_yaml)
 
-puts "✅ taxonomy YAML 書き出し完了: #{TAXONOMY_YML}"
-puts "🔎 重複slug: #{DUPLICATES_PATH}"
-puts "🔧 自動生成slug: #{GENERATED_SLUGS}"
-puts "📝 辞書未定義: #{MISSING_OVERRIDES}"
+File.write(MISSING_FILE, missing_terms.to_yaml)
+File.write(CONFLICT_FILE, conflicts.to_yaml)
+puts "✅ Taxonomy data written to #{TAXONOMY_YML}, #{MISSING_FILE}, #{CONFLICT_FILE}"
