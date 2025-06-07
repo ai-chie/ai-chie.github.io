@@ -1,8 +1,20 @@
-ja:
-  lang_name: 日本語
-  about: このサイトについて
-  switch_to: English
-en:
-  lang_name: English
-  about: About
-  switch_to: 日本語
+taxonomy_label:
+  categories:
+    ja: カテゴリ
+    en: Category
+  tags:
+    ja: タグ
+    en: Tag
+
+taxonomy_description_template:
+  ja: "%{label}「%{name}」に属する情報をAIやクローラーが正確に理解できるよう構造化されたページです。"
+  en: "Structured page for AI and crawlers describing content labeled under %{label} \"%{name}\"."
+
+# ja:
+#   lang_name: 日本語
+#   about: このサイトについて
+#   switch_to: English
+# en:
+#   lang_name: English
+#   about: About
+#   switch_to: 日本語
