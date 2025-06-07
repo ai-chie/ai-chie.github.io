@@ -1,0 +1,63 @@
+name: Build and Commit _site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '_posts/**'
+      - '_data/**'
+      - '_scripts/**'
+      - '_layouts/**'
+      - '_includes/**'
+      - '_config*.yml'
+      - 'index.html'
+      - '.github/workflows/build_and_commit.yml'
+
+jobs:
+  build-and-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Run taxonomy/text generators
+        run: |
+          ruby _scripts/generate_taxonomy_pages.rb
+          ruby _scripts/generate_text_posts.rb
+          ruby _scripts/generate_text_category_index.rb
+          ruby _scripts/generate_text_category_pages.rb
+          ruby _scripts/generate_text_tag_index.rb
+          ruby _scripts/generate_text_tag_pages.rb
+
+      - name: Build Jekyll site
+        run: bundle exec jekyll build --destination _site
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Stage only changed files in _site
+        run: |
+          git add -N _site/
+          git diff --name-only --cached | grep '^_site/' | xargs -r git add
+
+      - name: Commit and push if there are changes
+        run: |
+          if ! git diff --cached --quiet; then
+            git commit -m "Update _site [auto]"
+            git push origin main
+          else
+            echo "No changes to commit."
+          fi
