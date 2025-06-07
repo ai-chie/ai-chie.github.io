@@ -15,7 +15,10 @@ def parse_front_matter(path)
   content = File.read(path)
   if content =~ /\A---\s*\n(.*?)\n---/m
     yaml = Regexp.last_match(1)
-    YAML.safe_load(yaml, permitted_classes: [Date, Time], aliases: true) || {}
+    data = YAML.safe_load(yaml, permitted_classes: [Date, Time], aliases: true) || {}
+    puts "[TEST] Parsed front matter for #{path}:"
+    pp data
+    return data
   else
     {}
   end
@@ -24,8 +27,6 @@ rescue Psych::SyntaxError => e
   {}
 end
 
-puts "[TEST] Parsed front matter for #{path}:"
-pp data
 
 # --------- Slug generator ---------
 def generate_slug(term, lang, used)
