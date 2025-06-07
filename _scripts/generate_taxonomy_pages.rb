@@ -24,6 +24,9 @@ rescue Psych::SyntaxError => e
   {}
 end
 
+puts "[TEST] Parsed front matter for #{path}:"
+pp data
+
 # --------- Slug generator ---------
 def generate_slug(term, lang, used)
   slug = I18n.transliterate(term.to_s).parameterize
