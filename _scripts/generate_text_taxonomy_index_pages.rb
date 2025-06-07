@@ -16,23 +16,27 @@ LANGS.each do |lang|
     entries = taxonomy_all.dig(lang, type) || []
     next if entries.empty?
 
-    label = lang_labels.dig("taxonomy_label", type, lang) || type.capitalize
-    index_title = lang_labels.dig("taxonomy_index_title", type, lang) || "#{label}一覧"
-    index_intro = lang_labels.dig("taxonomy_index_intro", type, lang) || "#{label}の一覧ページです。"
+    label        = lang_labels.dig("taxonomy_label", type, lang) || type.capitalize
+    index_title  = lang_labels.dig("taxonomy_index_title", type, lang) || "#{label}一覧"
+    index_intro  = lang_labels.dig("taxonomy_index_intro", type, lang) || "#{label}の一覧ページです。"
 
-    list_html = entries.map do |item|
-      slug = item["taxonomy_slug"]
-      name_obj = item["taxonomy_name"]
-      name = name_obj.is_a?(Hash) ? name_obj[lang] : name_obj
-      count = item["count"] || 0
-      "<li><a href="/#{DEVICE}/#{lang}/#{type}/#{slug}/">#{name}</a> <span>(#{count})</span></li>"
-    end.join("\n")
+    list_lines = []
+    entries.each do |item|
+      slug      = item["taxonomy_slug"]
+      name_obj  = item["taxonomy_name"]
+      name      = name_obj.is_a?(Hash) ? name_obj[lang] : name_obj
+      count     = item["count"] || 0
+      line      = "<li><a href=\"/#{DEVICE}/#{lang}/#{type}/#{slug}/\">#{name}</a> <span>(#{count})</span></li>"
+      list_lines << line
+    end
 
-    dir = File.join("_pages", DEVICE, lang, type)
+    list_html = list_lines.join("\n")
+
+    dir  = File.join("_pages", DEVICE, lang, type)
     FileUtils.mkdir_p(dir)
     path = File.join(dir, "index.html")
 
-    File.write(path, <<~MD)
+    content = <<~HTML
       ---
       layout: text
       lang: #{lang}
@@ -49,6 +53,8 @@ LANGS.each do |lang|
         #{list_html}
         </ul>
       </main>
-    MD
+    HTML
+
+    File.write(path, content)
   end
 end
