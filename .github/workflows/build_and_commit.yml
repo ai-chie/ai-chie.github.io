@@ -48,11 +48,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Stage only changed files in _site (safe fallback)
+      - name: Stage only changed files in _site (safe and filtered)
         run: |
           mkdir -p _site
           git add -N _site/ || true
-          CHANGED=$(git diff --name-only --cached | grep '^_site/' || true)
+          CHANGED=$(git diff --name-only --cached | grep '^_site/' | grep -v '\.keep$' || true)
           if [ -n "$CHANGED" ]; then
             echo "$CHANGED" | xargs git add
           else
