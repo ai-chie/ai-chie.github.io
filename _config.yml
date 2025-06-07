@@ -11,7 +11,7 @@ source: .
 destination: ./_site
 
 permalink: 
-theme: minima
+# theme: minima
 
 # Markdownエンジン
 markdown: kramdown
