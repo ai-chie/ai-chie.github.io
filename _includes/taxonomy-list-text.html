@@ -3,6 +3,8 @@
 {%- assign lang = include.lang | default: page.lang | default: 'ja' -%}
 {%- assign data = site.data.taxonomy[type][lang] -%}
 {%- assign seen_slugs = "" | split: "" -%}
+{%- assign labels = site.data.lang.taxonomy_badge -%}
+{%- assign warnings = site.data.lang.taxonomy_warning -%}
 
 {%- for group_name in data %}
   {%- assign group = group_name[1] %}
@@ -22,31 +24,25 @@
         {%- assign badges = "" -%}
         {%- assign warning = "" -%}
 
-        {%- if item.taxonomy_featured %}{% assign badges = badges | append: "注目 " %}{% endif -%}
-        {%- if item.taxonomy_beta %}{% assign badges = badges | append: "Beta " %}{% endif -%}
-        {%- if item.taxonomy_deprecated %}{% assign badges = badges | append: "廃止予定 " %}{% endif -%}
+        {%- if item.taxonomy_featured %}{% assign badges = badges | append: labels.featured[lang] | append: " " %}{% endif -%}
+        {%- if item.taxonomy_beta %}{% assign badges = badges | append: labels.beta[lang] | append: " " %}{% endif -%}
+        {%- if item.taxonomy_deprecated %}{% assign badges = badges | append: labels.deprecated[lang] | append: " " %}{% endif -%}
 
         {%- if name == '' %}
-          {% assign warning = warning | append: '⚠️ 名前が未定義 ' %}
+          {% assign warning = warning | append: "⚠️ " | append: warnings.name_missing[lang] | append: " " %}
         {%- endif %}
         {%- if slug == '' %}
-          {% assign warning = warning | append: '⚠️ slug未生成 ' %}
+          {% assign warning = warning | append: "⚠️ " | append: warnings.slug_missing[lang] | append: " " %}
         {%- endif %}
         {%- if seen_slugs contains slug %}
-          {% assign warning = warning | append: '⚠️ slug重複 ' %}
+          {% assign warning = warning | append: "⚠️ " | append: warnings.slug_duplicate[lang] | append: " " %}
         {%- else %}
           {% assign seen_slugs = seen_slugs | push: slug %}
         {%- endif %}
 
-        {%- if audience != 'external' or draft or hidden or private or admin_only %}
-          {%- continue %}
-        {%- endif %}
-
-        <li>
-          <a href="{{ link }}">{{ name }}</a>
-          {% if badges != "" %}（{{ badges | strip }}）{% endif %}
-          {% if warning != "" %}<span style="color: red;">{{ warning | strip }}</span>{% endif %}
-        </li>
+        {%- unless draft or hidden or private or admin_only %}
+          <li><a href="{{ link }}">{{ badges }}{{ name }}</a> {{ warning }}</li>
+        {%- endunless %}
       {%- endfor %}
     </ul>
   </section>

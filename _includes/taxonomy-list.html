@@ -1,97 +1,64 @@
-{% assign lang = include.lang | default: page.lang | default: 'ja' %}
-{% assign type = include.type | default: 'categories' %}
-{% assign title = include.title | default: (type == 'tags' ? 'タグ一覧' : 'カテゴリ一覧') %}
-{% assign data = site.data.taxonomy[type][lang] %}
-{% assign counts = site.data['generated_' | append: type | append: '_counts'][lang] %}
-{% assign schema = site.data.taxonomy.schema %}
+{%- assign schema = site.data.taxonomy.schema -%}
+{%- assign type = include.type | default: 'categories' -%}
+{%- assign lang = include.lang | default: page.lang | default: 'ja' -%}
+{%- assign data = site.data.taxonomy[type][lang] -%}
+{%- assign counts = site.data["generated_" | append: type | append: "_counts"][lang] -%}
+{%- assign schema = site.data.taxonomy.schema -%}
+{%- assign ui = site.data.lang.taxonomy_ui -%}
 
-<h1>{{ title }}</h1>
-<div class="flex items-center gap-4 mb-4 flex-wrap">
-  <input type="text" placeholder="検索..." id="{{ type }}-search" class="p-2 border rounded w-full sm:w-auto">
-  <select id="{{ type }}-sort" class="p-2 border rounded">
-    <option value="count">件数順</option>
-    <option value="name">名前順</option>
+<h1>{{ ui.title[type][lang] }}</h1>
+
+<div>
+  <input type="text" id="filter" placeholder="{{ ui.search_placeholder[lang] }}">
+  <select id="sort">
+    <option value="count">{{ ui.sort_options.count[lang] }}</option>
+    <option value="name">{{ ui.sort_options.name[lang] }}</option>
   </select>
-  <div id="{{ type }}-filters" class="flex gap-2 flex-wrap">
-    {% assign group_data = data | sort: 'last' %}
-    {% for group_name in group_data %}
-      <label class="inline-flex items-center">
-        <input type="checkbox" class="{{ type }}-group-filter" value="{{ group_name[0] }}" checked>
-        <span class="ml-1 text-sm">{{ group_name[0] }}</span>
-      </label>
-    {% endfor %}
-  </div>
 </div>
 
-<div id="{{ type }}-grid">
-  {% assign sorted_groups = data | sort: 'last.order' %}
-  {% for group_name in sorted_groups %}
-    {% assign group = group_name[1] %}
-    <h2 class="mt-8 mb-2 text-xl font-bold">{{ group_name[0] }}</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      {% assign sorted_items = group.items | sort: 'taxonomy_priority' %}
-      {% for item in sorted_items %}
-        {% assign slug = item.taxonomy_slug %}
-        {% assign count = counts[slug] | default: 0 %}
-        {% assign taxonomy_name = item.taxonomy_name | default: schema.taxonomy_name.default %}
-        {% assign taxonomy_hidden = item.taxonomy_hidden | default: schema.taxonomy_hidden.default %}
-        {% assign taxonomy_draft = item.taxonomy_draft | default: schema.taxonomy_draft.default %}
-        {% assign taxonomy_private = item.taxonomy_private | default: schema.taxonomy_private.default %}
-        {% assign taxonomy_admin_only = item.taxonomy_admin_only | default: schema.taxonomy_admin_only.default %}
-        {% assign taxonomy_featured = item.taxonomy_featured | default: schema.taxonomy_featured.default %}
-        {% assign taxonomy_beta = item.taxonomy_beta | default: schema.taxonomy_beta.default %}
-        {% assign taxonomy_deprecated = item.taxonomy_deprecated | default: schema.taxonomy_deprecated.default %}
-        {% assign taxonomy_audience = item.taxonomy_audience | default: schema.taxonomy_audience.default %}
-        {% assign taxonomy_color = item.taxonomy_color | default: schema.taxonomy_color.default %}
-        {% assign taxonomy_description = item.taxonomy_description | default: schema.taxonomy_description.default %}
-        {% assign taxonomy_icon = item.taxonomy_icon | default: schema.taxonomy_icon.default %}
-        {% unless slug == "" or taxonomy_hidden or taxonomy_draft or taxonomy_private or taxonomy_admin_only %}
-        <div class="p-4 border rounded-xl shadow {{ type }}-item" data-name="{{ slug }}" data-count="{{ count }}" data-group="{{ group_name[0] }}">
-          <a href="/text/{{ lang }}/{{ type }}/{{ slug }}/" class="block">
-            {% if item.image %}<img src="{{ item.image }}" alt="{{ taxonomy_name }}" class="w-10 h-10 mb-2">{% endif %}
-            <strong class="block text-lg font-semibold" {% if taxonomy_color %}style="color: {{ taxonomy_color }}"{% endif %}>{{ taxonomy_icon }} {{ taxonomy_name }}</strong>
-            {% if taxonomy_description %}<p class="text-sm text-gray-600">{{ taxonomy_description }}</p>{% endif %}
-            <small class="text-xs text-gray-500">({{ count }} 件)</small>
-            <div class="text-xs mt-1 space-x-1">
-              {% if taxonomy_featured %}<span class="text-yellow-600 font-bold">★注目</span>{% endif %}
-              {% if taxonomy_beta %}<span class="text-indigo-600">🧪Beta</span>{% endif %}
-              {% if taxonomy_deprecated %}<span class="text-red-600">⚠廃止予定</span>{% endif %}
-              {% if taxonomy_audience == 'internal' %}<span class="text-gray-500">🔒Internal</span>{% endif %}
-              {% if taxonomy_audience == 'external' %}<span class="text-green-600">🌐Public</span>{% endif %}
-            </div>
-          </a>
-        </div>
-        {% endunless %}
-      {% endfor %}
-    </div>
-  {% endfor %}
-</div>
+{%- for group_name in data %}
+  {%- assign group = group_name[1] %}
+  <section>
+    <h2>{{ group_name[0] }}</h2>
+    <ul>
+      {%- assign items = group.items | sort: 'taxonomy_priority' %}
+      {%- for item in items %}
+        {%- assign name = item.taxonomy_name %}
+        {%- assign slug = item.taxonomy_slug %}
+        {%- assign link = item.taxonomy_link | default: '/' | append: lang | append: '/' | append: type | append: '/' | append: slug | append: '/' %}
+        {%- assign count = counts[slug] | default: 0 %}
+        {%- assign audience = item.taxonomy_audience | default: schema.taxonomy_audience.default %}
+        {%- assign draft = item.taxonomy_draft | default: schema.taxonomy_draft.default %}
+        {%- assign hidden = item.taxonomy_hidden | default: schema.taxonomy_hidden.default %}
+        {%- assign private = item.taxonomy_private | default: schema.taxonomy_private.default %}
+        {%- assign admin_only = item.taxonomy_admin_only | default: schema.taxonomy_admin_only.default %}
 
-<script>
-const search = document.getElementById('{{ type }}-search');
-const sort = document.getElementById('{{ type }}-sort');
-const checkboxes = document.querySelectorAll('.{{ type }}-group-filter');
-search.addEventListener('input', filter);
-sort.addEventListener('change', filter);
-checkboxes.forEach(cb => cb.addEventListener('change', filter));
+        {%- assign badge = "" -%}
+        {%- if item.taxonomy_featured %}{% assign badge = badge | append: ui.badges.featured[lang] | append: " " %}{% endif %}
+        {%- if item.taxonomy_beta %}{% assign badge = badge | append: ui.badges.beta[lang] | append: " " %}{% endif %}
+        {%- if item.taxonomy_deprecated %}{% assign badge = badge | append: ui.badges.deprecated[lang] | append: " " %}{% endif %}
+        {%- assign audience_label = ui.audience_labels[audience][lang] %}
 
-function filter() {
-  const query = search.value.toLowerCase();
-  const activeGroups = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
-  const items = document.querySelectorAll('.{{ type }}-item');
-  items.forEach(item => {
-    const name = item.dataset.name.toLowerCase();
-    const group = item.dataset.group;
-    item.style.display = (name.includes(query) && activeGroups.includes(group)) ? 'block' : 'none';
-  });
-  const grids = document.querySelectorAll('#{{ type }}-grid .grid');
-  grids.forEach(grid => {
-    const children = Array.from(grid.children);
-    children.sort((a, b) => {
-      if (sort.value === 'name') return a.dataset.name.localeCompare(b.dataset.name);
-      return b.dataset.count - a.dataset.count;
-    });
-    children.forEach(child => grid.appendChild(child));
-  });
-}
-</script>
+        {%- assign color = item.taxonomy_color | default: schema.taxonomy_color.default %}
+        {%- assign tooltip = item.taxonomy_tooltip | default: "" %}
+        {%- assign description = item.taxonomy_description | default: "" %}
+        {%- assign priority = item.taxonomy_priority | default: schema.taxonomy_priority.default %}
+
+        {%- unless draft or hidden or private or admin_only %}
+          <li style="border-left: 4px solid {{ color }}; padding-left: 0.5em;">
+            <a href="{{ link }}" title="{{ tooltip }}">
+              {%- if priority <= 10 -%}<strong>{%- endif -%}
+              {{ badge }}{{ name }}
+              {%- if priority <= 10 -%}</strong>{%- endif -%}
+            </a>
+            <span>({{ count }}{{ ui.count_suffix[lang] }})</span>
+            <span>{{ audience_label }}</span>
+            {%- if description != "" %}
+              <br><small>{{ description }}</small>
+            {%- endif %}
+          </li>
+        {%- endunless %}
+      {%- endfor %}
+    </ul>
+  </section>
+{%- endfor %}
