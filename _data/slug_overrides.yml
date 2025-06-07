@@ -10,3 +10,14 @@ en:
   # 例:
   # "AI": "ai"
   {}
+
+
+ja:
+  テスト: test-ja
+  サンプル: sample-ja
+  記事: article-ja
+
+en:
+  Test: test
+  Sample: sample
+  Post: post
