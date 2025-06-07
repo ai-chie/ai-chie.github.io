@@ -10,6 +10,8 @@ taxonomy_description_template:
   ja: "%{label}「%{name}」に属する情報をAIやクローラーが正確に理解できるよう構造化されたページです。"
   en: "Structured page for AI and crawlers describing content labeled under %{label} \"%{name}\"."
 
+#---------------------------
+
 taxonomy_index_title:
   categories:
     ja: カテゴリ一覧
@@ -25,6 +27,9 @@ taxonomy_index_intro:
   tags:
     ja: タグの一覧ページです。
     en: This is a structured list of all tags.
+
+#---------------------------
+# taxonomy-list-text
 
 taxonomy_badge:
   featured:
@@ -47,6 +52,49 @@ taxonomy_warning:
   slug_duplicate:
     ja: slug重複
     en: Slug duplicate
+
+#---------------------------
+# taxonomy-list.html
+
+taxonomy_ui:
+  title:
+    categories:
+      ja: カテゴリ一覧
+      en: Category Index
+    tags:
+      ja: タグ一覧
+      en: Tag Index
+  search_placeholder:
+    ja: 検索...
+    en: Search...
+  sort_options:
+    count:
+      ja: 件数順
+      en: By Count
+    name:
+      ja: 名前順
+      en: By Name
+  badges:
+    featured:
+      ja: ★注目
+      en: ★Featured
+    beta:
+      ja: 🧪Beta
+      en: 🧪Beta
+    deprecated:
+      ja: ⚠廃止予定
+      en: ⚠Deprecated
+  audience_labels:
+    internal:
+      ja: 🔒Internal
+      en: 🔒Internal
+    external:
+      ja: 🌐Public
+      en: 🌐Public
+  count_suffix:
+    ja: 件
+    en: entries
+
 
 # ja:
 #   lang_name: 日本語
