@@ -12,9 +12,9 @@ LAYOUT              = 'default'
 TAXONOMY_YML        = '_data/generated_taxonomy.yml'
 SLUG_DICT_FILE      = '_data/slug_overrides.yml'
 MISSING_TERMS_FILE  = '_data/missing_slug_terms.yml'
+CONFLICT_FILE       = '_data/slug_conflicts.yml'
 SCHEMA_PATH         = '_data/taxonomy/schema.yml'
 
-# --- 安全な YAML ロード ---
 def safe_load_yaml(path)
   return {} unless File.exist?(path)
   YAML.load_file(path)
@@ -23,15 +23,11 @@ rescue => e
   {}
 end
 
-# --- Front matter helper ---
 def parse_front_matter(path)
   content = File.read(path)
   if content =~ /\A---\s*\n(.*?)\n---/m
     yaml = Regexp.last_match(1)
-    data = YAML.safe_load(yaml, permitted_classes: [Date, Time], aliases: true) || {}
-    puts "[TEST] Parsed front matter for #{path}:"; STDOUT.flush
-    pp data; STDOUT.flush
-    return data
+    YAML.safe_load(yaml, permitted_classes: [Date, Time], aliases: true) || {}
   else
     {}
   end
@@ -40,24 +36,34 @@ rescue Psych::SyntaxError => e
   {}
 end
 
-# --- Slug generator ---
-def generate_slug(term, lang, used, overrides, missing, type)
-  override = overrides.dig(lang, term)
-  return override if override && !override.strip.empty?
-
-  missing[lang][type] << term unless missing[lang][type].include?(term)
-
-  base = I18n.transliterate(term.to_s)
-  base = term.to_s if base.strip.empty?
-
-  slug = base.parameterize
-  slug = term.to_s.each_codepoint.map { |c| c.to_s(16) }.join("-")[0..20] if slug.empty?
-  slug = "#{lang}-#{slug}" if used.include?(slug)
-  used << slug
-  slug
+def validate_schema(schema)
+  valid_types = %w[string integer boolean enum]
+  schema.each do |attr, meta|
+    unless valid_types.include?(meta['type'].to_s)
+      warn "[WARN] Invalid type '#{meta['type']}' for schema key '#{attr}'"
+    end
+    if meta['type'] == 'enum' && !meta['values'].is_a?(Array)
+      warn "[WARN] Enum 'values' must be an array for '#{attr}'"
+    end
+  end
 end
 
-# --- Utility: deep stringify keys ---
+def resolve_schema_value(meta, lang)
+  val = meta['default']
+  if val.is_a?(Hash)
+    val[lang] || val.values.first
+  else
+    case meta['type']
+    when 'string'  then val.to_s
+    when 'integer' then val.to_i
+    when 'boolean' then !!val
+    when 'enum'
+      meta['values']&.include?(val) ? val : meta['values']&.first
+    else val
+    end
+  end
+end
+
 def deep_stringify_keys(obj)
   case obj
   when Hash
@@ -69,14 +75,40 @@ def deep_stringify_keys(obj)
   end
 end
 
-# --- 初期化 ---
-taxonomy = Hash.new { |h, k| h[k] = { "categories" => [], "tags" => [] } }
-counts   = Hash.new { |h, k| h[k] = { "categories" => Hash.new(0), "tags" => Hash.new(0) } }
-missing  = Hash.new { |h, k| h[k] = { "categories" => [], "tags" => [] } }
+def generate_slug(term, lang, used, overrides, missing, conflicts, type)
+  override = overrides.dig(lang, term)
+  return override if override && !override.strip.empty?
 
+  base = I18n.transliterate(term.to_s)
+  base = term.to_s if base.strip.empty?
+  slug = base.parameterize
+
+  if slug.empty?
+    slug = term.to_s.each_codepoint.map { |c| c.to_s(16) }.join("-")[0..20]
+  end
+
+  if used.include?(slug)
+    slug_with_prefix = "#{lang}-#{slug}"
+    conflicts[lang][slug] ||= []
+    conflicts[lang][slug] << term unless conflicts[lang][slug].include?(term)
+    slug = slug_with_prefix
+  end
+
+  used << slug
+  missing[lang][type] << term unless missing[lang][type].include?(term)
+  slug
+end
+
+# ---------------- INIT ----------------
+taxonomy  = Hash.new { |h, k| h[k] = { "categories" => [], "tags" => [] } }
+counts    = Hash.new { |h, k| h[k] = { "categories" => Hash.new(0), "tags" => Hash.new(0) } }
+missing   = Hash.new { |h, k| h[k] = { "categories" => [], "tags" => [] } }
+conflicts = Hash.new { |h, k| h[k] = {} }
 used_slugs = []
-overrides  = safe_load_yaml(SLUG_DICT_FILE)
-schema     = safe_load_yaml(SCHEMA_PATH)
+
+overrides = safe_load_yaml(SLUG_DICT_FILE)
+schema    = safe_load_yaml(SCHEMA_PATH)
+validate_schema(schema)
 
 puts "[LOG] Scanning posts..."; STDOUT.flush
 Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
@@ -95,7 +127,7 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   end
 end
 
-# --- 出力処理 ---
+# -------------- OUTPUT ----------------
 generated = {}
 
 taxonomy.each do |lang, types|
@@ -106,7 +138,7 @@ taxonomy.each do |lang, types|
     key = type.chop
 
     terms.uniq.sort.each do |name|
-      slug = generate_slug(name, lang, used_slugs, overrides, missing, type)
+      slug = generate_slug(name, lang, used_slugs, overrides, missing, conflicts, type)
 
       item = {
         'taxonomy_name' => name,
@@ -114,20 +146,9 @@ taxonomy.each do |lang, types|
         'count'         => counts[lang][type][name]
       }
 
-      # --- schema属性を付加 ---
       schema.each do |attr, meta|
         next if meta['unused']
-        default = meta['default']
-        value = case meta['type']
-                when 'string'  then default.to_s
-                when 'integer' then default.to_i
-                when 'boolean' then !!default
-                when 'enum'
-                  meta['values']&.include?(default) ? default : meta['values']&.first
-                else
-                  default
-                end
-        item[attr] = value
+        item[attr] = resolve_schema_value(meta, lang)
       end
 
       items << item
@@ -149,14 +170,10 @@ taxonomy.each do |lang, types|
   end
 end
 
-# --- YAML保存 ---
+# -------------- SAVE ------------------
 puts "[LOG] Writing taxonomy YAML..."; STDOUT.flush
-stringified = deep_stringify_keys(generated)
-yaml_string = stringified.to_yaml
-puts "[DEBUG] YAML Preview:\n#{yaml_string}"; STDOUT.flush
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
-written = File.write(TAXONOMY_YML, yaml_string)
-raise "[ERROR] YAML write failure!" if written == 0
-
+File.write(TAXONOMY_YML, deep_stringify_keys(generated).to_yaml)
 File.write(MISSING_TERMS_FILE, deep_stringify_keys(missing).to_yaml)
-puts "[DONE] Files written successfully."; STDOUT.flush
+File.write(CONFLICT_FILE, deep_stringify_keys(conflicts).to_yaml)
+puts "[DONE] All YAML files written."; STDOUT.flush
