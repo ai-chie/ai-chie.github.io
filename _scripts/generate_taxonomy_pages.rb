@@ -76,27 +76,30 @@ def deep_stringify_keys(obj)
 end
 
 def generate_slug(term, lang, used, overrides, missing, conflicts, type)
-  override = overrides.dig(lang, term)
-  return override if override && !override.strip.empty?
+  if (override = overrides.dig(lang, term))
+    used << override
+    return [override, 'override']
+  end
 
   base = I18n.transliterate(term.to_s)
   base = term.to_s if base.strip.empty?
   slug = base.parameterize
 
+  source = 'auto'
   if slug.empty?
     slug = term.to_s.each_codepoint.map { |c| c.to_s(16) }.join("-")[0..20]
   end
 
   if used.include?(slug)
-    slug_with_prefix = "#{lang}-#{slug}"
     conflicts[lang][slug] ||= []
     conflicts[lang][slug] << term unless conflicts[lang][slug].include?(term)
-    slug = slug_with_prefix
+    slug = "#{lang}-#{slug}"
+    source += '+conflict'
   end
 
   used << slug
   missing[lang][type] << term unless missing[lang][type].include?(term)
-  slug
+  [slug, source]
 end
 
 # ---------------- INIT ----------------
@@ -138,12 +141,13 @@ taxonomy.each do |lang, types|
     key = type.chop
 
     terms.uniq.sort.each do |name|
-      slug = generate_slug(name, lang, used_slugs, overrides, missing, conflicts, type)
+      slug, source = generate_slug(name, lang, used_slugs, overrides, missing, conflicts, type)
 
       item = {
-        'taxonomy_name' => name,
-        'taxonomy_slug' => slug,
-        'count'         => counts[lang][type][name]
+        'taxonomy_name'   => name,
+        'taxonomy_slug'   => slug,
+        'slug_source'     => source,
+        'count'           => counts[lang][type][name]
       }
 
       schema.each do |attr, meta|
@@ -162,6 +166,7 @@ taxonomy.each do |lang, types|
         #{key}: "#{name}"
         permalink: /#{lang}/#{type}/#{slug}/
         lang: #{lang}
+        slug_source: #{source}
         ---
       MD
     end
