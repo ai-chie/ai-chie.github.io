@@ -99,3 +99,15 @@ FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
 File.write(TAXONOMY_YML, generated.to_yaml)
 
 puts "[DONE] generated_taxonomy.yml written successfully."
+
+puts "[DEBUG] Final taxonomy object structure:"
+pp generated
+puts "[DEBUG] Lang keys: #{generated.keys}"
+puts "[DEBUG] First level sizes:"
+generated.each do |lang, types|
+  puts "  - #{lang}:"
+  types.each do |type, items|
+    puts "    * #{type}: #{items.size} items"
+  end
+end
+
