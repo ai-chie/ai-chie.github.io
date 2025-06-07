@@ -12,8 +12,6 @@ on:
       - '_config*.yml'
       - 'index.html'
       - '.github/workflows/build_and_commit.yml'
-      
-  workflow_dispatch:
 
 jobs:
   build-and-commit:
@@ -52,6 +50,7 @@ jobs:
 
       - name: Stage only changed files in _site (safe fallback)
         run: |
+          mkdir -p _site
           git add -N _site/ || true
           CHANGED=$(git diff --name-only --cached | grep '^_site/' || true)
           if [ -n "$CHANGED" ]; then
