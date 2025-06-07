@@ -21,7 +21,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          persist-credentials: false  # 認証は手動設定で行う
+          persist-credentials: false
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -31,14 +31,10 @@ jobs:
       - name: Install dependencies
         run: bundle install
 
-      - name: Run taxonomy/text generators
+      - name: Run unified taxonomy text generators (i18n)
         run: |
-          ruby _scripts/generate_taxonomy_pages.rb
-          ruby _scripts/generate_text_posts.rb
-          ruby _scripts/generate_text_category_index.rb
-          ruby _scripts/generate_text_category_pages.rb
-          ruby _scripts/generate_text_tag_index.rb
-          ruby _scripts/generate_text_tag_pages.rb
+          ruby _scripts/generate_text_taxonomy_pages.rb
+          ruby _scripts/generate_text_taxonomy_index_pages.rb
 
       - name: Build Jekyll site
         run: bundle exec jekyll build --destination _site
@@ -70,4 +66,3 @@ jobs:
             git push origin main
           else
             echo "No changes to commit."
-          fi
