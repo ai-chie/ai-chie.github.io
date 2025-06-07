@@ -6,10 +6,12 @@ require 'i18n'
 require 'active_support/core_ext/string/inflections'
 require 'pp'
 
-POSTS_DIR       = '_posts'
-OUTPUT_ROOT     = '_generated'
-LAYOUT          = 'default'
-TAXONOMY_YML    = '_data/generated_taxonomy.yml'
+POSTS_DIR           = '_posts'
+OUTPUT_ROOT         = '_generated'
+LAYOUT              = 'default'
+TAXONOMY_YML        = '_data/generated_taxonomy.yml'
+SLUG_DICT_FILE      = '_data/slug_overrides.yml'
+MISSING_TERMS_FILE  = '_data/missing_slug_terms.yml'
 
 # --------- Front matter helper ---------
 def parse_front_matter(path)
@@ -28,9 +30,25 @@ rescue Psych::SyntaxError => e
   {}
 end
 
-# --------- Slug generator ---------
-def generate_slug(term, lang, used)
-  slug = I18n.transliterate(term.to_s).parameterize
+# --------- Slug generator with override + fallback ---------
+def generate_slug(term, lang, used, overrides, missing, type)
+  override = overrides.dig(lang, term)
+  if override && !override.strip.empty?
+    return override
+  end
+
+  # 収集対象とする（重複防止）
+  missing[lang][type] << term unless missing[lang][type].include?(term)
+
+  base = I18n.transliterate(term.to_s)
+  base = term.to_s if base.strip.empty?
+  slug = base.parameterize
+
+  if slug.empty?
+    # fallback slug from codepoints
+    slug = term.to_s.each_codepoint.map { |c| c.to_s(16) }.join("-")[0..20]
+  end
+
   slug = "#{lang}-#{slug}" if used.include?(slug)
   used << slug
   slug
@@ -39,7 +57,10 @@ end
 # --------- 初期化 ---------
 taxonomy = Hash.new { |h, k| h[k] = { "categories" => [], "tags" => [] } }
 counts   = Hash.new { |h, k| h[k] = { "categories" => Hash.new(0), "tags" => Hash.new(0) } }
+missing  = Hash.new { |h, k| h[k] = { "categories" => [], "tags" => [] } }
+
 used_slugs = []
+overrides = File.exist?(SLUG_DICT_FILE) ? YAML.load_file(SLUG_DICT_FILE) : {}
 
 puts "[LOG] Scanning posts..."
 Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
@@ -58,11 +79,6 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   end
 end
 
-# --------- デバッグ確認 ---------
-puts "[TRACE] taxonomy keys: #{taxonomy.keys}"
-puts "[TRACE] taxonomy['ja']['categories']: #{taxonomy.dig('ja', 'categories').inspect}"
-puts "[TRACE] taxonomy['ja']['tags']: #{taxonomy.dig('ja', 'tags').inspect}"
-
 # --------- 出力処理 ---------
 generated = {}
 
@@ -73,11 +89,11 @@ taxonomy.each do |lang, types|
   types.each do |type, terms|
     puts "[TRACE]  → #{type}: #{terms.uniq.sort.inspect}"
     items = []
-    key = type.chop # "categories" → "category"
+    key = type.chop # categories → category
 
     terms.uniq.sort.each do |name|
       puts "[TRACE]    → term=#{name}"
-      slug = generate_slug(name, lang, used_slugs)
+      slug = generate_slug(name, lang, used_slugs, overrides, missing, type)
 
       item = {
         'taxonomy_name' => name,
@@ -114,6 +130,9 @@ puts "[LOG] Writing YAML to #{TAXONOMY_YML}"
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
 File.write(TAXONOMY_YML, generated.to_yaml)
 
-puts "[DONE] generated_taxonomy.yml written successfully."
+puts "[LOG] Writing missing slug terms to #{MISSING_TERMS_FILE}"
+File.write(MISSING_TERMS_FILE, missing.to_yaml)
+
+puts "[DONE] YAML files written."
 puts "[DEBUG] Final taxonomy object structure:"
 pp generated
