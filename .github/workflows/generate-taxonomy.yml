@@ -8,6 +8,9 @@ on:
       - "_data/slug_overrides.yml"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-taxonomy:
     runs-on: ubuntu-latest
@@ -41,5 +44,3 @@ jobs:
             git commit -m "Auto-update taxonomy [bot]"
             git push origin main
           fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
