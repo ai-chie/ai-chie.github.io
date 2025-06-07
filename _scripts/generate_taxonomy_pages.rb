@@ -30,27 +30,38 @@ rescue Psych::SyntaxError => e
   {}
 end
 
-# --------- Slug generator with override + fallback ---------
+# --------- Slug generator with full logging ---------
 def generate_slug(term, lang, used, overrides, missing, type)
+  puts "[DEBUG] SlugGen: term=#{term} lang=#{lang}"
+
   override = overrides.dig(lang, term)
   if override && !override.strip.empty?
+    puts "[DEBUG] → override slug=#{override}"
     return override
   end
 
-  # 収集対象とする（重複防止）
   missing[lang][type] << term unless missing[lang][type].include?(term)
 
   base = I18n.transliterate(term.to_s)
+  puts "[DEBUG] → transliterate=#{base.inspect}"
+
   base = term.to_s if base.strip.empty?
+
   slug = base.parameterize
+  puts "[DEBUG] → parameterized=#{slug.inspect}"
 
   if slug.empty?
-    # fallback slug from codepoints
     slug = term.to_s.each_codepoint.map { |c| c.to_s(16) }.join("-")[0..20]
+    puts "[DEBUG] → fallback slug=#{slug}"
   end
 
-  slug = "#{lang}-#{slug}" if used.include?(slug)
+  if used.include?(slug)
+    slug = "#{lang}-#{slug}"
+    puts "[DEBUG] → conflict resolved slug=#{slug}"
+  end
+
   used << slug
+  puts "[DEBUG] → final slug=#{slug}"
   slug
 end
 
