@@ -14,15 +14,16 @@ SLUG_DICT_FILE  = '_data/slug_overrides.yml'
 MISSING_FILE    = '_data/missing_slug_terms.yml'
 CONFLICT_FILE   = '_data/slug_conflicts.yml'
 
-# YAML読み込み
+# ---------- ユーティリティ ----------
+
 def safe_load_yaml(path)
+  return {} unless File.exist?(path)
   YAML.load_file(path)
 rescue => e
   warn "YAML load error in #{path}: #{e.message}"
   {}
 end
 
-# Front matter抽出
 def parse_front_matter(path)
   content = File.read(path)
   if content =~ /\A---\s*\n(.*?)\n---/m
@@ -36,7 +37,6 @@ rescue Psych::SyntaxError => e
   {}
 end
 
-# slug生成＋辞書・重複対応
 def generate_slug(term, lang, overrides, used)
   return [overrides.dig(lang, term), 'override'] if overrides.dig(lang, term)
 
@@ -52,17 +52,16 @@ def generate_slug(term, lang, overrides, used)
   [slug, source]
 end
 
-# データ読み込み
+# ---------- データ準備 ----------
+
 schema     = safe_load_yaml(SCHEMA_PATH)
 overrides  = safe_load_yaml(SLUG_DICT_FILE)
 taxonomy   = Hash.new { |h, k| h[k] = { categories: [], tags: [] } }
 counts     = Hash.new { |h, k| h[k] = { categories: Hash.new(0), tags: Hash.new(0) } }
 
-# 投稿抽出
 Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   data = parse_front_matter(path)
   next if data.empty? || data['draft'] || data['hidden']
-
   lang = data['lang']
   next unless %w[ja en].include?(lang)
 
@@ -76,28 +75,29 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   end
 end
 
-# 生成
-generated = {}
-missing   = Hash.new { |h, k| h[k] = [] }
-conflicts = Hash.new { |h, k| h[k] = {} }
+# ---------- 出力処理 ----------
+
+generated  = {}
+missing    = Hash.new { |h, k| h[k] = [] }
+conflicts  = Hash.new { |h, k| h[k] = {} }
 used_slugs = {}
 
 taxonomy.each do |lang, types|
   generated[lang] = {}
 
   types.each do |type, terms|
-    key = type.to_s.chop
+    key = type.to_s.chop  # 'category' or 'tag'
     items = []
-    seen = {}
+    seen_slugs = {}
 
     terms.uniq.sort.each do |name|
       slug, src = generate_slug(name, lang, overrides, used_slugs)
       missing[lang] << name if src.start_with?('auto') && !overrides.dig(lang, name)
-      if seen[slug]
+      if seen_slugs[slug]
         conflicts[lang][slug] ||= []
         conflicts[lang][slug] << name
       end
-      seen[slug] = true
+      seen_slugs[slug] = true
 
       item = {
         'taxonomy_name' => name,
@@ -106,19 +106,23 @@ taxonomy.each do |lang, types|
       }
 
       schema.each do |attr, meta|
-        next if %w[taxonomy_name taxonomy_slug].include?(attr) || meta['unused']
-        item[attr] = meta['type'] == 'enum' ? (meta['values'].include?(meta['default']) ? meta['default'] : meta['values'].first) : meta['default']
+        next if %w[taxonomy_name taxonomy_slug].include?(attr)
+        next if meta['unused']
+        default = meta['default']
+        value = meta['type'] == 'enum' ? (meta['values']&.include?(default) ? default : meta['values']&.first) : default
+        item[attr] = value
       end
 
       items << item
 
+      # 出力Markdownファイル
       path = File.join(OUTPUT_ROOT, lang, type.to_s, "#{slug}.md")
       FileUtils.mkdir_p(File.dirname(path))
       File.write(path, <<~MD)
         ---
         layout: #{LAYOUT}
-        title: #{key.capitalize}: #{name}
-        #{key}: #{name}
+        title: "#{key.capitalize}: #{name}"
+        #{key}: "#{name}"
         permalink: /#{lang}/#{type}/#{slug}/
         lang: #{lang}
         ---
@@ -129,9 +133,14 @@ taxonomy.each do |lang, types|
   end
 end
 
-# 書き出し
+# ---------- YAML保存 ----------
+
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
 File.write(TAXONOMY_YML, generated.to_yaml)
 File.write(MISSING_FILE, missing.to_yaml)
 File.write(CONFLICT_FILE, conflicts.to_yaml)
-puts "✅ Taxonomy data written to #{TAXONOMY_YML}, #{MISSING_FILE}, #{CONFLICT_FILE}"
+
+puts "✅ Taxonomy generation complete."
+puts "   > Data:    #{TAXONOMY_YML}"
+puts "   > Missing: #{MISSING_FILE}"
+puts "   > Conflict: #{CONFLICT_FILE}"
