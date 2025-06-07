@@ -4,6 +4,7 @@ require 'yaml'
 require 'date'
 require 'i18n'
 require 'active_support/core_ext/string/inflections'
+require 'pp'
 
 POSTS_DIR       = '_posts'
 OUTPUT_ROOT     = '_generated'
@@ -27,7 +28,6 @@ rescue Psych::SyntaxError => e
   {}
 end
 
-
 # --------- Slug generator ---------
 def generate_slug(term, lang, used)
   slug = I18n.transliterate(term.to_s).parameterize
@@ -36,9 +36,9 @@ def generate_slug(term, lang, used)
   slug
 end
 
-# --------- Main execution ---------
-taxonomy = Hash.new { |h, k| h[k] = { categories: [], tags: [] } }
-counts   = Hash.new { |h, k| h[k] = { categories: Hash.new(0), tags: Hash.new(0) } }
+# --------- 初期化 ---------
+taxonomy = Hash.new { |h, k| h[k] = { "categories" => [], "tags" => [] } }
+counts   = Hash.new { |h, k| h[k] = { "categories" => Hash.new(0), "tags" => Hash.new(0) } }
 used_slugs = []
 
 puts "[LOG] Scanning posts..."
@@ -48,7 +48,7 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   lang = data['lang']
   next unless %w[ja en].include?(lang)
 
-  %i[categories tags].each do |type|
+  ["categories", "tags"].each do |type|
     Array(data[type]).each do |term|
       str = term.to_s.strip
       next if str.empty?
@@ -58,16 +58,25 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   end
 end
 
+# --------- デバッグ確認 ---------
+puts "[TRACE] taxonomy keys: #{taxonomy.keys}"
+puts "[TRACE] taxonomy['ja']['categories']: #{taxonomy.dig('ja', 'categories').inspect}"
+puts "[TRACE] taxonomy['ja']['tags']: #{taxonomy.dig('ja', 'tags').inspect}"
+
+# --------- 出力処理 ---------
 generated = {}
 
 taxonomy.each do |lang, types|
+  puts "[TRACE] Building taxonomy for lang=#{lang}"
   generated[lang] = {}
 
   types.each do |type, terms|
+    puts "[TRACE]  → #{type}: #{terms.uniq.sort.inspect}"
     items = []
-    key = type.to_s.chop
+    key = type.chop # "categories" → "category"
 
     terms.uniq.sort.each do |name|
+      puts "[TRACE]    → term=#{name}"
       slug = generate_slug(name, lang, used_slugs)
 
       item = {
@@ -81,9 +90,10 @@ taxonomy.each do |lang, types|
 
       items << item
 
-      path = File.join(OUTPUT_ROOT, lang, type.to_s, "#{slug}.md")
-      FileUtils.mkdir_p(File.dirname(path))
-      File.write(path, <<~MD)
+      # Markdown出力
+      md_path = File.join(OUTPUT_ROOT, lang, type, "#{slug}.md")
+      FileUtils.mkdir_p(File.dirname(md_path))
+      File.write(md_path, <<~MD)
         ---
         layout: #{LAYOUT}
         title: "#{key.capitalize}: #{name}"
@@ -94,24 +104,16 @@ taxonomy.each do |lang, types|
       MD
     end
 
+    puts "[TRACE]    → items.size = #{items.size}"
     generated[lang][type] = items
   end
 end
 
+# --------- YAML保存 ---------
 puts "[LOG] Writing YAML to #{TAXONOMY_YML}"
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
 File.write(TAXONOMY_YML, generated.to_yaml)
 
 puts "[DONE] generated_taxonomy.yml written successfully."
-
 puts "[DEBUG] Final taxonomy object structure:"
 pp generated
-puts "[DEBUG] Lang keys: #{generated.keys}"
-puts "[DEBUG] First level sizes:"
-generated.each do |lang, types|
-  puts "  - #{lang}:"
-  types.each do |type, items|
-    puts "    * #{type}: #{items.size} items"
-  end
-end
-
