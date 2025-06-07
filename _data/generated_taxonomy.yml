@@ -1,43 +1,115 @@
 ---
 en:
   categories:
-  - taxonomy_name: Test
+  - taxonomy_name: unknown
     taxonomy_slug: test
     count: 1
-    color: "#cccccc"
-    description: ''
-    priority: 99
+    taxonomy_hidden: false
+    taxonomy_draft: false
+    taxonomy_private: false
+    taxonomy_admin_only: false
+    taxonomy_featured: false
+    taxonomy_beta: false
+    taxonomy_deprecated: false
+    taxonomy_color: "#cccccc"
+    taxonomy_priority: 99
+    taxonomy_description: ''
+    taxonomy_tooltip: ''
+    taxonomy_icon: ''
+    taxonomy_link: ''
+    taxonomy_hidden_reason: ''
+    taxonomy_audience: external
   tags:
-  - taxonomy_name: Post
+  - taxonomy_name: unknown
     taxonomy_slug: post
     count: 1
-    color: "#cccccc"
-    description: ''
-    priority: 99
-  - taxonomy_name: Sample
+    taxonomy_hidden: false
+    taxonomy_draft: false
+    taxonomy_private: false
+    taxonomy_admin_only: false
+    taxonomy_featured: false
+    taxonomy_beta: false
+    taxonomy_deprecated: false
+    taxonomy_color: "#cccccc"
+    taxonomy_priority: 99
+    taxonomy_description: ''
+    taxonomy_tooltip: ''
+    taxonomy_icon: ''
+    taxonomy_link: ''
+    taxonomy_hidden_reason: ''
+    taxonomy_audience: external
+  - taxonomy_name: unknown
     taxonomy_slug: sample
     count: 1
-    color: "#cccccc"
-    description: ''
-    priority: 99
+    taxonomy_hidden: false
+    taxonomy_draft: false
+    taxonomy_private: false
+    taxonomy_admin_only: false
+    taxonomy_featured: false
+    taxonomy_beta: false
+    taxonomy_deprecated: false
+    taxonomy_color: "#cccccc"
+    taxonomy_priority: 99
+    taxonomy_description: ''
+    taxonomy_tooltip: ''
+    taxonomy_icon: ''
+    taxonomy_link: ''
+    taxonomy_hidden_reason: ''
+    taxonomy_audience: external
 ja:
   categories:
-  - taxonomy_name: テスト
+  - taxonomy_name: unknown
     taxonomy_slug: test-ja
     count: 1
-    color: "#cccccc"
-    description: ''
-    priority: 99
+    taxonomy_hidden: false
+    taxonomy_draft: false
+    taxonomy_private: false
+    taxonomy_admin_only: false
+    taxonomy_featured: false
+    taxonomy_beta: false
+    taxonomy_deprecated: false
+    taxonomy_color: "#cccccc"
+    taxonomy_priority: 99
+    taxonomy_description: ''
+    taxonomy_tooltip: ''
+    taxonomy_icon: ''
+    taxonomy_link: ''
+    taxonomy_hidden_reason: ''
+    taxonomy_audience: external
   tags:
-  - taxonomy_name: サンプル
+  - taxonomy_name: unknown
     taxonomy_slug: sample-ja
     count: 1
-    color: "#cccccc"
-    description: ''
-    priority: 99
-  - taxonomy_name: 記事
+    taxonomy_hidden: false
+    taxonomy_draft: false
+    taxonomy_private: false
+    taxonomy_admin_only: false
+    taxonomy_featured: false
+    taxonomy_beta: false
+    taxonomy_deprecated: false
+    taxonomy_color: "#cccccc"
+    taxonomy_priority: 99
+    taxonomy_description: ''
+    taxonomy_tooltip: ''
+    taxonomy_icon: ''
+    taxonomy_link: ''
+    taxonomy_hidden_reason: ''
+    taxonomy_audience: external
+  - taxonomy_name: unknown
     taxonomy_slug: article-ja
     count: 1
-    color: "#cccccc"
-    description: ''
-    priority: 99
+    taxonomy_hidden: false
+    taxonomy_draft: false
+    taxonomy_private: false
+    taxonomy_admin_only: false
+    taxonomy_featured: false
+    taxonomy_beta: false
+    taxonomy_deprecated: false
+    taxonomy_color: "#cccccc"
+    taxonomy_priority: 99
+    taxonomy_description: ''
+    taxonomy_tooltip: ''
+    taxonomy_icon: ''
+    taxonomy_link: ''
+    taxonomy_hidden_reason: ''
+    taxonomy_audience: external
