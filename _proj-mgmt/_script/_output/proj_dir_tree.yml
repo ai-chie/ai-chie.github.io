@@ -88,13 +88,14 @@ _generated:
 
       __files__:
       - [.keep, _generated/ja/categories/.keep]
-      - [.md, _generated/ja/categories/.md]
+      - [test-ja.md, _generated/ja/categories/test-ja.md]
 
     tags:
 
       __files__:
       - [.keep, _generated/ja/tags/.keep]
-      - [.md, _generated/ja/tags/.md]
+      - [article-ja.md, _generated/ja/tags/article-ja.md]
+      - [sample-ja.md, _generated/ja/tags/sample-ja.md]
 
 _includes:
 
@@ -215,6 +216,11 @@ assets:
 
     __files__:
     - [.keep, assets/js/.keep]
+
+docs:
+
+  __files__:
+  - [.keep, docs/.keep]
 
 root_files:
 
