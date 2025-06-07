@@ -3,19 +3,15 @@ require 'yaml'
 
 TAXONOMY_FILE = "_data/generated_taxonomy.yml"
 SCHEMA_FILE   = "_data/taxonomy/schema.yml"
+LANG_FILE     = "_data/lang.yml"
 
 LANGS = %w[ja en]
 DEVICE = "text"
 TYPES = %w[categories tags]
 
-# 言語別表示ラベル
-LABELS = {
-  "categories" => { "ja" => "カテゴリ", "en" => "Category" },
-  "tags"       => { "ja" => "タグ",     "en" => "Tag" }
-}
-
 taxonomy_all = YAML.load_file(TAXONOMY_FILE)
 schema_def   = YAML.load_file(SCHEMA_FILE)
+lang_labels  = YAML.load_file(LANG_FILE)
 
 REQUIRED_FIELDS = schema_def.select { |_, v| v["required"] == true }.keys
 
@@ -32,10 +28,14 @@ FILTER_FIELDS = {
 LANGS.each do |lang|
   TYPES.each do |type|
     entries = taxonomy_all.dig(lang, type) || []
-    label = LABELS.dig(type, lang) || type.capitalize
+
+    label = lang_labels.dig("taxonomy_label", type, lang) || type.capitalize
+    desc_template = lang_labels.dig("taxonomy_description_template", lang) || "%{label}「%{name}」の説明ページです。"
 
     entries.each do |item|
-      next unless REQUIRED_FIELDS.all? { |key| item[key].is_a?(String) && !item[key].strip.empty? }
+      name_obj = item["taxonomy_name"]
+      next unless name_obj.is_a?(String) || (name_obj.is_a?(Hash) && name_obj[lang].is_a?(String) && !name_obj[lang].strip.empty?)
+      name = name_obj.is_a?(Hash) ? name_obj[lang] : name_obj
 
       slug = item["taxonomy_slug"]
       next if slug.nil? || slug.strip.empty?
@@ -46,7 +46,7 @@ LANGS.each do |lang|
       end
       next if skip
 
-      name = item["taxonomy_name"]
+      description = desc_template.gsub("%{label}", label).gsub("%{name}", name)
 
       dir = File.join("_pages", DEVICE, lang, type, slug)
       FileUtils.mkdir_p(dir)
@@ -58,13 +58,13 @@ LANGS.each do |lang|
         lang: #{lang}
         device: #{DEVICE}
         title: "#{name} - #{label}"
-        description: "#{label}「#{name}」に属する情報をAIやクローラーが正確に理解できるよう構造化されたページです。"
+        description: "#{description}"
         permalink: /#{DEVICE}/#{lang}/#{type}/#{slug}/
         ---
 
         <main>
           <h1>#{name}（#{label}）</h1>
-          <p>このページは、#{label}「#{name}」に分類された記事や情報を対象としたAI向け構造化コンテンツです。</p>
+          <p>#{description}</p>
           <p>分類コード: <code>#{slug}</code></p>
         </main>
       MD
