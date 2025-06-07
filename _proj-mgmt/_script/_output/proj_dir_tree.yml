@@ -4,12 +4,11 @@
   workflows:
 
     __files__:
+    - [build_and_commit.yml, .github/workflows/build_and_commit.yml]
     - [gemfile-lock-artifact.yml, .github/workflows/gemfile-lock-artifact.yml]
     - [generate-category-counts.yml, .github/workflows/generate-category-counts.yml]
     - [generate-proj-dir-tree.yml, .github/workflows/generate-proj-dir-tree.yml]
     - [generate-tag-counts.yml.yml, .github/workflows/generate-tag-counts.yml.yml]
-    - [generate-taxonomy.yml, .github/workflows/generate-taxonomy.yml]
-    - [generate-text-pages.yml, .github/workflows/generate-text-pages.yml]
     - [yaml-to-json.yml, .github/workflows/yaml-to-json.yml]
 
 _admin:
@@ -225,6 +224,7 @@ docs:
 root_files:
 
   __files__:
+  - [.gitattributes, .gitattributes]
   - [Gemfile, Gemfile]
   - [Gemfile.lock, Gemfile.lock]
   - [README.md, README.md]
