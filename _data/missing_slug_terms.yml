@@ -1,13 +1,1 @@
----
-en:
-  categories:
-  - Test
-  tags:
-  - Post
-  - Sample
-ja:
-  categories:
-  - テスト
-  tags:
-  - サンプル
-  - 記事
+--- {}

@@ -23,20 +23,20 @@ en:
 ja:
   categories:
   - taxonomy_name: テスト
-    taxonomy_slug: 30c6-30b9-30c8
+    taxonomy_slug: test-ja
     count: 1
     color: "#cccccc"
     description: ''
     priority: 99
   tags:
   - taxonomy_name: サンプル
-    taxonomy_slug: 30b5-30f3-30d7-30eb
+    taxonomy_slug: sample-ja
     count: 1
     color: "#cccccc"
     description: ''
     priority: 99
   - taxonomy_name: 記事
-    taxonomy_slug: 8a18-4e8b
+    taxonomy_slug: article-ja
     count: 1
     color: "#cccccc"
     description: ''
