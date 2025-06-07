@@ -12,6 +12,8 @@ on:
       - '_config*.yml'
       - 'index.html'
       - '.github/workflows/build_and_commit.yml'
+  
+  workflow_dispatch:
 
 jobs:
   build-and-commit:
