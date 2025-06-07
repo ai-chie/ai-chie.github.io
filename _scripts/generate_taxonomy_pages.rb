@@ -5,7 +5,6 @@ require 'date'
 require 'i18n'
 require 'active_support/core_ext/string/inflections'
 require 'pp'
-require 'json'
 
 POSTS_DIR           = '_posts'
 OUTPUT_ROOT         = '_generated'
@@ -20,8 +19,8 @@ def parse_front_matter(path)
   if content =~ /\A---\s*\n(.*?)\n---/m
     yaml = Regexp.last_match(1)
     data = YAML.safe_load(yaml, permitted_classes: [Date, Time], aliases: true) || {}
-    puts "[TEST] Parsed front matter for #{path}:"
-    pp data
+    puts "[TEST] Parsed front matter for #{path}:"; STDOUT.flush
+    pp data; STDOUT.flush
     return data
   else
     {}
@@ -33,35 +32,35 @@ end
 
 # --- Slug generator ---
 def generate_slug(term, lang, used, overrides, missing, type)
-  puts "[DEBUG] SlugGen: term=#{term} lang=#{lang}"
+  puts "[DEBUG] SlugGen: term=#{term} lang=#{lang}"; STDOUT.flush
 
   override = overrides.dig(lang, term)
   if override && !override.strip.empty?
-    puts "[DEBUG] → override slug=#{override}"
+    puts "[DEBUG] → override slug=#{override}"; STDOUT.flush
     return override
   end
 
   missing[lang][type] << term unless missing[lang][type].include?(term)
 
   base = I18n.transliterate(term.to_s)
-  puts "[DEBUG] → transliterate=#{base.inspect}"
+  puts "[DEBUG] → transliterate=#{base.inspect}"; STDOUT.flush
   base = term.to_s if base.strip.empty?
 
   slug = base.parameterize
-  puts "[DEBUG] → parameterized=#{slug.inspect}"
+  puts "[DEBUG] → parameterized=#{slug.inspect}"; STDOUT.flush
 
   if slug.empty?
     slug = term.to_s.each_codepoint.map { |c| c.to_s(16) }.join("-")[0..20]
-    puts "[DEBUG] → fallback slug=#{slug}"
+    puts "[DEBUG] → fallback slug=#{slug}"; STDOUT.flush
   end
 
   if used.include?(slug)
     slug = "#{lang}-#{slug}"
-    puts "[DEBUG] → conflict resolved slug=#{slug}"
+    puts "[DEBUG] → conflict resolved slug=#{slug}"; STDOUT.flush
   end
 
   used << slug
-  puts "[DEBUG] → final slug=#{slug}"
+  puts "[DEBUG] → final slug=#{slug}"; STDOUT.flush
   slug
 end
 
@@ -87,7 +86,7 @@ missing  = Hash.new { |h, k| h[k] = { "categories" => [], "tags" => [] } }
 used_slugs = []
 overrides = File.exist?(SLUG_DICT_FILE) ? YAML.load_file(SLUG_DICT_FILE) : {}
 
-puts "[LOG] Scanning posts..."
+puts "[LOG] Scanning posts..."; STDOUT.flush
 Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   data = parse_front_matter(path)
   next if data.empty? || data['draft'] || data['hidden']
@@ -108,16 +107,16 @@ end
 generated = {}
 
 taxonomy.each do |lang, types|
-  puts "[TRACE] Building taxonomy for lang=#{lang}"
+  puts "[TRACE] Building taxonomy for lang=#{lang}"; STDOUT.flush
   generated[lang] = {}
 
   types.each do |type, terms|
-    puts "[TRACE]  → #{type}: #{terms.uniq.sort.inspect}"
+    puts "[TRACE]  → #{type}: #{terms.uniq.sort.inspect}"; STDOUT.flush
     items = []
     key = type.chop
 
     terms.uniq.sort.each do |name|
-      puts "[TRACE]    → term=#{name}"
+      puts "[TRACE]    → term=#{name}"; STDOUT.flush
       slug = generate_slug(name, lang, used_slugs, overrides, missing, type)
 
       item = {
@@ -144,25 +143,27 @@ taxonomy.each do |lang, types|
       MD
     end
 
-    puts "[TRACE]    → items.size = #{items.size}"
+    puts "[TRACE]    → items.size = #{items.size}"; STDOUT.flush
     generated[lang][type] = items
   end
 end
 
 # --- YAML保存 ---
-puts "[LOG] Writing YAML to #{TAXONOMY_YML}"
+puts "[LOG] Writing YAML to #{TAXONOMY_YML}"; STDOUT.flush
 
 stringified = deep_stringify_keys(generated)
 yaml_string = stringified.to_yaml
 
-puts "[DEBUG] YAML Preview:\n#{yaml_string}"
+puts "[DEBUG] YAML Preview:\n#{yaml_string}"; STDOUT.flush
 
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
 bytes_written = File.write(TAXONOMY_YML, yaml_string)
-puts "[INFO] #{bytes_written} bytes written to #{TAXONOMY_YML}"
+puts "[INFO] #{bytes_written} bytes written to #{TAXONOMY_YML}"; STDOUT.flush
+
+raise "[ERROR] YAML write failure: empty file" if bytes_written == 0
 
 File.write(MISSING_TERMS_FILE, deep_stringify_keys(missing).to_yaml)
-puts "[DONE] missing terms also written to #{MISSING_TERMS_FILE}"
+puts "[DONE] missing terms also written to #{MISSING_TERMS_FILE}"; STDOUT.flush
 
-puts "[DEBUG] Final taxonomy object structure:"
-pp generated
+puts "[DEBUG] Final taxonomy object structure:"; STDOUT.flush
+pp generated; STDOUT.flush
