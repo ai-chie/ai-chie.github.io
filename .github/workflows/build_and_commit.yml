@@ -12,7 +12,7 @@ on:
       - '_config*.yml'
       - 'index.html'
       - '.github/workflows/build_and_commit.yml'
-  
+      
   workflow_dispatch:
 
 jobs:
@@ -50,10 +50,15 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Stage only changed files in _site
+      - name: Stage only changed files in _site (safe fallback)
         run: |
-          git add -N _site/
-          git diff --name-only --cached | grep '^_site/' | xargs -r git add
+          git add -N _site/ || true
+          CHANGED=$(git diff --name-only --cached | grep '^_site/' || true)
+          if [ -n "$CHANGED" ]; then
+            echo "$CHANGED" | xargs git add
+          else
+            echo "No changed files in _site/"
+          fi
 
       - name: Commit and push if there are changes
         run: |
