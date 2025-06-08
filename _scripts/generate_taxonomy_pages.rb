@@ -169,16 +169,21 @@ taxonomy.each do |lang, types|
     terms.uniq.sort.each do |name|
       slug, source = generate_slug(name, lang, used_slugs, overrides, missing, conflicts, type)
 
-      normalized_key = name.to_s.strip.downcase
+      normalized_key = name.to_s.strip
       dict_values = taxonomy_definitions.dig(lang, type)&.values || []
 
       matched_entry = dict_values.find do |item|
         item_name = item["taxonomy_name"]
-        item_name.is_a?(String) && item_name.strip.downcase == normalized_key
+        item_name.to_s.strip.casecmp(normalized_key).zero?
       end
 
       verified_name = matched_entry ? matched_entry["taxonomy_name"] : "unknown"
-      puts "[DEBUG] verified_name for #{lang}/#{type}/#{name}: #{verified_name}"
+
+      puts "[DEBUG] lang=#{lang} type=#{type} name=#{name.inspect}"
+      puts "[DEBUG] normalized_key = #{normalized_key.inspect}"
+      puts "[DEBUG] available = #{dict_values.map { |d| d["taxonomy_name"] }.inspect}"
+      puts "[DEBUG] matched_entry = #{matched_entry.inspect}"
+      puts "[DEBUG] verified_name = #{verified_name.inspect}"
 
       item = {
         'taxonomy_name' => verified_name,
@@ -214,14 +219,6 @@ end
 
 puts "[CHECK] Final taxonomy output structure:"
 pp generated
-
-puts "[CHECK] Individual taxonomy items:"
-generated.each do |lang, types|
-  types.each do |type, items|
-    puts "== #{lang} / #{type} =="
-    items.each { |i| pp i }
-  end
-end
 
 puts "[LOG] Writing taxonomy YAML..."; STDOUT.flush
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
