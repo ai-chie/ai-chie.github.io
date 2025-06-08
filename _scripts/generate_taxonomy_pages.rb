@@ -156,6 +156,20 @@ taxonomy_dicts = {
   "tags"       => load_flat_taxonomy_dict("_data/taxonomy/tags.yml", lang)
 }
 
+
+# ========================= [追加] taxonomy辞書を全言語×typeで事前に読み込み =========================
+taxonomy_definitions = {
+  "ja" => {
+    "categories" => load_flat_taxonomy_dict("_data/taxonomy/categories.yml", "ja"),
+    "tags"       => load_flat_taxonomy_dict("_data/taxonomy/tags.yml", "ja")
+  },
+  "en" => {
+    "categories" => load_flat_taxonomy_dict("_data/taxonomy/categories.yml", "en"),
+    "tags"       => load_flat_taxonomy_dict("_data/taxonomy/tags.yml", "en")
+  }
+}
+# ==============================================================================
+
 taxonomy.each do |lang, types|
   taxonomy_dicts = {
     "categories" => load_flat_taxonomy_dict("_data/taxonomy/categories.yml", lang),
@@ -173,7 +187,7 @@ taxonomy.each do |lang, types|
 
       item = {
         'taxonomy_name'   => name,
-  'taxonomy_name_verified' => taxonomy_dicts[type].key?(name) ? name : 'unknown',  # [追加] 辞書補完チェック
+  'taxonomy_name_verified' => taxonomy_definitions.dig(lang, type).key?(name) ? name : 'unknown',  # [追加] 辞書補完チェック
 
         'taxonomy_slug'   => slug,
         'slug_source'     => source,
