@@ -161,17 +161,22 @@ taxonomy_dicts = {
 
 
 
-# ========================= [修正済] 全言語・全タイプのtaxonomy辞書を明示的に定義 =========================
-taxonomy_definitions = {
-  "ja" => {
-    "categories" => load_flat_taxonomy_dict("_data/taxonomy/categories.yml", "ja"),
-    "tags"       => load_flat_taxonomy_dict("_data/taxonomy/tags.yml", "ja")
-  },
-  "en" => {
-    "categories" => load_flat_taxonomy_dict("_data/taxonomy/categories.yml", "en"),
-    "tags"       => load_flat_taxonomy_dict("_data/taxonomy/tags.yml", "en")
-  }
-}
+
+
+
+# ========================= [改善版] LANGS × TYPES に基づく taxonomy辞書動的初期化 =========================
+LANGS = %w[ja en]
+TYPES = %w[categories tags]
+
+taxonomy_definitions = {}
+
+LANGS.each do |lang|
+  taxonomy_definitions[lang] = {}
+  TYPES.each do |type|
+    path = "_data/taxonomy/#{type}.yml"
+    taxonomy_definitions[lang][type] = load_flat_taxonomy_dict(path, lang)
+  end
+end
 # ==============================================================================
 
 taxonomy.each do |lang, types|
