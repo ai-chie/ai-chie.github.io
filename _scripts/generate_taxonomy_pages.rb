@@ -169,14 +169,14 @@ taxonomy.each do |lang, types|
 
     terms.uniq.sort.each do |name|
       slug, source = generate_slug(name, lang, used_slugs, overrides, missing, conflicts, type)
-      
-      
-      name_key = name.to_s.strip.downcase
-      dict_values = taxonomy_definitions.dig(lang, type).values
-      mapped = dict_values.map { |v| v["taxonomy_name"].to_s.strip.downcase }
-      puts "[DEBUG] lang: #{lang}, type: #{type}, name: #{name.inspect}, name_key: #{name_key}"
-      puts "[DEBUG] dict_values: #{mapped.inspect}"
-      matched_entry = dict_values.find { |item| item["taxonomy_name"].to_s.strip.downcase == name_key }
+
+      normalized_key = name.to_s.strip.downcase
+      dict_map = taxonomy_definitions.dig(lang, type) || {}
+
+      matched_entry = dict_map.find do |key, val|
+        key.to_s.strip.downcase == normalized_key
+      end&.last
+
       verified_name = matched_entry ? matched_entry["taxonomy_name"] : "unknown"
 puts "[DEBUG] matched_entry: #{matched_entry.inspect}"
       puts "[DEBUG] verified_name: #{verified_name.inspect}"
