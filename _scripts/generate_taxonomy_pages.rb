@@ -68,17 +68,6 @@ def resolve_schema_value(meta, lang)
   end
 end
 
-def deep_stringify_keys(obj)
-  case obj
-  when Hash
-    obj.each_with_object({}) { |(k, v), h| h[k.to_s] = deep_stringify_keys(v) }
-  when Array
-    obj.map { |v| deep_stringify_keys(v) }
-  else
-    obj
-  end
-end
-
 def generate_slug(term, lang, used, overrides, missing, conflicts, type)
   if (override = overrides.dig(lang, term))
     used << override
@@ -172,11 +161,9 @@ taxonomy.each do |lang, types|
       normalized_key = name.to_s.strip.downcase
       dict_map = taxonomy_definitions.dig(lang, type) || {}
 
-      matched_entry = dict_map.find do |k, v|
-        k.to_s.strip.downcase == normalized_key
-      end&.last
-
+      matched_entry = dict_map.find { |k, _| k.to_s.strip.downcase == normalized_key }&.last
       verified_name = matched_entry ? matched_entry["taxonomy_name"] : "unknown"
+
       puts "[DEBUG] verified_name for #{lang}/#{type}/#{name}: #{verified_name}"
 
       item = {
@@ -224,7 +211,7 @@ end
 
 puts "[LOG] Writing taxonomy YAML..."; STDOUT.flush
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
-File.write(TAXONOMY_YML, deep_stringify_keys(generated).to_yaml)
-File.write(MISSING_TERMS_FILE, deep_stringify_keys(missing).to_yaml)
-File.write(CONFLICT_FILE, deep_stringify_keys(conflicts).to_yaml)
+File.write(TAXONOMY_YML, generated.to_yaml)
+File.write(MISSING_TERMS_FILE, missing.to_yaml)
+File.write(CONFLICT_FILE, conflicts.to_yaml)
 puts "[DONE] All YAML files written."; STDOUT.flush
