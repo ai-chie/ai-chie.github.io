@@ -1,4 +1,3 @@
-
 #!/usr/bin/env ruby
 require 'fileutils'
 require 'yaml'
@@ -173,13 +172,12 @@ taxonomy.each do |lang, types|
       normalized_key = name.to_s.strip.downcase
       dict_map = taxonomy_definitions.dig(lang, type) || {}
 
-      matched_entry = dict_map.find do |key, val|
-        key.to_s.strip.downcase == normalized_key
+      matched_entry = dict_map.find do |k, v|
+        k.to_s.strip.downcase == normalized_key
       end&.last
 
       verified_name = matched_entry ? matched_entry["taxonomy_name"] : "unknown"
-puts "[DEBUG] matched_entry: #{matched_entry.inspect}"
-      puts "[DEBUG] verified_name: #{verified_name.inspect}"
+      puts "[DEBUG] verified_name for #{lang}/#{type}/#{name}: #{verified_name}"
 
       item = {
         'taxonomy_name' => verified_name,
@@ -215,6 +213,15 @@ end
 
 puts "[CHECK] Final taxonomy output structure:"
 pp generated
+
+puts "[CHECK] Individual taxonomy items:"
+generated.each do |lang, types|
+  types.each do |type, items|
+    puts "== #{lang} / #{type} =="
+    items.each { |i| pp i }
+  end
+end
+
 puts "[LOG] Writing taxonomy YAML..."; STDOUT.flush
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
 File.write(TAXONOMY_YML, deep_stringify_keys(generated).to_yaml)
