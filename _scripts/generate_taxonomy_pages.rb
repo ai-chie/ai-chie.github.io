@@ -193,7 +193,7 @@ taxonomy.each do |lang, types|
       }
 
       schema.each do |attr, meta|
-        next if meta['unused']
+        next if meta['unused'] || attr == 'taxonomy_name'  # ← 修正箇所
         item[attr] = resolve_schema_value(meta, lang)
       end
 
