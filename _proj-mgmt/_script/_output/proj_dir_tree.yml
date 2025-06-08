@@ -130,6 +130,21 @@ _pages:
 
   text:
 
+    en:
+
+      categories:
+
+        __files__:
+        - [index.html, _pages/text/en/categories/index.html]
+
+      tags:
+
+        __files__:
+        - [index.html, _pages/text/en/tags/index.html]
+
+      __files__:
+      - [index.html, _pages/text/en/index.html]
+
     ja:
 
       categories:
@@ -181,11 +196,9 @@ _scripts:
   - [generate_sitemap_text.rb, _scripts/generate_sitemap_text.rb]
   - [generate_tag_counts.rb, _scripts/generate_tag_counts.rb]
   - [generate_taxonomy_pages.rb, _scripts/generate_taxonomy_pages.rb]
-  - [generate_text_category_index.rb, _scripts/generate_text_category_index.rb]
-  - [generate_text_category_pages.rb, _scripts/generate_text_category_pages.rb]
   - [generate_text_posts.rb, _scripts/generate_text_posts.rb]
-  - [generate_text_tag_index.rb, _scripts/generate_text_tag_index.rb]
-  - [generate_text_tag_pages.rb, _scripts/generate_text_tag_pages.rb]
+  - [generate_text_taxonomy_index_pages.rb, _scripts/generate_text_taxonomy_index_pages.rb]
+  - [generate_text_taxonomy_pages.rb, _scripts/generate_text_taxonomy_pages.rb]
   - [merge_missing_slugs.rb, _scripts/merge_missing_slugs.rb]
   - [merge_slug_dictionaries.rb, _scripts/merge_slug_dictionaries.rb]
   - [package.json, _scripts/package.json]
