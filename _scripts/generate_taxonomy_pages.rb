@@ -171,8 +171,8 @@ taxonomy.each do |lang, types|
       slug, source = generate_slug(name, lang, used_slugs, overrides, missing, conflicts, type)
       
       name_key = name.to_s.strip.downcase
-      dict = taxonomy_definitions.dig(lang, type).transform_keys { |k| k.to_s.strip.downcase }
-      verified = dict.key?(name_key)
+      dict_values = taxonomy_definitions.dig(lang, type).values
+      verified = dict_values.any? { |item| item["taxonomy_name"].to_s.strip.downcase == name_key }
 
       item = {
         'taxonomy_name' => verified ? name : 'unknown',
