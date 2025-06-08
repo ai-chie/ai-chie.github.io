@@ -133,6 +133,29 @@ end
 # -------------- OUTPUT ----------------
 generated = {}
 
+
+# ========================= [追加] taxonomy辞書の読み込みと平坦化 =========================
+def load_flat_taxonomy_dict(path, lang)
+  raw = safe_load_yaml(path)
+  return {} unless raw[lang]
+  flat = {}
+  raw[lang].each_value do |group|
+    next unless group["items"]
+    group["items"].each do |item|
+      name = item["taxonomy_name"]
+      flat[name] = item if name
+    end
+  end
+  flat
+end
+# ==============================================================================
+
+# カテゴリ・タグ辞書の読み込み
+taxonomy_dicts = {
+  "categories" => load_flat_taxonomy_dict("_data/taxonomy/categories.yml", lang),
+  "tags"       => load_flat_taxonomy_dict("_data/taxonomy/tags.yml", lang)
+}
+
 taxonomy.each do |lang, types|
   generated[lang] = {}
 
@@ -145,6 +168,8 @@ taxonomy.each do |lang, types|
 
       item = {
         'taxonomy_name'   => name,
+  'taxonomy_name_verified' => taxonomy_dicts[type].key?(name) ? name : 'unknown',  # [追加] 辞書補完チェック
+
         'taxonomy_slug'   => slug,
         'slug_source'     => source,
         'count'           => counts[lang][type][name]
