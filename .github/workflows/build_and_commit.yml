@@ -1,10 +1,17 @@
-name: Build and Commit Generated Files
+name: Build and Commit _site, _generated, _pages, and Taxonomy YAMLs
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [main]
+    paths:
+      - '_posts/**'
+      - '_data/**'
+      - '_scripts/**'
+      - '_layouts/**'
+      - '_includes/**'
+      - '_config*.yml'
+      - 'index.html'
+      - '.github/workflows/build_and_commit.yml'
 
 jobs:
   build-and-commit:
@@ -12,37 +19,98 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false  # 認証は手動設定で行う
 
-      - name: Set up Ruby
+      - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
+          ruby-version: 3.1
 
       - name: Install dependencies
         run: bundle install
 
-      - name: Run taxonomy generator
-        run: ruby _scripts/generate_taxonomy_pages.rb
-
-      - name: Debug generated YAML output
+      - name: Run taxonomy/text generators
         run: |
-          echo "=== GENERATED TAXONOMY YAML ==="
-          cat _data/generated_taxonomy.yml || echo "File not found"
-          echo "=== MISSING TERMS ==="
-          cat _data/missing_slug_terms.yml || echo "File not found"
-          echo "=== CONFLICTS ==="
-          cat _data/slug_conflicts.yml || echo "File not found"
+          ruby _scripts/generate_taxonomy_pages.rb
+          ruby _scripts/generate_text_posts.rb
+          ruby _scripts/generate_text_taxonomy_index_pages.rb
+          ruby _scripts/generate_text_taxonomy_pages.rb
 
-      - name: Commit and push generated taxonomy files
+      - name: Debug generated YAML
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add _data/generated_taxonomy.yml _data/missing_slug_terms.yml _data/slug_conflicts.yml || true
-          git commit -m "Auto-update: generated taxonomy" || echo "No changes to commit"
-          git push origin main
-        env:
-          GIT_AUTHOR_NAME: github-actions
-          GIT_AUTHOR_EMAIL: github-actions@github.com
-          GIT_COMMITTER_NAME: github-actions
-          GIT_COMMITTER_EMAIL: github-actions@github.com
+          echo "=== _data/generated_taxonomy.yml ==="
+          cat _data/generated_taxonomy.yml || echo "Not found"
+          echo "=== _data/missing_slug_terms.yml ==="
+          cat _data/missing_slug_terms.yml || echo "Not found"
+          echo "=== _data/slug_conflicts.yml ==="
+          cat _data/slug_conflicts.yml || echo "Not found"
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Setup authenticated push
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+
+      - name: Commit and push taxonomy YAMLs
+        run: |
+          git add -N _data/
+          CHANGED=$(git diff --name-only --cached | grep '^_data/' | grep -E 'generated_taxonomy|missing_slug_terms|slug_conflicts' || true)
+          if [ -n "$CHANGED" ]; then
+            echo "$CHANGED" | xargs git add
+            git commit -m "Update taxonomy YAMLs [auto]"
+            git push origin main
+          else
+            echo "No taxonomy YAML changes to commit."
+          fi
+
+      - name: Commit and push _generated content
+        run: |
+          git add -N _generated/
+          CHANGED=$(git diff --name-only --cached | grep '^_generated/' || true)
+          if [ -n "$CHANGED" ]; then
+            echo "$CHANGED" | xargs git add
+            git commit -m "Update _generated content [auto]"
+            git push origin main
+          else
+            echo "No _generated content changes to commit."
+          fi
+
+      - name: Commit and push _pages content
+        run: |
+          git add -N _pages/
+          CHANGED=$(git diff --name-only --cached | grep '^_pages/' || true)
+          if [ -n "$CHANGED" ]; then
+            echo "$CHANGED" | xargs git add
+            git commit -m "Update _pages content [auto]"
+            git push origin main
+          else
+            echo "No _pages content changes to commit."
+          fi
+
+      - name: Build Jekyll site
+        run: bundle exec jekyll build --destination _site
+
+      - name: Stage only changed files in _site (safe and filtered)
+        run: |
+          mkdir -p _site
+          git add -N _site/ || true
+          CHANGED=$(git diff --name-only --cached | grep '^_site/' | grep -v '\.keep$' || true)
+          if [ -n "$CHANGED" ]; then
+            echo "$CHANGED" | xargs git add
+          else
+            echo "No _site changes to commit."
+          fi
+
+      - name: Commit and push _site if there are changes
+        run: |
+          if ! git diff --cached --quiet; then
+            git commit -m "Update _site [auto]"
+            git push origin main
+          else
+            echo "No changes to commit for _site."
+          fi
