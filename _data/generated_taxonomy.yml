@@ -1,7 +1,7 @@
 ---
 en:
   categories:
-  - taxonomy_name: unknown
+  - taxonomy_name: Test
     taxonomy_slug: test
     slug_source: override
     count: 1
@@ -21,7 +21,7 @@ en:
     taxonomy_hidden_reason: ''
     taxonomy_audience: external
   tags:
-  - taxonomy_name: unknown
+  - taxonomy_name: Post
     taxonomy_slug: post
     slug_source: override
     count: 1
@@ -40,7 +40,7 @@ en:
     taxonomy_link: ''
     taxonomy_hidden_reason: ''
     taxonomy_audience: external
-  - taxonomy_name: unknown
+  - taxonomy_name: Sample
     taxonomy_slug: sample
     slug_source: override
     count: 1
@@ -61,7 +61,7 @@ en:
     taxonomy_audience: external
 ja:
   categories:
-  - taxonomy_name: unknown
+  - taxonomy_name: テスト
     taxonomy_slug: test-ja
     slug_source: override
     count: 1
@@ -81,7 +81,7 @@ ja:
     taxonomy_hidden_reason: ''
     taxonomy_audience: external
   tags:
-  - taxonomy_name: unknown
+  - taxonomy_name: サンプル
     taxonomy_slug: sample-ja
     slug_source: override
     count: 1
@@ -100,7 +100,7 @@ ja:
     taxonomy_link: ''
     taxonomy_hidden_reason: ''
     taxonomy_audience: external
-  - taxonomy_name: unknown
+  - taxonomy_name: 記事
     taxonomy_slug: article-ja
     slug_source: override
     count: 1
