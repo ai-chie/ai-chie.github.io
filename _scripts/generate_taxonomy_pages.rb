@@ -114,7 +114,7 @@ def load_flat_taxonomy_dict(path, lang)
     next unless group["items"]
     group["items"].each do |item|
       name = item["taxonomy_name"]
-      flat[name.to_s] = item if name  # ← ここが決定的な修正
+      flat[name.to_s] = item if name
     end
   end
   flat
@@ -170,11 +170,14 @@ taxonomy.each do |lang, types|
       slug, source = generate_slug(name, lang, used_slugs, overrides, missing, conflicts, type)
 
       normalized_key = name.to_s.strip.downcase
-      dict_map = taxonomy_definitions.dig(lang, type) || {}
+      dict_values = taxonomy_definitions.dig(lang, type)&.values || []
 
-      matched_entry = dict_map.find { |k, _| k.to_s.strip.downcase == normalized_key }&.last
+      matched_entry = dict_values.find do |item|
+        item_name = item["taxonomy_name"]
+        item_name.is_a?(String) && item_name.strip.downcase == normalized_key
+      end
+
       verified_name = matched_entry ? matched_entry["taxonomy_name"] : "unknown"
-
       puts "[DEBUG] verified_name for #{lang}/#{type}/#{name}: #{verified_name}"
 
       item = {
