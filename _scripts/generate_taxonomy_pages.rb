@@ -157,6 +157,11 @@ taxonomy_dicts = {
 }
 
 taxonomy.each do |lang, types|
+  taxonomy_dicts = {
+    "categories" => load_flat_taxonomy_dict("_data/taxonomy/categories.yml", lang),
+    "tags"       => load_flat_taxonomy_dict("_data/taxonomy/tags.yml", lang)
+  }
+
   generated[lang] = {}
 
   types.each do |type, terms|
