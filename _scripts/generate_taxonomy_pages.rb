@@ -213,6 +213,8 @@ puts "[DEBUG] matched_entry: #{matched_entry.inspect}"
   end
 end
 
+puts "[CHECK] Final taxonomy output structure:"
+pp generated
 puts "[LOG] Writing taxonomy YAML..."; STDOUT.flush
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
 File.write(TAXONOMY_YML, deep_stringify_keys(generated).to_yaml)
