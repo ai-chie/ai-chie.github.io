@@ -176,13 +176,7 @@ taxonomy.each do |lang, types|
       mapped = dict_values.map { |v| v["taxonomy_name"].to_s.strip.downcase }
       puts "[DEBUG] lang: #{lang}, type: #{type}, name: #{name.inspect}, name_key: #{name_key}"
       puts "[DEBUG] dict_values: #{mapped.inspect}"
-      normalized_key = name.to_s.strip.downcase
-matched_entry = dict_values.find do |item|
-  candidate = item["taxonomy_name"]
-  candidate.is_a?(String) && !candidate.strip.empty? &&
-    candidate.strip.downcase == normalized_key
-end
-
+      matched_entry = dict_values.find { |item| item["taxonomy_name"].to_s.strip.downcase == name_key }
       verified_name = matched_entry ? matched_entry["taxonomy_name"] : "unknown"
 puts "[DEBUG] matched_entry: #{matched_entry.inspect}"
       puts "[DEBUG] verified_name: #{verified_name.inspect}"
