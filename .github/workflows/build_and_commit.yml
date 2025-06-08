@@ -1,71 +1,31 @@
-name: Build and Commit _site
+name: Build Site
 
 on:
   push:
-    branches: [main]
-    paths:
-      - '_posts/**'
-      - '_data/**'
-      - '_scripts/**'
-      - '_layouts/**'
-      - '_includes/**'
-      - '_config*.yml'
-      - 'index.html'
-      - '.github/workflows/build_and_commit.yml'
+    branches:
+      - main
 
 jobs:
-  build-and-commit:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false  # 認証は手動設定で行う
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-      - name: Setup Ruby
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1
+          ruby-version: '3.1'
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: bundle install
 
-      - name: Run taxonomy/text generators
-        run: |
-          ruby _scripts/generate_taxonomy_pages.rb
-          ruby _scripts/generate_text_posts.rb
-          ruby _scripts/generate_text_taxonomy_index_pages.rb
-          ruby _scripts/generate_text_taxonomy_pages.rb
+      - name: Run taxonomy generator
+        run: ruby _scripts/generate_taxonomy_pages.rb
 
-      - name: Build Jekyll site
-        run: bundle exec jekyll build --destination _site
-
-      - name: Configure git
+      - name: Debug generated_taxonomy.yml
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Setup authenticated push
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-
-      - name: Stage only changed files in _site (safe and filtered)
-        run: |
-          mkdir -p _site
-          git add -N _site/ || true
-          CHANGED=$(git diff --name-only --cached | grep '^_site/' | grep -v '\.keep$' || true)
-          if [ -n "$CHANGED" ]; then
-            echo "$CHANGED" | xargs git add
-          else
-            echo "No changed files in _site/"
-          fi
-
-      - name: Commit and push if there are changes
-        run: |
-          if ! git diff --cached --quiet; then
-            git commit -m "Update _site [auto]"
-            git push origin main
-          else
-            echo "No changes to commit."
-          fi
+          echo "=== GENERATED TAXONOMY YAML ==="
+          cat _data/generated_taxonomy.yml
+          echo "=== END OF TAXONOMY ==="
