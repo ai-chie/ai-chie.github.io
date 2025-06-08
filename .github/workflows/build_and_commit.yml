@@ -1,16 +1,17 @@
-name: Build Site
+name: Build and Commit Generated Files
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-and-commit:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Ruby
@@ -18,14 +19,30 @@ jobs:
         with:
           ruby-version: '3.1'
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: bundle install
 
       - name: Run taxonomy generator
         run: ruby _scripts/generate_taxonomy_pages.rb
 
-      - name: Debug generated_taxonomy.yml
+      - name: Debug generated YAML output
         run: |
           echo "=== GENERATED TAXONOMY YAML ==="
-          cat _data/generated_taxonomy.yml
-          echo "=== END OF TAXONOMY ==="
+          cat _data/generated_taxonomy.yml || echo "File not found"
+          echo "=== MISSING TERMS ==="
+          cat _data/missing_slug_terms.yml || echo "File not found"
+          echo "=== CONFLICTS ==="
+          cat _data/slug_conflicts.yml || echo "File not found"
+
+      - name: Commit and push generated taxonomy files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add _data/generated_taxonomy.yml _data/missing_slug_terms.yml _data/slug_conflicts.yml || true
+          git commit -m "Auto-update: generated taxonomy" || echo "No changes to commit"
+          git push origin main
+        env:
+          GIT_AUTHOR_NAME: github-actions
+          GIT_AUTHOR_EMAIL: github-actions@github.com
+          GIT_COMMITTER_NAME: github-actions
+          GIT_COMMITTER_EMAIL: github-actions@github.com
