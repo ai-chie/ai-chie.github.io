@@ -169,7 +169,10 @@ taxonomy.each do |lang, types|
 
     terms.uniq.sort.each do |name|
       slug, source = generate_slug(name, lang, used_slugs, overrides, missing, conflicts, type)
-      verified = taxonomy_definitions.dig(lang, type).key?(name)
+      
+      name_key = name.to_s.strip.downcase
+      dict = taxonomy_definitions.dig(lang, type).transform_keys { |k| k.to_s.strip.downcase }
+      verified = dict.key?(name_key)
 
       item = {
         'taxonomy_name' => verified ? name : 'unknown',
