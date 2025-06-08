@@ -1,3 +1,4 @@
+
 #!/usr/bin/env ruby
 require 'fileutils'
 require 'yaml'
@@ -6,6 +7,7 @@ require 'i18n'
 require 'active_support/core_ext/string/inflections'
 require 'pp'
 
+# ---------------- CONSTANTS ----------------
 POSTS_DIR           = '_posts'
 OUTPUT_ROOT         = '_generated'
 LAYOUT              = 'default'
@@ -14,7 +16,10 @@ SLUG_DICT_FILE      = '_data/slug_overrides.yml'
 MISSING_TERMS_FILE  = '_data/missing_slug_terms.yml'
 CONFLICT_FILE       = '_data/slug_conflicts.yml'
 SCHEMA_PATH         = '_data/taxonomy/schema.yml'
+LANGS               = %w[ja en]
+TYPES               = %w[categories tags]
 
+# ---------------- FUNCTIONS ----------------
 def safe_load_yaml(path)
   return {} unless File.exist?(path)
   YAML.load_file(path)
@@ -102,6 +107,20 @@ def generate_slug(term, lang, used, overrides, missing, conflicts, type)
   [slug, source]
 end
 
+def load_flat_taxonomy_dict(path, lang)
+  raw = safe_load_yaml(path)
+  return {} unless raw[lang]
+  flat = {}
+  raw[lang].each_value do |group|
+    next unless group["items"]
+    group["items"].each do |item|
+      name = item["taxonomy_name"]
+      flat[name] = item if name
+    end
+  end
+  flat
+end
+
 # ---------------- INIT ----------------
 taxonomy  = Hash.new { |h, k| h[k] = { "categories" => [], "tags" => [] } }
 counts    = Hash.new { |h, k| h[k] = { "categories" => Hash.new(0), "tags" => Hash.new(0) } }
@@ -118,9 +137,9 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   data = parse_front_matter(path)
   next if data.empty? || data['draft'] || data['hidden']
   lang = data['lang']
-  next unless %w[ja en].include?(lang)
+  next unless LANGS.include?(lang)
 
-  ["categories", "tags"].each do |type|
+  TYPES.each do |type|
     Array(data[type]).each do |term|
       str = term.to_s.strip
       next if str.empty?
@@ -130,46 +149,7 @@ Dir.glob("#{POSTS_DIR}/**/*.md").each do |path|
   end
 end
 
-# -------------- OUTPUT ----------------
-generated = {}
-
-
-# ========================= [追加] taxonomy辞書の読み込みと平坦化 =========================
-def load_flat_taxonomy_dict(path, lang)
-  raw = safe_load_yaml(path)
-  return {} unless raw[lang]
-  flat = {}
-  raw[lang].each_value do |group|
-    next unless group["items"]
-    group["items"].each do |item|
-      name = item["taxonomy_name"]
-      flat[name] = item if name
-    end
-  end
-  flat
-end
-# ==============================================================================
-
-# カテゴリ・タグ辞書の読み込み
-taxonomy_dicts = {
-  "categories" => load_flat_taxonomy_dict("_data/taxonomy/categories.yml", lang),
-  "tags"       => load_flat_taxonomy_dict("_data/taxonomy/tags.yml", lang)
-}
-
-
-# ========================= [追加] taxonomy辞書を全言語×typeで事前に読み込み =========================
-
-
-
-
-
-
-# ========================= [改善版] LANGS × TYPES に基づく taxonomy辞書動的初期化 =========================
-LANGS = %w[ja en]
-TYPES = %w[categories tags]
-
 taxonomy_definitions = {}
-
 LANGS.each do |lang|
   taxonomy_definitions[lang] = {}
   TYPES.each do |type|
@@ -177,14 +157,10 @@ LANGS.each do |lang|
     taxonomy_definitions[lang][type] = load_flat_taxonomy_dict(path, lang)
   end
 end
-# ==============================================================================
+
+generated = {}
 
 taxonomy.each do |lang, types|
-  taxonomy_dicts = {
-    "categories" => load_flat_taxonomy_dict("_data/taxonomy/categories.yml", lang),
-    "tags"       => load_flat_taxonomy_dict("_data/taxonomy/tags.yml", lang)
-  }
-
   generated[lang] = {}
 
   types.each do |type, terms|
@@ -193,14 +169,13 @@ taxonomy.each do |lang, types|
 
     terms.uniq.sort.each do |name|
       slug, source = generate_slug(name, lang, used_slugs, overrides, missing, conflicts, type)
+      verified = taxonomy_definitions.dig(lang, type).key?(name)
 
       item = {
-        'taxonomy_name'   => name,
-  'taxonomy_name_verified' => taxonomy_definitions.dig(lang, type).key?(name) ? name : 'unknown',  # [追加] 辞書補完チェック
-
-        'taxonomy_slug'   => slug,
-        'slug_source'     => source,
-        'count'           => counts[lang][type][name]
+        'taxonomy_name' => verified ? name : 'unknown',
+        'taxonomy_slug' => slug,
+        'slug_source'   => source,
+        'count'         => counts[lang][type][name]
       }
 
       schema.each do |attr, meta|
@@ -228,7 +203,6 @@ taxonomy.each do |lang, types|
   end
 end
 
-# -------------- SAVE ------------------
 puts "[LOG] Writing taxonomy YAML..."; STDOUT.flush
 FileUtils.mkdir_p(File.dirname(TAXONOMY_YML))
 File.write(TAXONOMY_YML, deep_stringify_keys(generated).to_yaml)
