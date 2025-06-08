@@ -171,10 +171,6 @@ taxonomy.each do |lang, types|
       
       name_key = name.to_s.strip.downcase
       dict_values = taxonomy_definitions.dig(lang, type).values
-      puts "[DEBUG] lang: #{lang}, type: #{type}, name: #{name.inspect}, name_key: #{name_key}"
-puts "[DEBUG] dict_values: \#{dict_values.map { |v| v["taxonomy_name"]&.strip&.downcase }.inspect}"
-name_key = name.to_s.strip.downcase
-      dict_values = taxonomy_definitions.dig(lang, type).values
       mapped = dict_values.map { |v| v["taxonomy_name"].to_s.strip.downcase }
       puts "[DEBUG] lang: #{lang}, type: #{type}, name: #{name.inspect}, name_key: #{name_key}"
       puts "[DEBUG] dict_values: #{mapped.inspect}"
