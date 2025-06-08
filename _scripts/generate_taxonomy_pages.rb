@@ -158,6 +158,10 @@ taxonomy_dicts = {
 
 
 # ========================= [追加] taxonomy辞書を全言語×typeで事前に読み込み =========================
+
+
+
+# ========================= [修正済] 全言語・全タイプのtaxonomy辞書を明示的に定義 =========================
 taxonomy_definitions = {
   "ja" => {
     "categories" => load_flat_taxonomy_dict("_data/taxonomy/categories.yml", "ja"),
