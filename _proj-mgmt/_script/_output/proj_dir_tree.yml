@@ -118,6 +118,8 @@ _layouts:
 
   __files__:
   - [default.html, _layouts/default.html]
+  - [taxonomy-text.html, _layouts/taxonomy-text.html]
+  - [taxonomy.html, _layouts/taxonomy.html]
   - [text-post.html, _layouts/text-post.html]
   - [text.html, _layouts/text.html]
 
