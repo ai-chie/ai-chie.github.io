@@ -12,6 +12,9 @@ on:
       - '_config*.yml'
       - 'index.html'
       - '.github/workflows/build_and_commit.yml'
+      
+permissions:
+  contents: write  # ← これを追加！重要！
 
 jobs:
   build-and-commit:
