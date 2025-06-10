@@ -26,29 +26,8 @@ jobs:
         with:
           persist-credentials: false  # 認証は手動設定で行う
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.1
-
       - name: Install dependencies
         run: bundle install
-
-      - name: Run taxonomy/text generators
-        run: |
-          ruby _scripts/generate_taxonomy_pages.rb
-          ruby _scripts/generate_text_posts.rb
-          ruby _scripts/generate_text_taxonomy_index_pages.rb
-          ruby _scripts/generate_text_taxonomy_pages.rb
-
-      - name: Debug generated YAML
-        run: |
-          echo "=== _data/generated_taxonomy.yml ==="
-          cat _data/generated_taxonomy.yml || echo "Not found"
-          echo "=== _data/missing_slug_terms.yml ==="
-          cat _data/missing_slug_terms.yml || echo "Not found"
-          echo "=== _data/slug_conflicts.yml ==="
-          cat _data/slug_conflicts.yml || echo "Not found"
 
       - name: Configure git
         run: |
@@ -58,30 +37,6 @@ jobs:
       - name: Setup authenticated push
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-
-      - name: Commit and push taxonomy YAMLs
-        run: |
-          git add -N _data/
-          CHANGED=$(git diff --name-only --cached | grep '^_data/' | grep -E 'generated_taxonomy|missing_slug_terms|slug_conflicts' || true)
-          if [ -n "$CHANGED" ]; then
-            echo "$CHANGED" | xargs git add
-            git commit -m "Update taxonomy YAMLs [auto]"
-            git push origin main
-          else
-            echo "No taxonomy YAML changes to commit."
-          fi
-
-      - name: Commit and push _generated content
-        run: |
-          git add -N _generated/
-          CHANGED=$(git diff --name-only --cached | grep '^_generated/' || true)
-          if [ -n "$CHANGED" ]; then
-            echo "$CHANGED" | xargs git add
-            git commit -m "Update _generated content [auto]"
-            git push origin main
-          else
-            echo "No _generated content changes to commit."
-          fi
 
       - name: Commit and push _pages content
         run: |
