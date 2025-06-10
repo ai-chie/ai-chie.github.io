@@ -1,6 +1,6 @@
-{%- assign taxonomy_schema = site.data.taxonomy.taxonomy_schema -%}
-{%- assign lang = include.lang | default: 'ja' -%} {# langパラメータを受け取る #}
-{%- assign labels = site.data.lang.taxonomy_badge -%} {# ラベルデータを読み込む #}
+{%- assign schema = site.data.taxonomy.taxonomy_schema -%} {# ここを修正 #}
+{%- assign lang = include.lang | default: 'ja' -%}
+{%- assign labels = site.data.lang.taxonomy_badge -%}
 
 <span class="inline-flex items-center space-x-1 text-xs">
 
@@ -14,17 +14,16 @@
 
   {%- if include.deprecated -%}
     <span class="px-2 py-0.5 bg-red-100 text-red-700 rounded" title="{{ labels.deprecated_tooltip[lang] }}">⚠ {{ labels.deprecated[lang] }}</span>
-  {%- endif -%}
+  {%- endif --}
 
-  {%- assign audience = include.audience | default: taxonomy_schema.taxonomy_audience.default -%}
+  {%- assign audience = include.audience | default: schema.taxonomy_audience.default -%}
   {%- if audience == 'internal' -%}
     <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded" title="{{ labels.internal_tooltip[lang] }}">🔒 {{ labels.internal[lang] }}</span>
   {%- elsif audience == 'external' -%}
     <span class="px-2 py-0.5 bg-green-100 text-green-600 rounded" title="{{ labels.public_tooltip[lang] }}">🌐 {{ labels.public[lang] }}</span>
-  {%- endif -%}
+  {%- endif --}
 
   {%- if include.tooltip -%}
-    {# ここはtaxonomy_tooltipが直接渡されるので、そのまま使う #}
     <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded" title="{{ include.tooltip }}">🛈</span>
   {%- endif -%}
 

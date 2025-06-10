@@ -1,4 +1,4 @@
-{%- assign taxonomy_schema = site.data.taxonomy.taxonomy_schema -%}
+{%- assign schema = site.data.taxonomy.taxonomy_schema -%} {# ここを修正 #}
 
 {# include.item を直接処理する #}
 {% assign item = include.item %}
@@ -7,21 +7,22 @@
 {% assign ui = include.ui %}
 {% assign warning = include.warning | default: "" %}
 {% assign lang = include.lang %}
-{% assign render_type = include.render_type | default: 'html' %} {# 新しいrender_typeパラメータ #}
+{% assign render_type = include.render_type | default: 'html' %}
 
 
-{% assign name           = item.taxonomy_name | default: 'unknown' %}
+{# taxonomy_name, taxonomy_description, taxonomy_tooltip は多言語キーを持つので、[lang] でアクセス #}
+{% assign name           = item.taxonomy_name[lang] | default: 'unknown' %}
 {% assign slug           = item.taxonomy_slug | default: '' %}
-{% assign audience       = item.taxonomy_audience | default: taxonomy_schema.taxonomy_audience.default %}
-{% assign admin_only     = item.taxonomy_admin_only | default: taxonomy_schema.taxonomy_admin_only.default %}
-{% assign hidden         = item.taxonomy_hidden | default: taxonomy_schema.taxonomy_hidden.default %}
-{% assign draft          = item.taxonomy_draft | default: taxonomy_schema.taxonomy_draft.default %}
-{% assign color          = item.taxonomy_color | default: taxonomy_schema.taxonomy_color.default %}
-{% assign tooltip        = item.taxonomy_tooltip | default: '' %}
+{% assign audience       = item.taxonomy_audience | default: schema.taxonomy_audience.default %}
+{% assign admin_only     = item.taxonomy_admin_only | default: schema.taxonomy_admin_only.default %}
+{% assign hidden         = item.taxonomy_hidden | default: schema.taxonomy_hidden.default %}
+{% assign draft          = item.taxonomy_draft | default: schema.taxonomy_draft.default %}
+{% assign color          = item.taxonomy_color | default: schema.taxonomy_color.default %}
+{% assign tooltip        = item.taxonomy_tooltip[lang] | default: '' %}
 {% assign icon           = item.taxonomy_icon | default: '' %}
 {% assign hidden_reason  = item.taxonomy_hidden_reason | default: '' %}
-{% assign description    = item.taxonomy_description | default: "" %}
-{% assign priority       = item.taxonomy_priority | default: taxonomy_schema.taxonomy_priority.default %}
+{% assign description    = item.taxonomy_description[lang] | default: "" %}
+{% assign priority       = item.taxonomy_priority | default: schema.taxonomy_priority.default %}
 
 {% assign count = counts[slug] | default: 0 %}
 {% assign audience_label = ui.audience_labels[audience][lang] %}
@@ -47,7 +48,7 @@
         tooltip=tooltip
         icon=icon
         hiddenReason=hidden_reason
-        lang=lang {# taxonomy-badge.html に lang を渡す #}
+        lang=lang
       %}
       <span>({{ count }}{{ ui.count_suffix[lang] }})</span>
       <span>{{ audience_label }}</span>
