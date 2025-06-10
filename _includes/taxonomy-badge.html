@@ -1,6 +1,6 @@
 {%- assign taxonomy_schema = site.data.taxonomy.taxonomy_schema -%}
 {%- assign lang = include.lang | default: 'ja' -%} {# langパラメータを受け取る #}
-{%- assign labels = site.data.taxonomy_badge -%} {# ラベルデータを読み込む #}
+{%- assign labels = site.data.lang.taxonomy_badge -%} {# ラベルデータを読み込む #}
 
 <span class="inline-flex items-center space-x-1 text-xs">
 

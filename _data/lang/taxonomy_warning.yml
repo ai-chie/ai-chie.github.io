@@ -1,0 +1,11 @@
+# _data/lang/taxonomy_warning.yml
+name_missing:
+  ja: 名前がありません
+  en: Name is missing
+slug_missing:
+  ja: スラッグがありません
+  en: Slug is missing
+slug_duplicate:
+  ja: スラッグが重複しています
+  en: Slug is duplicated
+  
