@@ -1,0 +1,38 @@
+# _data/lang/taxonomy_badge.yml の例
+featured:
+  ja: 注目
+  en: Featured
+featured_tooltip:
+  ja: 注目トピックとして強調表示
+  en: Highlighted as a featured topic
+beta:
+  ja: Beta
+  en: Beta
+beta_tooltip:
+  ja: 実験中の分類
+  en: Experimental classification
+deprecated:
+  ja: 廃止予定
+  en: Deprecated
+deprecated_tooltip:
+  ja: 非推奨または廃止予定
+  en: Deprecated or scheduled for removal
+internal:
+  ja: Internal
+  en: Internal
+internal_tooltip:
+  ja: 社内向け分類
+  en: Internal classification
+public:
+  ja: Public
+  en: Public
+public_tooltip:
+  ja: 公開用分類
+  en: Public classification
+icon_tooltip:
+  ja: アイコン
+  en: Icon
+hidden_reason_tooltip:
+  ja: 非表示理由
+  en: Reason for being hidden
+  

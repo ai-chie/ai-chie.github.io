@@ -1,0 +1,144 @@
+
+
+taxonomy_slug:
+  type: string
+  required: true
+  default: "unknown"
+  unused: false
+  description: 【必須】タグやカテゴリのslug
+  group: 必須情報
+
+taxonomy_name:
+  type: string
+  required: true
+  default: "unknown"
+  unused: false
+  description: 【必須】タグやカテゴリの名称。
+  group: 必須情報
+
+taxonomy_description:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: タグやカテゴリの説明文。一覧や個別ページで表示
+  group: 表示補助・説明メタ情報
+  
+taxonomy_link:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: リンク先を上書きする場合に使用
+  group: 表示補助・説明メタ情報
+  
+taxonomy_audience:
+  type: enum
+  values:
+    - internal  # 社内向け
+    - external  # 公開向け
+  required: false
+  default: external
+  unused: false
+  description: 対象読者の区分（🌐=external, 🔒=internal）
+  group: 公開範囲（対象読者）
+  
+taxonomy_priority:
+  type: integer
+  required: false
+  default: 99
+  unused: false
+  description: 並び順制御用の数値（1〜999）。小さいほど上位に表示される
+  group: UI装飾・強調表示
+  
+taxonomy_featured:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 注目トピックとして強調表示（★アイコン等）
+  group: UI装飾・強調表示
+  
+taxonomy_beta:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 実験中の分類（🧪などのアイコン表示）
+  group: UI装飾・強調表示
+  
+taxonomy_deprecated:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 非推奨・廃止予定（⚠アイコン付きで警告）
+  group: UI装飾・強調表示
+  
+taxonomy_color:
+  type: string
+  required: false
+  default: "#cccccc"
+  unused: false
+  description: タグの装飾やUIでの視認性向上に使う色コード
+  group: UI装飾・強調表示
+  
+taxonomy_icon:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: 表示時に使うアイコン（例： emoji やクラス名）
+  group: 表示補助・説明メタ情報
+  
+taxonomy_tooltip:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: ホバー時に表示する補足情報。バッジやアイコンなどに対応
+  group: 表示補助・説明メタ情報
+  
+taxonomy_private:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 社内資料や限定公開向けなど。基本的に外部公開しない分類
+  group: 表示制御（制限・非表示系）
+
+taxonomy_admin_only:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 管理者用。UIには原則表示されない
+  group: 表示制御（制限・非表示系）
+  
+taxonomy_hidden:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 完全に表示対象外とする（一覧・記事ページすべてに非表示）
+  group: 表示制御（制限・非表示系）
+  
+taxonomy_hidden_reason:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）
+  group: 表示補助・説明メタ情報
+  
+taxonomy_draft:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 下書き扱い。将来的に公開される可能性はあるが、現時点では非表示
+  group: 表示制御（制限・非表示系）
+  
+
+
+
