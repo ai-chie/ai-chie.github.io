@@ -1,8 +1,14 @@
+{% assign render_type = include.render_type | default: 'human' %} {# 'human' または 'ai' #}
+
 <ul class="space-y-4">
   {% for post in include.posts %}
-    {% include post-attribute-check.html post=post %} {# 修正: context=post を post=post に変更 #}
-    {% unless post_attrs.post_hidden or post_attrs.post_draft %} {# 修正: post_hidden を post_attrs.post_hidden に変更 #}
-      {% include post-list-item.html post=post %}
+    {% include post-attribute-check.html post=post %}
+    {% unless post_attrs.post_hidden or post_attrs.post_draft %}
+      {% if render_type == 'text' %}
+        {% include post-list-item-text.html post=post %}
+      {% else %}
+        {% include post-list-item.html post=post %}
+      {% endif %}
     {% endunless %}
   {% endfor %}
 </ul>
