@@ -20,12 +20,13 @@ HTML出力は行わず、Liquid変数を設定するのみです。
 {%- assign schema = include.schema -%}
 
 {# _dataファイルからタクソノミーの基本データを読み込む #}
-{%- assign data = site.data.taxonomy[type] -%}
+{# ファイルが存在しない場合にも空の配列が割り当てられるように default: "" | split: "" を追加 #}
+{%- assign data = site.data.taxonomy[type] | default: "" | split: "" -%}
 
-{# data が存在しない場合は、早期に処理を終了するか、空のリストを返す #}
-{%- if data == nil or data.size == 0 -%}
+{# data が存在しない（空の配列になった）場合は、早期に処理を終了 #}
+{%- if data.size == 0 -%}
   {%- assign merged_items = "" | split: "" -%} {# 空のリストを返す #}
-  {%- return -%} {# Liquid 2.x 以降で利用可能な return #}
+  {%- return -%}
 {%- endif -%}
 
 {# Jekyllの標準機能を使って、各タクソノミーに紐づく記事のカウントデータを取得 #}
@@ -49,13 +50,13 @@ HTML出力は行わず、Liquid変数を設定するのみです。
   {%- assign current_item_slug = item.taxonomy_slug | default: '' -%}
 
   {%- if current_item_name == '' %}
-    {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.name_missing[lang] | append: " " %}
+    {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.name_missing[lang] | default: warnings_data.name_missing['ja'] | append: " " %}
   {%- endif %}
   {%- if current_item_slug == '' %}
-    {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.slug_missing[lang] | append: " " %}
+    {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.slug_missing[lang] | default: warnings_data.slug_missing['ja'] | append: " " %}
   {%- endif %}
   {%- if seen_slugs contains current_item_slug and current_item_slug != '' %}
-    {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.slug_duplicate[lang] | append: " " %}
+    {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.slug_duplicate[lang] | default: warnings_data.slug_duplicate['ja'] | append: " " %}
   {%- else %}
     {%- if current_item_slug != '' %}{% assign seen_slugs = seen_slugs | push: current_item_slug %}{% endif -%}
   {%- endif %}
