@@ -1,4 +1,4 @@
-
+# _data/taxonomy/taxonomy_schema.yml (修正案 - 追加フィールド対応)
 
 taxonomy_slug:
   type: string
@@ -9,21 +9,21 @@ taxonomy_slug:
   group: 必須情報
 
 taxonomy_name:
-  type: string
+  type: object
   required: true
-  default: "unknown"
+  default: { ja: "unknown", en: "unknown" }
   unused: false
-  description: 【必須】タグやカテゴリの名称。
+  description: 【必須】タグやカテゴリの名称。多言語対応 {ja "日本語名", en "English Name"}
   group: 必須情報
 
 taxonomy_description:
-  type: string
+  type: object
   required: false
-  default: ""
+  default: { ja: "", en: "" }
   unused: false
-  description: タグやカテゴリの説明文。一覧や個別ページで表示
+  description: タグやカテゴリの説明文。一覧や個別ページで表示。多言語対応
   group: 表示補助・説明メタ情報
-  
+
 taxonomy_link:
   type: string
   required: false
@@ -31,7 +31,7 @@ taxonomy_link:
   unused: false
   description: リンク先を上書きする場合に使用
   group: 表示補助・説明メタ情報
-  
+
 taxonomy_audience:
   type: enum
   values:
@@ -42,7 +42,7 @@ taxonomy_audience:
   unused: false
   description: 対象読者の区分（🌐=external, 🔒=internal）
   group: 公開範囲（対象読者）
-  
+
 taxonomy_priority:
   type: integer
   required: false
@@ -50,7 +50,7 @@ taxonomy_priority:
   unused: false
   description: 並び順制御用の数値（1〜999）。小さいほど上位に表示される
   group: UI装飾・強調表示
-  
+
 taxonomy_featured:
   type: boolean
   required: false
@@ -58,7 +58,7 @@ taxonomy_featured:
   unused: false
   description: 注目トピックとして強調表示（★アイコン等）
   group: UI装飾・強調表示
-  
+
 taxonomy_beta:
   type: boolean
   required: false
@@ -66,7 +66,7 @@ taxonomy_beta:
   unused: false
   description: 実験中の分類（🧪などのアイコン表示）
   group: UI装飾・強調表示
-  
+
 taxonomy_deprecated:
   type: boolean
   required: false
@@ -74,7 +74,7 @@ taxonomy_deprecated:
   unused: false
   description: 非推奨・廃止予定（⚠アイコン付きで警告）
   group: UI装飾・強調表示
-  
+
 taxonomy_color:
   type: string
   required: false
@@ -82,7 +82,7 @@ taxonomy_color:
   unused: false
   description: タグの装飾やUIでの視認性向上に使う色コード
   group: UI装飾・強調表示
-  
+
 taxonomy_icon:
   type: string
   required: false
@@ -90,15 +90,15 @@ taxonomy_icon:
   unused: false
   description: 表示時に使うアイコン（例： emoji やクラス名）
   group: 表示補助・説明メタ情報
-  
+
 taxonomy_tooltip:
-  type: string
+  type: object
   required: false
-  default: ""
+  default: { ja: "", en: "" }
   unused: false
-  description: ホバー時に表示する補足情報。バッジやアイコンなどに対応
+  description: ホバー時に表示する補足情報。バッジやアイコンなどに対応。多言語対応
   group: 表示補助・説明メタ情報
-  
+
 taxonomy_private:
   type: boolean
   required: false
@@ -114,31 +114,46 @@ taxonomy_admin_only:
   unused: false
   description: 管理者用。UIには原則表示されない
   group: 表示制御（制限・非表示系）
-  
+
 taxonomy_hidden:
   type: boolean
   required: false
   default: false
   unused: false
-  description: 完全に表示対象外とする（一覧・記事ページすべてに非表示）
+  description: 完全に表示対象外とする（一覧・記事ページ含め）
   group: 表示制御（制限・非表示系）
-  
-taxonomy_hidden_reason:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description: 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）
-  group: 表示補助・説明メタ情報
-  
-taxonomy_draft:
+
+taxonomy_output_text: # 追加
   type: boolean
   required: false
-  default: false
+  default: true
   unused: false
-  description: 下書き扱い。将来的に公開される可能性はあるが、現時点では非表示
-  group: 表示制御（制限・非表示系）
+  description: text構成に出力対象とする
+  group: 表示制御（出力対象）
+
+taxonomy_output_pc: # 追加
+  type: boolean
+  required: false
+  default: true
+  unused: false
+  description: PC構成に出力対象とする
+  group: 表示制御（出力対象）
+
+taxonomy_output_mobile: # 追加
+  type: boolean
+  required: false
+  default: true
+  unused: false
+  description: モバイル構成に出力対象とする
+  group: 表示制御（出力対象）
+
+taxonomy_aliases: # 追加
+  type: array
+  items:
+    type: string
+  required: false
+  default: []
+  unused: false
+  description: 検索やslug補完のための別名指定
+  group: 検索・補完
   
-
-
-
