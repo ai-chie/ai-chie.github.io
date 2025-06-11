@@ -1,7 +1,7 @@
 <ul class="space-y-4">
   {% for post in include.posts %}
-    {% include post-attribute-check.html context=post %}
-    {% unless post_hidden or post_draft %}
+    {% include post-attribute-check.html post=post %} {# 修正: context=post を post=post に変更 #}
+    {% unless post_attrs.post_hidden or post_attrs.post_draft %} {# 修正: post_hidden を post_attrs.post_hidden に変更 #}
       {% include post-list-item.html post=post %}
     {% endunless %}
   {% endfor %}
