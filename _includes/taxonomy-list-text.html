@@ -1,17 +1,6 @@
-{%- assign schema = site.data.taxonomy.taxonomy_schema -%} {# ここを修正 #}
 {%- assign type = include.type | default: 'categories' -%}
-{%- assign lang = include.lang | default: page.lang | default: 'ja' -%}
-{%- assign ui = site.data.lang.taxonomy_ui -%}
-{%- assign warnings_data = site.data.lang.taxonomy_warning -%}
 
-{# 中間生成物の読み込みは不要になる #}
-
-{# taxonomy_list_generator.html をインクルードして、タクソノミーリストを生成・表示 #}
-{% include taxonomy_list_generator.html
+{% include taxonomy_page_template.html
   type=type
-  lang=lang
-  ui=ui
-  warnings_data=warnings_data
-  base_path="/text/" | append: lang | append: "/" | append: type
   render_type='text'
 %}

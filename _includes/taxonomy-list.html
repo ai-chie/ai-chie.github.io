@@ -1,27 +1,6 @@
-{%- assign schema = site.data.taxonomy.taxonomy_schema -%} {# ここを修正 #}
-{%- assign type = include.type | default: 'categories' -%} {# 'categories' or 'tags' #}
-{%- assign lang = include.lang | default: page.lang | default: 'ja' -%}
-{%- assign ui = site.data.lang.taxonomy_ui -%}
-{%- assign warnings_data = site.data.lang.taxonomy_warning -%}
+{%- assign type = include.type | default: 'categories' -%}
 
-{# 中間生成物の読み込みは不要になる #}
-
-<h1>{{ ui.title[type][lang] }}</h1>
-
-<div>
-  <input type="text" id="filter" placeholder="{{ ui.search_placeholder[lang] }}">
-  <select id="sort">
-    <option value="count">{{ ui.sort_options.count[lang] }}</option>
-    <option value="name">{{ ui.sort_options.name[lang] }}</option>
-  </select>
-</div>
-
-{# taxonomy_list_generator.html をインクルードして、タクソノミーリストを生成・表示 #}
-{% include taxonomy_list_generator.html
+{% include taxonomy_page_template.html
   type=type
-  lang=lang
-  ui=ui
-  warnings_data=warnings_data
-  base_path="/" | append: lang | append: "/" | append: type
   render_type='html'
 %}
