@@ -1,82 +1,23 @@
 {%- comment -%}
-このファイルは、_dataファイルで定義されたタクソノミー情報（名前、スラッグ、優先順位など）をマスターとして使用し、
-Jekyllの標準機能で取得した記事のカウント情報をマージして、taxonomy-list-block.htmlを呼び出して表示します。
-警告表示ロジックも_dataファイルの情報に基づいて実行されます。
-
-使用例:
-{% include taxonomy_list_generator.html type='categories' lang=page.lang ui=site.data.lang.taxonomy_ui warnings_data=site.data.lang.taxonomy_warning base_path='/ja/categories' render_type='html' %}
-{% include taxonomy_list_generator.html type='tags' lang=page.lang ui=site.data.lang.taxonomy_ui warnings_data=site.data.lang.taxonomy_warning base_path='/ja/tags' render_type='text' %}
+このファイルは、準備されたタクソノミーアイテムのリスト（merged_items）を受け取り、
+それぞれのアイテムに対して taxonomy-list-block.html を呼び出してHTMLを生成します。
 
 必要な引数:
-- type: 'categories' または 'tags' (必須)
-- lang: 現在の言語 (必須)
-- ui: UIテキストデータ (site.data.lang.taxonomy_uiなど) (必須)
-- warnings_data: 警告メッセージデータ (site.data.lang.taxonomy_warningなど) (必須)
+- merged_items: taxonomy_data_preparer.html によって準備されたタクソノミーアイテムの配列 (必須)
 - base_path: 各タクソノミーへのリンクのベースパス (例: '/ja/categories') (必須)
+- ui: UIテキストデータ (site.data.lang.taxonomy_uiなど) (必須)
+- lang: 現在の言語 (必須)
 - render_type: 'html' または 'text' (オプション、デフォルトは 'html')
+- schema: site.data.taxonomy.taxonomy_schema (必須)
 {%- endcomment -%}
 
-{%- assign type = include.type -%}
-{%- assign lang = include.lang -%}
-{%- assign ui = include.ui -%}
-{%- assign warnings_data = include.warnings_data -%}
+{%- assign merged_items = include.merged_items -%}
 {%- assign base_path = include.base_path -%}
+{%- assign ui = include.ui -%}
+{%- assign lang = include.lang -%}
 {%- assign render_type = include.render_type | default: 'html' -%}
+{%- assign schema = include.schema -%}
 
-{# _dataファイルからタクソノミーの基本データを読み込む #}
-{%- assign data = site.data.taxonomy[type] -%}
-
-{# Jekyllの標準機能を使って、各タクソノミーに紐づく記事のカウントデータを取得 #}
-{%- if type == 'categories' -%}
-  {%- assign standard_taxonomy_posts = site.categories -%}
-{%- elsif type == 'tags' -%}
-  {%- assign standard_taxonomy_posts = site.tags -%}
-{%- else -%}
-  {%- assign standard_taxonomy_posts = null -%}
-{%- endif -%}
-
-{# 新しく追加する変数 #}
-{%- assign seen_slugs = "" | split: "" -%}
-{%- assign merged_items = "" | split: "" -%}
-
-{# _dataのアイテムにカウントをマージし、警告情報を付与 #}
-{%- assign items = data | sort: 'taxonomy_priority' %}
-{%- for item in items %}
-  {# _dataファイルから取得したタクソノミー情報を基に警告メッセージを生成 #}
-  {%- assign current_item_warning = "" -%}
-  {%- assign current_item_name = item.taxonomy_name[lang] | default: '無名' -%}
-  {%- assign current_item_slug = item.taxonomy_slug | default: '' -%}
-
-  {%- if current_item_name == '' %}
-    {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.name_missing[lang] | append: " " %}
-  {%- endif %}
-  {%- if current_item_slug == '' %}
-    {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.slug_missing[lang] | append: " " %}
-  {%- endif %}
-  {%- if seen_slugs contains current_item_slug and current_item_slug != '' %}
-    {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.slug_duplicate[lang] | append: " " %}
-  {%- else %}
-    {%- if current_item_slug != '' %}{% assign seen_slugs = seen_slugs | push: current_item_slug %}{% endif -%}
-  {%- endif %}
-
-  {# Jekyll標準のタクソノミーデータからカウント数を取得し、マージ #}
-  {%- assign count = 0 -%}
-  {%- for standard_name_posts_pair in standard_taxonomy_posts -%}
-    {%- assign standard_name = standard_name_posts_pair[0] -%}
-    {%- assign standard_posts = standard_name_posts_pair[1] -%}
-    {%- if standard_name | slugify == current_item_slug -%}
-      {%- assign count = standard_posts.size -%}
-      {%- break -%} {# マッチしたらループを抜ける #}
-    {%- endif -%}
-  {%- endfor -%}
-
-  {# 新しいハッシュを作成して、必要な情報をまとめる #}
-  {% assign merged_item = item | merge: {"_count": count, "_warning": current_item_warning} %}
-  {% assign merged_items = merged_items | push: merged_item %}
-
-{%- endfor %}
-
-{# ここで実際にリストを出力する #}
 <ul class="space-y-1">
   {%- for item in merged_items %}
     {% include taxonomy-list-block.html
@@ -87,6 +28,7 @@ Jekyllの標準機能で取得した記事のカウント情報をマージし�
       warning=item._warning {# _warningとしてマージした警告メッセージを渡す #}
       lang=lang
       render_type=render_type
+      schema=schema {# schemaも渡す #}
     %}
   {%- endfor %}
 </ul>

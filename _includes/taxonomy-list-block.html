@@ -1,4 +1,4 @@
-{%- assign schema = site.data.taxonomy.taxonomy_schema -%} {# ここを修正 #}
+{%- assign schema = include.schema -%} {# <--- ここを修正 #}
 
 {# include.item を直接処理する #}
 {% assign item = include.item %}
@@ -49,6 +49,7 @@
         icon=icon
         hiddenReason=hidden_reason
         lang=lang
+        schema=schema {# schemaも渡す #}
       %}
       <span>({{ count }}{{ ui.count_suffix[lang] }})</span>
       <span>{{ audience_label }}</span>
