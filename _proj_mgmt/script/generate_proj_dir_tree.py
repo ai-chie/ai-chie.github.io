@@ -6,7 +6,7 @@ import subprocess
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedSeq, CommentedMap
 
-OUTPUT_FILE = "_proj-mgmt/_script/_output/proj_dir_tree.yml"
+OUTPUT_FILE = "_proj_mgmt/script/output/proj-dir-tree.yml"
 EXCLUDE_NAMES = {".git", ".gitignore", ".DS_Store", "node_modules"}
 
 # --- 除外チェック（.gitignore + 明示除外） ---

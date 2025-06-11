@@ -5,8 +5,8 @@ name: Generate Project Directory Tree
 on:
   push:
     paths:
-      - '_proj-mgmt/_script/generate_proj_dir_tree.py'
-      - '.github/workflows/generate-proj-dir-tree.yml'
+      - '_proj_mgmt/script/generate_proj_dir_tree.py'
+      - '.github/workflows/proj_mgmt_workflows/generate-proj-dir-tree.yml'
   workflow_dispatch:
 
 permissions:
@@ -29,19 +29,19 @@ jobs:
       - name: 📦 Install ruamel.yaml
         run: pip install ruamel.yaml
 
-      - name: 🛠️ Generate proj_dir_tree.yml
-        run: python _proj-mgmt/_script/generate_proj_dir_tree.py
+      - name: 🛠️ Generate proj-dir-tree.yml
+        run: python _proj_mgmt/script/generate_proj_dir_tree.py
 
       - name: 🔍 Show output preview
         run: |
           echo "----- YAML Dump Preview -----"
-          cat _proj-mgmt/_script/_output/proj_dir_tree.yml
+          cat _proj_mgmt/script/output/proj-dir-tree.yml
 
       - name: 📤 Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add _proj-mgmt/_script/_output/proj_dir_tree.yml
+          git add _proj_mgmt/script/output/proj-dir-tree.yml
           if git diff --cached --quiet; then
             echo "✅ No changes to commit"
           else

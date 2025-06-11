@@ -3,8 +3,8 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
 
-const inputDir = path.join(__dirname, '_data');
-const outputDir = path.join(__dirname, '_data/_generated');
+const inputDir = path.join(__dirname, '_admin/data/');
+const outputDir = path.join(__dirname, '_data/_generated/');
 
 // 出力先フォルダが存在しなければ作成
 if (!fs.existsSync(outputDir)) {
@@ -12,7 +12,7 @@ if (!fs.existsSync(outputDir)) {
 }
 
 fs.readdirSync(inputDir).forEach(file => {
-  if (file.startsWith('initial') && (file.endsWith('.yml') || file.endsWith('.yaml'))) {
+  if (file.startsWith('allowed_') && (file.endsWith('.yml') || file.endsWith('.yaml'))) {
     const yamlPath = path.join(inputDir, file);
     const jsonPath = path.join(outputDir, file.replace(/\.ya?ml$/, '.json'));
 

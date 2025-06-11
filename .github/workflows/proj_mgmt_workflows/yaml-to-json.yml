@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - '_data/*.yml'
-      - '.github/workflows/yaml-to-json.yml'
+      - '.github/workflows/proj_mgmt_workflows/yaml-to-json.yml'
       
 permissions:
   contents: write       
@@ -22,11 +22,11 @@ jobs:
           node-version: '18'
 
       - name: 📦 Install dependencies
-        working-directory: _scripts
+        working-directory: _admin/scripts/
         run: npm install
 
       - name: 🔁 Convert YAML to JSON
-        working-directory: _scripts
+        working-directory: _admin/scripts/
         run: npm run convert
 
       - name: 🚀 Commit and push changes
@@ -36,8 +36,8 @@ jobs:
           
       - name: Add JSON files if they exist
         run: |
-          if ls _data/_generated/*.json 1> /dev/null 2>&1; then
-            git add _data/_generated/*.json
+          if ls _admin/generated/*.json 1> /dev/null 2>&1; then
+            git add admin/generated//*.json
           else
             echo "No JSON files to add."
           fi          
