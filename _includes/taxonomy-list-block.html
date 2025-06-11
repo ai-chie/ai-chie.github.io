@@ -3,7 +3,7 @@
 {# include.item を直接処理する #}
 {% assign item = include.item %}
 {% assign base_path = include.base_path %}
-{% assign counts = include.counts %}
+{% assign counts_param = include.counts %} {# counts を counts_param に変更 #}
 {% assign ui = include.ui %}
 {% assign warning = include.warning | default: "" %}
 {% assign lang = include.lang %}
@@ -24,7 +24,7 @@
 {% assign description    = item.taxonomy_description[lang] | default: "" %}
 {% assign priority       = item.taxonomy_priority | default: schema.taxonomy_priority.default %}
 
-{% assign count = counts[slug] | default: 0 %}
+{% assign count = counts_param | default: 0 %} {# counts_param を直接使用 #}
 {% assign audience_label = ui.audience_labels[audience][lang] %}
 
 

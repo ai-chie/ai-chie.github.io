@@ -4,49 +4,14 @@
 {%- assign ui = site.data.lang.taxonomy_ui -%}
 {%- assign warnings_data = site.data.lang.taxonomy_warning -%}
 
-{# データ読み込み: _data/taxonomy/categories.yml や _data/taxonomy/tags.yml を直接読み込む #}
-{%- assign data = site.data.taxonomy[type] -%}
+{# 中間生成物の読み込みは不要になる #}
 
-{%- assign counts = site.data["generated_" | append: type | append: "_counts"][lang] -%}
-
-
-{# 新しく追加する変数 #}
-{%- assign seen_slugs = "" | split: "" -%}
-
-<h2>{{ ui.title[type][lang] }} (Text Version)</h2>
-
-<section>
-  <h3>{{ ui.all_categories_or_tags[lang] }}</h3>
-  <ul class="space-y-1">
-    {%- assign items = data | sort: 'taxonomy_priority' %}
-    {%- for item in items %}
-      {# 各itemの警告メッセージをここで生成 #}
-      {%- assign current_item_warning = "" -%}
-      {# taxonomy_name は多言語キーを持つので、[lang] でアクセス #}
-      {%- assign current_item_name = item.taxonomy_name[lang] | default: '無名' -%}
-      {%- assign current_item_slug = item.taxonomy_slug | default: '' -%}
-
-      {%- if current_item_name == '' %}
-        {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.name_missing[lang] | append: " " %}
-      {%- endif %}
-      {%- if current_item_slug == '' %}
-        {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.slug_missing[lang] | append: " " %}
-      {%- endif %}
-      {%- if seen_slugs contains current_item_slug and current_item_slug != '' %}
-        {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.slug_duplicate[lang] | append: " " %}
-      {%- else %}
-        {%- if current_item_slug != '' %}{% assign seen_slugs = seen_slugs | push: current_item_slug %}{% endif -%}
-      {%- endif %}
-
-      {% include taxonomy-list-block.html
-        item=item
-        base_path="/text/" | append: lang | append: "/" | append: type
-        counts=counts
-        ui=ui
-        warning=current_item_warning
-        lang=lang
-        render_type='text'
-      %}
-    {%- endfor %}
-  </ul>
-</section>
+{# taxonomy_list_generator.html をインクルードして、タクソノミーリストを生成・表示 #}
+{% include taxonomy_list_generator.html
+  type=type
+  lang=lang
+  ui=ui
+  warnings_data=warnings_data
+  base_path="/text/" | append: lang | append: "/" | append: type
+  render_type='text'
+%}
