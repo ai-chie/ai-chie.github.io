@@ -6,9 +6,10 @@
     <title>{{ page.title | default: site.title }}</title>
 
     {# サイト全体で共通して使用する _data ファイルの読み込み #}
-    {%- assign common_ui = site.data.lang.taxonomy_ui -%}
-    {%- assign common_warnings_data = site.data.lang.taxonomy_warning -%}
-    {%- assign common_schema = site.data.taxonomy.taxonomy_schema -%}
+    {# ファイルが存在しない場合に備えて default: {} を設定し、Liquidエラーを防ぐ #}
+    {%- assign common_ui = site.data.lang.taxonomy_ui | default: {} -%}
+    {%- assign common_warnings_data = site.data.lang.taxonomy_warning | default: {} -%}
+    {%- assign common_schema = site.data.taxonomy.taxonomy_schema | default: {} -%}
 
     {# 子レイアウトやページがhead要素の内容を追加するためのフックポイント #}
     {% if layout.head_content %}
