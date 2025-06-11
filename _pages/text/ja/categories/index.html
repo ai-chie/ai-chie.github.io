@@ -2,7 +2,7 @@
 layout: text {# AI向けレイアウトを指定 #}
 title: "AI向けカテゴリーリスト"
 permalink: /ai/categories/
-type: categories # 必要に応じて front matter で渡す
+type: /text/ja/categories/ # 必要に応じて front matter で渡す
 lang: ja # 必要に応じて front matter で渡す
 ---
 {# ここからがレイアウトの {{ content }} に入る部分 #}
@@ -16,7 +16,7 @@ lang: ja # 必要に応じて front matter で渡す
 {%- assign lang = page.lang | default: 'ja' -%}
 
 {# AI向けパスの構築 #}
-{%- assign base_path = "/" | append: "ai/" | append: lang | append: "/" | append: type -%}
+{%- assign base_path = "/" | append: "text/" | append: lang | append: "/" | append: type -%}
 
 {# データを準備する共通部品を呼び出す #}
 {% include taxonomy_data_preparer.html

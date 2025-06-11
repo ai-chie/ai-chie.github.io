@@ -12,9 +12,8 @@ head_content: "{% include head-meta.html %}" # 人間向けhead部品を指定
 </nav>
 
 <main>
-    <article> {# ページの内容を適切にマークアップ #}
-        {{ content }} {# ページコンテンツがここに挿入されます #}
-    </article>
+    {# ページの内容がここに挿入されます。個別の記事はここで <article> を持つように調整する #}
+    {{ content }} {# ページコンテンツがここに挿入されます #}
 </main>
 
 <footer>
