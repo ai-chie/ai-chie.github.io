@@ -1,9 +1,8 @@
 ---
 layout: default
-taxonomy_type: categories
-taxonomy_slug: test
 lang: ja
-title: "テスト"
-permalink: /text/ja/categories/test/
+taxonomy_slug: test
+name: "テスト"
 description: "これはテストカテゴリです"
+permalink: /text/ja/categories/test/
 ---
