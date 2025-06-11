@@ -1,7 +1,6 @@
-{%- comment -%}
-text モード用最小構成。SEOメタタグやCSSは含まず、HTML構造だけに集中。
-{%- endcomment -%}
-<meta charset="UTF-8">
-<!-- Optional -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{ page.title | escape }}</title>
+{# _includes/head-minimal.html #}
+{# AI/クローラー向けの最小限のhead要素。base.htmlでmeta charset, viewport, titleは定義済み #}
+{# text モード用最小構成。SEOメタタグやCSSは含まず、HTML構造だけに集中。 #}
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+{# 必要に応じて、AIが解析しやすい追加のメタデータをここに記述 #}

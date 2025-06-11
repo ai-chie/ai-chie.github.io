@@ -1,9 +1,9 @@
 ---
-layout: text {# AI向けレイアウトを指定 #}
-title: "AI向けカテゴリーリスト"
-permalink: /ai/categories/
-type: categories # 必要に応じて front matter で渡す
-lang: ja # 必要に応じて front matter で渡す
+layout: default {# 人間向けデフォルトレイアウトを指定 #}
+title: "カテゴリー"
+permalink: /categories/
+type: categories
+lang: ja
 ---
 {# ここからがレイアウトの {{ content }} に入る部分 #}
 
@@ -15,8 +15,8 @@ lang: ja # 必要に応じて front matter で渡す
 {%- assign type = page.type | default: 'categories' -%}
 {%- assign lang = page.lang | default: 'ja' -%}
 
-{# AI向けパスの構築 #}
-{%- assign base_path = "/" | append: "ai/" | append: lang | append: "/" | append: type -%}
+{# 人間向けパスの構築 #}
+{%- assign base_path = "/" | append: lang | append: "/" | append: type -%}
 
 {# データを準備する共通部品を呼び出す #}
 {% include taxonomy_data_preparer.html
@@ -27,7 +27,15 @@ lang: ja # 必要に応じて front matter で渡す
 %}
 {# taxonomy_data_preparer.html が 'merged_items' 変数を設定する #}
 
-<h1>{{ ui.title[type][lang] }} (AI Version)</h1>
+<h1>{{ ui.title[type][lang] }}</h1>
+
+<div>
+  <input type="text" id="filter" placeholder="{{ ui.search_placeholder[lang] }}">
+  <select id="sort">
+    <option value="count">{{ ui.sort_options.count[lang] }}</option>
+    <option value="name">{{ ui.sort_options.name[lang] }}</option>
+  </select>
+</div>
 
 <section>
   <h2>{{ ui.all_categories_or_tags[lang] }}</h2>
@@ -37,7 +45,7 @@ lang: ja # 必要に応じて front matter で渡す
     base_path=base_path
     ui=ui
     lang=lang
-    render_type='text' # AI向けなので render_type は 'text'
+    render_type='html' # 人間向けなので render_type は 'html'
     schema=schema
   %}
 </section>

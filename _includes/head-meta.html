@@ -1,34 +1,20 @@
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-{%- if page.title %}
-  <title>{{ page.title }} | {{ site.title }}</title>
-  <meta property="og:title" content="{{ page.title }} | {{ site.title }}">
-{%- else %}
-  <title>{{ site.title }}</title>
-  <meta property="og:title" content="{{ site.title }}">
-{%- endif %}
-
-{%- if page.description %}
-  <meta name="description" content="{{ page.description }}">
-  <meta property="og:description" content="{{ page.description }}">
-{%- endif %}
-
-{%- assign canonical_url = site.url | append: page.url %}
-<link rel="canonical" href="{{ canonical_url }}">
-<meta property="og:url" content="{{ canonical_url }}">
+{# _includes/head-meta.html #}
+{# 人間向けのhead要素。base.htmlでmeta charset, viewport, titleは定義済みのため、重複部分は削除。 #}
+{# {% seo %}タグが多くのメタデータを生成するため、重複を避ける #}
 
 {%- if page.lang %}
   <meta name="language" content="{{ page.lang }}">
 {%- endif %}
 
-<meta name="robots" content="index, follow">
+{# {% seo %}タグは、canonical url, description, og:title, og:description, og:url, robotsなどを自動生成します #}
+{% seo %}
 
-{%- if page.date %}
-  <meta name="date" content="{{ page.date | date_to_xmlschema }}">
-  <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
-{%- endif %}
+{# ここには、{% seo %}で生成されないが人間向けページに必要なhead要素のみを記述します #}
+<link rel="stylesheet" href="/assets/css/main.css">
+<script src="/assets/js/analytics.js" async></script>
+{# 他のスタイルシート、ファビコンなどをここに記述 #}
 
+{%- assign canonical_url = site.url | append: page.url %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -44,6 +30,3 @@
   }
 }
 </script>
-
-<!-- head-meta.html の末尾に追加 -->
-{% seo %}

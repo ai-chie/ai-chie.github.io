@@ -1,4 +1,4 @@
-{%- assign schema = include.schema -%} {# <--- ここを修正 #}
+{%- assign schema = include.schema -%}
 {%- assign lang = include.lang | default: 'ja' -%}
 {%- assign labels = site.data.lang.taxonomy_badge -%}
 
@@ -8,31 +8,31 @@
     <span class="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded" title="{{ labels.featured_tooltip[lang] }}">★ {{ labels.featured[lang] }}</span>
   {%- endif -%}
 
-  {%- if include.beta -%}\
+  {%- if include.beta -%}
     <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded" title="{{ labels.beta_tooltip[lang] }}">🧪 {{ labels.beta[lang] }}</span>
-  {%- endif --}\
+  {%- endif --}
 
-  {%- if include.deprecated -%}\
+  {%- if include.deprecated -%}
     <span class="px-2 py-0.5 bg-red-100 text-red-700 rounded" title="{{ labels.deprecated_tooltip[lang] }}">⚠ {{ labels.deprecated[lang] }}</span>
-  {%- endif --}\
+  {%- endif --}
 
-  {%- assign audience = include.audience | default: schema.taxonomy_audience.default -%}\
-  {%- if audience == 'internal' -%}\
+  {%- assign audience = include.audience | default: schema.taxonomy_audience.default -%}
+  {%- if audience == 'internal' -%}
     <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded" title="{{ labels.internal_tooltip[lang] }}">🔒 {{ labels.internal[lang] }}</span>
-  {%- elsif audience == 'external' -%}\
+  {%- elsif audience == 'external' -%}
     <span class="px-2 py-0.5 bg-green-100 text-green-600 rounded" title="{{ labels.public_tooltip[lang] }}">🌐 {{ labels.public[lang] }}</span>
-  {%- endif --}\
+  {%- endif --}
 
-  {%- if include.tooltip -%}\
+  {%- if include.tooltip -%}
     <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded" title="{{ include.tooltip }}">🛈</span>
-  {%- endif -%}\
+  {%- endif -%}
 
-  {%- if include.icon -%}\
+  {%- if include.icon -%}
     <span class="px-2 py-0.5" title="{{ labels.icon_tooltip[lang] }}"><span class="{{ include.icon }}"></span></span>
-  {%- endif --}\
+  {%- endif --}
 
-  {%- if include.hiddenReason -%}\
+  {%- if include.hiddenReason -%}
     <span class="px-2 py-0.5 text-red-500" title="{{ labels.hidden_reason_tooltip[lang] }}">🛈 {{ include.hiddenReason }}</span>
-  {%- endif -%}\
+  {%- endif -%}
 
 </span>

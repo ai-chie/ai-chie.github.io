@@ -1,20 +1,12 @@
-<!-- text index <main>のみ・最小限構造 -->
-
 ---
-layout: none
+layout: base {# base.html を継承する #}
 lang: ja
 device: text
 title: "AI/クローラー用軽量ページ"
 description: "AIが読みやすいように最適化されたプレーンHTML構成です"
+head_content: "{% include head-minimal.html %}" # AI向けhead部品を指定
 ---
 
-<!DOCTYPE html>
-<html lang="{{ page.lang | default: 'ja' }}">
-  <head>
-    {% include head-minimal.html %}
-  </head>
-  <body>
-    {{ content }}
-  </body>
-</html>
-
+<main>
+    {{ content }} {# ページコンテンツがここに挿入されます #}
+</main>

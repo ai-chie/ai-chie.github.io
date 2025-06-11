@@ -1,56 +1,25 @@
-<!-- PC / mobile ヘッダー・ナビ・装飾あり -->
+---
+layout: base {# base.html を継承する #}
+head_content: "{% include head-meta.html %}" # 人間向けhead部品を指定
+---
 
-<!DOCTYPE html>
-<html lang="{% if page.path contains '/ja/' %}ja{% else %}en{% endif %}">
-<head>
-    {% include head-meta.html %}
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="font-sans text-gray-800">
-  {% include header.html %}
+<header>
+    {% include header.html %} {# 例: 共通ヘッダー部品 #}
+</header>
 
-  <main class="p-4">
-    {% if page.layout == "post" %}
-      {% include post-attribute-check.html post=page %}
+<nav>
+    {% include navigation.html %} {# 例: 共通ナビゲーション部品 #}
+</nav>
 
-      {% if post_attrs.post_hidden or post_attrs.post_draft %}
-        <div class="text-center text-gray-500 py-12">
-          <p>このページは現在表示できません（非公開または下書きの可能性があります）。</p>
-        </div>
-      {% else %}
-        <article class="prose max-w-4xl mx-auto">
-          <header class="mb-6">
-            <h1 class="text-3xl font-bold mb-2">{{ page.title }}</h1>
-            <p class="text-sm text-gray-500">{{ page.date | date: "%Y-%m-%d" }}</p>
+<main>
+    <article> {# ページの内容を適切にマークアップ #}
+        {{ content }} {# ページコンテンツがここに挿入されます #}
+    </article>
+</main>
 
-            <div class="text-xs mt-2 space-x-2">
-              {% if post_attrs.post_featured %}
-                <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 rounded">★ 注目</span>
-              {% endif %}
-              {% if post_attrs.post_beta %}
-                <span class="inline-block px-2 py-1 bg-indigo-100 text-indigo-700 rounded">🧪 Beta</span>
-              {% endif %}
-              {% if post_attrs.post_deprecated %}
-                <span class="inline-block px-2 py-1 bg-red-100 text-red-700 rounded">⚠ 廃止予定</span>
-              {% endif %}
-              {% if post_attrs.post_audience == 'internal' %}
-                <span class="inline-block px-2 py-1 bg-gray-100 text-gray-600 rounded">🔒 Internal</span>
-              {% elsif post_attrs.post_audience == 'external' %}
-                <span class="inline-block px-2 py-1 bg-green-100 text-green-600 rounded">🌐 Public</span>
-              {% endif %}
-            </div>
-          </header>
+<footer>
+    {% include footer.html %} {# 例: 共通フッター部品 #}
+</footer>
 
-          <section class="content">
-            {{ content }}
-          </section>
-        </article>
-      {% endif %}
-    {% else %}
-      {{ content }}
-    {% endif %}
-  </main>
-
-  {% include footer.html %}
-</body>
-</html>
+{# 人間向けページに必要なJavaScriptなどをここで読み込む #}
+<script src="/assets/js/interactive.js"></script>

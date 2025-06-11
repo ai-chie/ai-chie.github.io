@@ -22,6 +22,12 @@ HTML出力は行わず、Liquid変数を設定するのみです。
 {# _dataファイルからタクソノミーの基本データを読み込む #}
 {%- assign data = site.data.taxonomy[type] -%}
 
+{# data が存在しない場合は、早期に処理を終了するか、空のリストを返す #}
+{%- if data == nil or data.size == 0 -%}
+  {%- assign merged_items = "" | split: "" -%} {# 空のリストを返す #}
+  {%- return -%} {# Liquid 2.x 以降で利用可能な return #}
+{%- endif -%}
+
 {# Jekyllの標準機能を使って、各タクソノミーに紐づく記事のカウントデータを取得 #}
 {%- if type == 'categories' -%}
   {%- assign standard_taxonomy_posts = site.categories -%}
@@ -31,9 +37,8 @@ HTML出力は行わず、Liquid変数を設定するのみです。
   {%- assign standard_taxonomy_posts = null -%}
 {%- endif -%}
 
-{# 新しく追加する変数 #}
 {%- assign seen_slugs = "" | split: "" -%}
-{%- assign merged_items = "" | split: "" -%} {# この変数を呼び出し元に返す #}
+{%- assign merged_items = "" | split: "" -%}
 
 {# _dataのアイテムにカウントをマージし、警告情報を付与 #}
 {%- assign items = data | sort: 'taxonomy_priority' %}

@@ -1,20 +1,10 @@
-<!-- text投稿用 <main>のみ・最小限構造 meta簡素・body直書き -->
-
 ---
-layout: none
+layout: base {# base.html を継承する #}
+head_content: "{% include head-minimal.html %}" # AI向けhead部品を指定
 ---
 
-<!DOCTYPE html>
-<html lang="{{ page.lang | default: 'ja' }}">
-  <head>
-    {% include head-minimal.html %}
-  </head>
-  <body>
-    <article>
-      <h1>{{ page.title }}</h1>
-      <time datetime="{{ page.date }}">{{ page.date }}</time>
-      {{ content }}
-    </article>
-  </body>
-</html>
-
+<article>
+  <h1>{{ page.title }}</h1>
+  <time datetime="{{ page.date }}">{{ page.date }}</time>
+  {{ content }} {# 投稿コンテンツがここに挿入されます #}
+</article>

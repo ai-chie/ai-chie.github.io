@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title | default: site.title }}</title>
+
+    {# サイト全体で共通して使用する _data ファイルの読み込み #}
+    {%- assign common_ui = site.data.lang.taxonomy_ui -%}
+    {%- assign common_warnings_data = site.data.lang.taxonomy_warning -%}
+    {%- assign common_schema = site.data.taxonomy.taxonomy_schema -%}
+
+    {# 子レイアウトやページがhead要素の内容を追加するためのフックポイント #}
+    {% if layout.head_content %}
+      {{ layout.head_content }}
+    {% endif %}
+    {% if page.head_content %}
+      {{ page.head_content }}
+    {% endif %}
+
+    {# 全てのページに共通する、本当に最小限のCSS/JSリンク（例: CSSリセットなど）をここに配置することも可能です #}
+    {# <link rel="stylesheet" href="/assets/css/reset.css"> #}
+</head>
+<body>
+    {{ content }} {# 子レイアウトの内容がここに挿入されます #}
+</body>
+</html>
