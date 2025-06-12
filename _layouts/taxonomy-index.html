@@ -12,13 +12,12 @@ head_content: "{% include head-minimal.html %}" # AI向けhead部品を指定
 {%- assign type = page.type | default: 'categories' -%}
 
 <main>
-    <section>
-        {{ content }}
-        <!-- <h2>{{ common_ui.title.[type][lang] }}</h2> -->
-        {% include taxonomy-list-text.html
-        lang=lang
-        type=type
-        %}
-    </section>
+    {{ content }}
+    <!-- <h2>{{ common_ui.title.[type][lang] }}</h2> -->
+    {% include taxonomy-list.html
+      device=device
+      lang=lang
+      type=type
+    %}
 </main>
 
