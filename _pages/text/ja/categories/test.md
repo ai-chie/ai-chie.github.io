@@ -1,8 +1,1 @@
----
-layout: default
-lang: ja
-taxonomy_slug: test
-name: "テスト"
-description: "これはテストカテゴリです"
-permalink: /text/ja/categories/test/
----
+ここで個別投稿のリストが表示される
