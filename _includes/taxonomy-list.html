@@ -1,9 +1,9 @@
 {%- assign device = include.device | default: page.device | default: 'text' -%}
 {%- assign lang = include.lang | default: page.lang | default: 'ja' -%}
 {%- assign type = include.type | default: 'categories' -%} {# 'categories' or 'tags' #}
-{%- assign ui = site.data.lang.taxonomy_ui -%}
-{%- assign warnings_data = site.data.lang.taxonomy_warning -%}
-{%- assign schema = site.data.taxonomy.taxonomy_schema -%} {# <--- ここは必要 #}
+{%- assign ui = include.common_ui | default: {} -%}
+{%- assign warnings_data = include.common_warnings_data | default: {} -%}
+{%- assign schema = include.common_schemaa | default: {} -%} {# <--- ここは必要 #}
 
 {# render_format を device の値に応じて設定 #}
 {%- assign render_format = 'html' -%} {# デフォルトをhtmlに設定 #}
