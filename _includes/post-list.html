@@ -11,7 +11,7 @@
 <ul class="space-y-4">
   {% for post in post_obj_1 %}
     {% include post-attribute-check.html post=post %}
-    {% unless post_attrs.post_hidden or post_attrs.post_draft %}
+    {% unless post_attrs.hidden or post_attrs.draft %}
       {# 変更点: post-list-item-text.html の include を削除し、render_type を渡す #}
       {% include post-list-item.html post=post render_type=render_type %}
     {% endunless %}

@@ -3,7 +3,7 @@
 
 {%- assign post_attrs = {} -%}
 
-{%- assign attr_list = "post_hidden,post_draft,post_featured,post_deprecated,post_beta,post_audience,post_private,post_admin_only" | split: "," -%}
+{%- assign attr_list = "hidden,draft,featured,deprecated,beta,audience,private,admin_only" | split: "," -%}
 
 {%- for attr in attr_list -%}
   {%- assign value = post_obj[attr] -%}
