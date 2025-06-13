@@ -40,12 +40,12 @@ HTML出力は行わず、Liquid変数を設定するのみです。
   {# merged_items は既に上で初期化されているので、ここでは不要 #}
 
   {# _dataのアイテムにカウントをマージし、警告情報を付与 #}
-  {%- assign items = data | sort: 'taxonomy_priority' %}
+  {%- assign items = data | sort: 'priority' %}
   {%- for item in items %}
     {# _dataファイルから取得したタクソノミー情報を基に警告メッセージを生成 #}
     {%- assign current_item_warning = "" -%}
-    {%- assign current_item_name = item.taxonomy_name[lang] | default: '無名' -%}
-    {%- assign current_item_slug = item.taxonomy_slug | default: '' -%}
+    {%- assign current_item_name = item.name[lang] | default: '無名' -%}
+    {%- assign current_item_slug = item.slug | default: '' -%}
 
     {%- if current_item_name == '' %}
       {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.name_missing[lang] | default: warnings_data.name_missing['ja'] | append: " " %}

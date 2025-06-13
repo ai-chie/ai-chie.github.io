@@ -16,7 +16,7 @@
     <span class="px-2 py-0.5 bg-red-100 text-red-700 rounded" title="{{ labels.deprecated_tooltip[lang] }}">⚠ {{ labels.deprecated[lang] }}</span>
   {%- endif -}
 
-  {%- assign audience = include.audience | default: schema.taxonomy_audience.default -%}
+  {%- assign audience = include.audience | default: schema.audience.default -%}
   {%- if audience == 'internal' -%}
     <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded" title="{{ labels.internal_tooltip[lang] }}">🔒 {{ labels.internal[lang] }}</span>
   {%- elsif audience == 'external' -%}

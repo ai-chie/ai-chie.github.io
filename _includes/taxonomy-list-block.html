@@ -10,19 +10,19 @@
 {% assign render_type = include.render_type | default: 'html' %}
 
 
-{# taxonomy_name, taxonomy_description, taxonomy_tooltip は多言語キーを持つので、[lang] でアクセス #}
-{% assign name           = item.taxonomy_name[lang] | default: 'unknown' %}
-{% assign slug           = item.taxonomy_slug | default: '' %}
-{% assign audience       = item.taxonomy_audience | default: schema.taxonomy_audience.default %}
-{% assign admin_only     = item.taxonomy_admin_only | default: schema.taxonomy_admin_only.default %}
-{% assign hidden         = item.taxonomy_hidden | default: schema.taxonomy_hidden.default %}
-{% assign draft          = item.taxonomy_draft | default: schema.taxonomy_draft.default %}
-{% assign color          = item.taxonomy_color | default: schema.taxonomy_color.default %}
-{% assign tooltip        = item.taxonomy_tooltip[lang] | default: '' %}
-{% assign icon           = item.taxonomy_icon | default: '' %}
-{% assign hidden_reason  = item.taxonomy_hidden_reason | default: '' %}
-{% assign description    = item.taxonomy_description[lang] | default: "" %}
-{% assign priority       = item.taxonomy_priority | default: schema.taxonomy_priority.default %}
+{# name, description, tooltip は多言語キーを持つので、[lang] でアクセス #}
+{% assign name           = item.name[lang] | default: 'unknown' %}
+{% assign slug           = item.slug | default: '' %}
+{% assign audience       = item.audience | default: schema.audience.default %}
+{% assign admin_only     = item.admin_only | default: schema.admin_only.default %}
+{% assign hidden         = item.hidden | default: schema.hidden.default %}
+{% assign draft          = item.draft | default: schema.draft.default %}
+{% assign color          = item.color | default: schema.color.default %}
+{% assign tooltip        = item.tooltip[lang] | default: '' %}
+{% assign icon           = item.icon | default: '' %}
+{% assign hidden_reason  = item.hidden_reason | default: '' %}
+{% assign description    = item.description[lang] | default: "" %}
+{% assign priority       = item.priority | default: schema.priority.default %}
 
 {% assign count = counts_param | default: 0 %} {# counts_param を直接使用 #}
 {% assign audience_label = ui.audience_labels[audience][lang] %}
@@ -34,16 +34,16 @@
   {% if render_type == 'html' %}
     {# 通常のHTML出力（詳細なスタイルとバッジを含む） #}
     <li class="flex items-center space-x-2">
-      <a href="{{ item.taxonomy_link | default: (base_path | append: '/' | append: slug | append: '/') }}"
+      <a href="{{ item.link | default: (base_path | append: '/' | append: slug | append: '/') }}"
          class="inline-block px-2 py-1 rounded text-white"
          style="background-color: {{ color }}"
          {% if tooltip != '' %}title="{{ tooltip }}"{% endif %}>
         {% if icon != '' %}<span class="mr-1">{{ icon }}</span>{% endif %}{{ name }}
       </a>
       {% include taxonomy-badge.html
-        featured=item.taxonomy_featured
-        beta=item.taxonomy_beta
-        deprecated=item.taxonomy_deprecated
+        featured=item.featured
+        beta=item.beta
+        deprecated=item.deprecated
         audience=audience
         tooltip=tooltip
         icon=icon
@@ -63,7 +63,7 @@
   {% elsif render_type == 'text' %}
     {# テキスト版のシンプルな出力（最小限のHTMLまたは純粋なテキスト） #}
     <li>
-      <a href="{{ item.taxonomy_link | default: (base_path | append: '/' | append: slug | append: '/') }}">
+      <a href="{{ item.link | default: (base_path | append: '/' | append: slug | append: '/') }}">
         {{ name }} ({{ count }}{{ ui.count_suffix[lang] }}) {% if warning != "" %}{{ warning }}{% endif %}
       </a>
     </li>
