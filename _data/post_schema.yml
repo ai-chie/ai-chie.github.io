@@ -5,6 +5,43 @@
 # タグ・カテゴリと競合した場合、記事側の設定を優先
 # --------------------------------------------------
 
+post_id:
+  type: string
+  required: true
+  default: ""
+  unused: false
+  description: timestamp(yyyymmddhhmm + uuid + lang)（例：202506131646+0900_uuid_ja）
+  
+post_modified_timestamp:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: timestamp(yyyymmddhhmm)
+  
+post_created_timestamp:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: timestamp(yyyymmddhhmm)
+  
+post_related_posts_lang:
+  type: array
+  items:
+    type: string
+  required: false
+  default: []
+  unused: false
+  description: 紐づく他言語の記事のID
+  
+post_priority:
+  type: integer
+  required: false
+  default: 99
+  unused: false
+  description: 並び順制御用の数値（1〜999）。小さいほど上位に表示される
+  
 post_draft:
   type: boolean
   required: false
@@ -81,3 +118,10 @@ post_admin_only:
   description: |
     管理者専用の投稿。一般閲覧者には非表示。
     現時点ではテンプレートに反映されていない。
+
+# ----------
+# Jekyll
+# ----------
+# title
+# date
+# description
