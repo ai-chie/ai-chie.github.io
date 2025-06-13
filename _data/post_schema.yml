@@ -157,7 +157,16 @@ post_draft:
 # categories
 # tags
 # permalink
+
+# ----------
+# Project Specific
 # ----------
 # device
 # lang
+# ----------
+# Project Specific: Taxonomy Only
+# ----------
+# type
+# types
+# slug
 # ----------
