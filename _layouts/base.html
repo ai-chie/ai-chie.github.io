@@ -10,6 +10,7 @@
     {%- assign common_ui = site.data.lang.taxonomy_ui | default: {} -%}
     {%- assign common_warnings_data = site.data.lang.taxonomy_warning | default: {} -%}
     {%- assign taxonomy_schema = site.data.taxonomy.taxonomy_schema | default: {} -%}
+    {%- assign post_schema = site.data.post.post_schema | default: {} -%}
 
     {# 子レイアウトやページがhead要素の内容を追加するためのフックポイント #}
     {% if layout.head_content %}
