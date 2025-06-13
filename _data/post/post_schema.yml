@@ -232,13 +232,6 @@ draft:
     GitHub Pages 上では Jekyll の `draft: true` 機能が使えないため、Liquid による制御を行う。
     URL を知っていればページ表示は可能。
     
-output_text: # 追加
-  type: boolean
-  required: false
-  default: true
-  unused: false
-  description: text構成に出力対象とする。Frontmatterで制御。
-
 output_pc: # 追加
   type: boolean
   required: false
@@ -252,6 +245,13 @@ output_mobile: # 追加
   default: true
   unused: false
   description: モバイル構成に出力対象とする。Frontmatterで制御。
+  
+output_text: # 追加
+  type: boolean
+  required: false
+  default: true
+  unused: false
+  description: text構成に出力対象とする。Frontmatterで制御。
   
 permalink:
   type: string

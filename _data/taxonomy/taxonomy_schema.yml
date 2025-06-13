@@ -173,14 +173,6 @@ draft:
   unused: false
   description: trueなら仮出力。本番に含めない
   group: 表示制御（制限・非表示系）
-  
-output_text: # 追加
-  type: boolean
-  required: false
-  default: true
-  unused: false
-  description: text構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
-  group: 表示制御（出力対象）
 
 output_pc: # 追加
   type: boolean
@@ -197,7 +189,15 @@ output_mobile: # 追加
   unused: false
   description: モバイル構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
   group: 表示制御（出力対象）
-
+  
+output_text: # 追加
+  type: boolean
+  required: false
+  default: true
+  unused: false
+  description: text構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
+  group: 表示制御（出力対象）
+  
 permalink:
   type: string
   required: false
