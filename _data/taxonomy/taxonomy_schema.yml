@@ -1,5 +1,40 @@
 # _data/taxonomy/taxonomy_schema.yml (修正案 - 追加フィールド対応)
 
+layout:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: Jekyll
+  
+layout_mobile:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description:
+
+layout_text:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description:
+  
+device:
+  type: string
+  required: true
+  default: "text"
+  unused: false
+  description:
+  
+lang:
+  type: string
+  required: true
+  default: "ja"
+  unused: false
+  description:
+
 slug:
   type: string
   required: true
@@ -163,6 +198,27 @@ output_mobile: # 追加
   description: モバイル構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
   group: 表示制御（出力対象）
 
+permalink:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: Jekyll
+  
+permalink_mobile:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description:
+
+permalink_text:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description:
+  
 aliases: # 追加
   type: array
   items:
