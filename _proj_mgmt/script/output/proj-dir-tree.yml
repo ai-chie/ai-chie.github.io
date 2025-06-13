@@ -3,125 +3,98 @@
 
   workflows:
 
+    proj_mgmt_workflows:
+
+      __files__:
+      - [gemfile-lock-artifact.yml, .github/workflows/proj_mgmt_workflows/gemfile-lock-artifact.yml]
+      - [yaml-to-json.yml, .github/workflows/proj_mgmt_workflows/yaml-to-json.yml]
+
     __files__:
     - [build_and_commit.yml, .github/workflows/build_and_commit.yml]
-    - [gemfile-lock-artifact.yml, .github/workflows/gemfile-lock-artifact.yml]
-    - [generate-category-counts.yml, .github/workflows/generate-category-counts.yml]
     - [generate-proj-dir-tree.yml, .github/workflows/generate-proj-dir-tree.yml]
-    - [generate-tag-counts.yml.yml, .github/workflows/generate-tag-counts.yml.yml]
-    - [yaml-to-json.yml, .github/workflows/yaml-to-json.yml]
 
 _admin:
 
+  data:
+
+    __files__:
+    - [allowed_categories_list.yml, _admin/data/allowed_categories_list.yml]
+    - [allowed_tags_list.yml, _admin/data/allowed_tags_list.yml]
+
+  generated:
+
+    __files__:
+    - [allowed_categories_list.json, _admin/generated/allowed_categories_list.json]
+    - [allowed_tags_list.json, _admin/generated/allowed_tags_list.json]
+
+  scripts:
+
+    __files__:
+    - [convert-yaml-to-json.js, _admin/scripts/convert-yaml-to-json.js]
+    - [package.json, _admin/scripts/package.json]
+
   __files__:
+  - [allowed_categories-tags-lists.js, _admin/allowed_categories-tags-lists.js]
   - [autofill-date.js, _admin/autofill-date.js]
   - [autofill-uuid.js, _admin/autofill-uuid.js]
   - [index.html, _admin/index.html]
-  - [initial_categories-tags-lists.js, _admin/initial_categories-tags-lists.js]
   - [uuid.js, _admin/uuid.js]
 
 _data:
 
-  _generated:
+  lang:
 
     __files__:
-    - [initial_categories_list.json, _data/_generated/initial_categories_list.json]
-    - [initial_tags_list.json, _data/_generated/initial_tags_list.json]
+    - [taxonomy_badge.yml, _data/lang/taxonomy_badge.yml]
+    - [taxonomy_ui.yml, _data/lang/taxonomy_ui.yml]
+    - [taxonomy_warning.yml, _data/lang/taxonomy_warning.yml]
+
+  post:
+
+    __files__:
+    - [post_schema.yml, _data/post/post_schema.yml]
 
   taxonomy:
 
     __files__:
     - [categories.yml, _data/taxonomy/categories.yml]
-    - [schema.yml, _data/taxonomy/schema.yml]
     - [tags.yml, _data/taxonomy/tags.yml]
-
-  welcome:
-
-    en:
-
-      __files__:
-      - [welcome-en.md, _data/welcome/en/welcome-en.md]
-
-    ja:
-
-      __files__:
-      - [welcome-ja.md, _data/welcome/ja/welcome-ja.md]
-
-  __files__:
-  - [generated_category_counts.yml, _data/generated_category_counts.yml]
-  - [generated_tag_counts.yml, _data/generated_tag_counts.yml]
-  - [generated_taxonomy.yml, _data/generated_taxonomy.yml]
-  - [initial_categories_list.yml, _data/initial_categories_list.yml]
-  - [initial_tags_list.yml, _data/initial_tags_list.yml]
-  - [lang.yml, _data/lang.yml]
-  - [missing_slug_terms.yml, _data/missing_slug_terms.yml]
-  - [post_schema.yml, _data/post_schema.yml]
-  - [slug_conflicts.yml, _data/slug_conflicts.yml]
-  - [slug_overrides.yml, _data/slug_overrides.yml]
+    - [taxonomy_schema.yml, _data/taxonomy/taxonomy_schema.yml]
 
 _export:
 
   __files__:
   - [.keep, _export/.keep]
 
-_generated:
-
-  en:
-
-    categories:
-
-      __files__:
-      - [.keep, _generated/en/categories/.keep]
-      - [test.md, _generated/en/categories/test.md]
-
-    tags:
-
-      __files__:
-      - [.keep, _generated/en/tags/.keep]
-      - [post.md, _generated/en/tags/post.md]
-      - [sample.md, _generated/en/tags/sample.md]
-
-  ja:
-
-    categories:
-
-      __files__:
-      - [.keep, _generated/ja/categories/.keep]
-      - [test-ja.md, _generated/ja/categories/test-ja.md]
-
-    tags:
-
-      __files__:
-      - [.keep, _generated/ja/tags/.keep]
-      - [article-ja.md, _generated/ja/tags/article-ja.md]
-      - [sample-ja.md, _generated/ja/tags/sample-ja.md]
-
 _includes:
 
+  contents:
+
+    __files__:
+    - [welcome.ja.md, _includes/contents/welcome.ja.md]
+
   __files__:
-  - [footer.html, _includes/footer.html]
-  - [head-ai.html, _includes/head-ai.html]
   - [head-meta.html, _includes/head-meta.html]
   - [head-minimal.html, _includes/head-minimal.html]
-  - [head-ogp.html, _includes/head-ogp.html]
-  - [header.html, _includes/header.html]
   - [lang_switch.html, _includes/lang_switch.html]
   - [post-attribute-check.html, _includes/post-attribute-check.html]
   - [post-list-item.html, _includes/post-list-item.html]
   - [post-list.html, _includes/post-list.html]
   - [taxonomy-badge.html, _includes/taxonomy-badge.html]
   - [taxonomy-list-block.html, _includes/taxonomy-list-block.html]
-  - [taxonomy-list-text.html, _includes/taxonomy-list-text.html]
   - [taxonomy-list.html, _includes/taxonomy-list.html]
+  - [taxonomy_data_preparer.html, _includes/taxonomy_data_preparer.html]
+  - [taxonomy_list_generator.html, _includes/taxonomy_list_generator.html]
 
 _layouts:
 
   __files__:
+  - [base.html, _layouts/base.html]
   - [default.html, _layouts/default.html]
-  - [taxonomy-text.html, _layouts/taxonomy-text.html]
-  - [taxonomy.html, _layouts/taxonomy.html]
+  - [post.html, _layouts/post.html]
   - [text-post.html, _layouts/text-post.html]
-  - [text.html, _layouts/text.html]
+  - [text-taxonomy-index.html, _layouts/text-taxonomy-index.html]
+  - [text-taxonomy.html, _layouts/text-taxonomy.html]
 
 _log:
 
@@ -132,99 +105,53 @@ _pages:
 
   text:
 
-    en:
-
-      categories:
-
-        __files__:
-        - [index.html, _pages/text/en/categories/index.html]
-
-      tags:
-
-        __files__:
-        - [index.html, _pages/text/en/tags/index.html]
-
-      __files__:
-      - [index.html, _pages/text/en/index.html]
-
     ja:
 
       categories:
 
         __files__:
-        - [index.html, _pages/text/ja/categories/index.html]
-
-      tags:
-
-        __files__:
-        - [index.html, _pages/text/ja/tags/index.html]
+        - [test.md, _pages/text/ja/categories/test.md]
 
       __files__:
-      - [index.html, _pages/text/ja/index.html]
+      - [index.md, _pages/text/ja/index.md]
 
 _posts:
 
-  en:
+  __files__:
+  - [2025-05-30-example.ja.md, _posts/2025-05-30-example.ja.md]
 
-    2025-05-30-T135040+0900-UUID-en:
+_proj_mgmt:
 
-      __files__:
-      - [2025-05-30-T135040+0900-UUID-en.md, _posts/en/2025-05-30-T135040+0900-UUID-en/2025-05-30-T135040+0900-UUID-en.md]
+  script:
 
-  ja:
-
-    2025-05-30-T135040+0900-UUID-ja:
+    output:
 
       __files__:
-      - [2025-05-30-T135040+0900-UUID-ja.md, _posts/ja/2025-05-30-T135040+0900-UUID-ja/2025-05-30-T135040+0900-UUID-ja.md]
-
-_proj-mgmt:
-
-  _script:
-
-    _output:
-
-      __files__:
-      - [proj_dir_tree.yml, _proj-mgmt/_script/_output/proj_dir_tree.yml]
+      - [proj-dir-tree.yml, _proj_mgmt/script/output/proj-dir-tree.yml]
 
     __files__:
-    - [generate_proj_dir_tree.py, _proj-mgmt/_script/generate_proj_dir_tree.py]
+    - [generate_proj_dir_tree.py, _proj_mgmt/script/generate_proj_dir_tree.py]
 
 _scripts:
 
   __files__:
-  - [convert-yaml-to-json.js, _scripts/convert-yaml-to-json.js]
-  - [generate_category_counts.rb, _scripts/generate_category_counts.rb]
   - [generate_sitemap_text.rb, _scripts/generate_sitemap_text.rb]
-  - [generate_tag_counts.rb, _scripts/generate_tag_counts.rb]
-  - [generate_taxonomy_pages.rb, _scripts/generate_taxonomy_pages.rb]
-  - [generate_text_posts.rb, _scripts/generate_text_posts.rb]
-  - [generate_text_taxonomy_index_pages.rb, _scripts/generate_text_taxonomy_index_pages.rb]
-  - [generate_text_taxonomy_pages.rb, _scripts/generate_text_taxonomy_pages.rb]
-  - [merge_missing_slugs.rb, _scripts/merge_missing_slugs.rb]
-  - [merge_slug_dictionaries.rb, _scripts/merge_slug_dictionaries.rb]
-  - [package.json, _scripts/package.json]
 
 assets:
-
-  css:
-
-    __files__:
-    - [.keep, assets/css/.keep]
 
   images:
 
     article:
 
-      2025-05-30-T135040+0900-UUID-en:
+      2025-05-30-example.en:
 
         __files__:
-        - [image_1-en.png, assets/images/article/2025-05-30-T135040+0900-UUID-en/image_1-en.png]
+        - [image_1-en.png, assets/images/article/2025-05-30-example.en/image_1-en.png]
 
-      2025-05-30-T135040+0900-UUID-ja:
+      2025-05-30-example.ja:
 
         __files__:
-        - [image_1-ja.png, assets/images/article/2025-05-30-T135040+0900-UUID-ja/image_1-ja.png]
+        - [image_1-ja.png, assets/images/article/2025-05-30-example.ja/image_1-ja.png]
 
   js:
 
