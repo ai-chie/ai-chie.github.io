@@ -3,7 +3,7 @@
 {%- assign type = include.type | default: 'categories' -%} {# 'categories' or 'tags' #}
 {%- assign ui = include.common_ui | default: {} -%}
 {%- assign warnings_data = include.common_warnings_data | default: {} -%}
-{%- assign schema = include.common_schemaa | default: {} -%} {# <--- ここは必要 #}
+{%- assign schema = include.common_schema | default: {} -%} {# <--- ここは必要 #}
 
 {# render_format を device の値に応じて設定 #}
 {%- assign render_format = 'html' -%} {# デフォルトをhtmlに設定 #}
@@ -14,61 +14,14 @@
 {# base_path をここで定義 #}
 {%- assign base_path = "/" | append: device | append: lang | append: "/" | append: type -%}
 
-{# === ここから taxonomy_data_preparer.html の内容を直接埋め込む === #}
-{# Liquidのincludeは変数を引き継がないため、ロジックを直接ここに記述します。 #}
-
-{%- assign data = site.data.taxonomy[type] | default: "" | split: "" -%}
-
-{%- if data.size == 0 -%}
-  {%- assign merged_items = "" | split: "" -%}
-{%- else -%}
-  {%- if type == 'categories' -%}
-    {%- assign standard_taxonomy_posts = site.categories -%}
-  {%- elsif type == 'tags' -%}
-    {%- assign standard_taxonomy_posts = site.tags -%}
-  {%- else -%}
-    {%- assign standard_taxonomy_posts = null -%}
-  {%- endif -%}
-
-  {%- assign seen_slugs = "" | split: "" -%}
-  {%- assign temp_merged_items = "" | split: "" -%} {# 最終的な merged_items の一時変数 #}
-
-  {%- assign items = data | sort: 'taxonomy_priority' %}
-  {%- for item in items %}
-    {%- assign current_item_warning = "" -%}
-    {%- assign current_item_name = item.taxonomy_name[lang] | default: '無名' -%}
-    {%- assign current_item_slug = item.taxonomy_slug | default: '' -%}
-
-    {%- if current_item_name == '' %}
-      {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.name_missing[lang] | default: warnings_data.name_missing['ja'] | append: " " %}
-    {%- endif %}
-    {%- if current_item_slug == '' %}
-      {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.slug_missing[lang] | default: warnings_data.slug_missing['ja'] | append: " " %}
-    {%- endif %}
-    {%- if seen_slugs contains current_item_slug and current_item_slug != '' %}
-      {% assign current_item_warning = current_item_warning | append: "⚠️ " | append: warnings_data.slug_duplicate[lang] | default: warnings_data.slug_duplicate['ja'] | append: " " %}
-    {%- else %}
-      {%- if current_item_slug != '' %}{% assign seen_slugs = seen_slugs | push: current_item_slug %}{% endif -%}
-    {%- endif %}
-
-    {%- assign count = 0 -%}
-    {%- for standard_name_posts_pair in standard_taxonomy_posts -%}
-      {%- assign standard_name = standard_name_posts_pair[0] -%}
-      {%- assign standard_posts = standard_name_posts_pair[1] -%}
-      {%- if standard_name | slugify == current_item_slug -%}
-        {%- assign count = standard_posts.size -%}
-        {%- break -%}
-      {%- endif -%}
-    {%- endfor -%}
-
-    {% assign merged_item = item | merge: {"_count": count, "_warning": current_item_warning} %}
-    {% assign temp_merged_items = temp_merged_items | push: merged_item %}
-
-  {%- endfor %}
-  {%- assign merged_items = temp_merged_items -%} {# 最終的に merged_items に割り当て #}
-{%- endif -%}
-
-{# === taxonomy_data_preparer.html の内容埋め込みここまで === #}
+{# データを準備する共通部品を呼び出す #}
+{% include taxonomy_data_preparer.html
+  type=type
+  lang=lang
+  warnings_data=warnings_data
+  schema=schema
+%}
+{# taxonomy_data_preparer.html が 'merged_items' 変数を設定する #}
 
 <!-- <h1>{{ ui.title[type][lang] }}</h1> -->
 
