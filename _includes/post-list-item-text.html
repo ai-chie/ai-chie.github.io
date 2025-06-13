@@ -1,9 +1,0 @@
-{% assign post = include.post %}
-{% include post-attribute-check.html post=post %}
-
-{% unless post_attrs.post_hidden or post_attrs.post_draft %}
-  <li>
-    <a href="{{ post.url }}">{{ post.title }}</a>
-    {# AI向けには不要なバッジや追加情報はここには含めない #}
-  </li>
-{% endunless %}

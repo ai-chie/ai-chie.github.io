@@ -1,14 +1,20 @@
-{% assign render_type = include.render_type | default: 'human' %} {# 'human' または 'ai' #}
+{% assign device = include.device | default: post.device | page.device | default: 'text' %}
+{% assign render_type = include.render_type | default: 'text' %} {# 'html' または 'text' #}
+{%- assign post_obj_1 = include.post | default: page -%}
+
+{# render_type を device の値に応じて設定 #}
+{% assign render_type = 'html' %} {# デフォルトをhtmlに設定 #}
+{% if device == 'text' %}
+  {% assign render_type = 'text' %}
+{% endif %}
 
 <ul class="space-y-4">
-  {% for post in include.posts %}
+  {% for post in post_obj_1 %}
     {% include post-attribute-check.html post=post %}
     {% unless post_attrs.post_hidden or post_attrs.post_draft %}
-      {% if render_type == 'text' %}
-        {% include post-list-item-text.html post=post %}
-      {% else %}
-        {% include post-list-item.html post=post %}
-      {% endif %}
+      {# 変更点: post-list-item-text.html の include を削除し、render_type を渡す #}
+      {% include post-list-item.html post=post render_type=render_type %}
     {% endunless %}
   {% endfor %}
 </ul>
+
