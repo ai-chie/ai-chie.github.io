@@ -35,60 +35,6 @@ post_related_posts_lang:
   unused: false
   description: 紐づく他言語の記事のID
   
-post_priority:
-  type: integer
-  required: false
-  default: 99
-  unused: false
-  description: 並び順制御用の数値（1〜999）。小さいほど上位に表示される
-  
-post_draft:
-  type: boolean
-  required: false
-  default: false
-  unused: false
-  description: |
-    下書き状態の記事。通常は一覧や分類ページに表示されず、ビルド対象にも含めない。
-    GitHub Pages 上では Jekyll の `draft: true` 機能が使えないため、Liquid による制御を行う。
-    URL を知っていればページ表示は可能。
-
-post_hidden:
-  type: boolean
-  required: false
-  default: false
-  unused: false
-  description: |
-    一覧や分類ページ、関連リンクなどすべての表示から除外する。
-    draft と異なり、準備中というより「見せたくない」明示的非表示。
-    URL 直打ちでのアクセスは可能。
-
-post_featured:
-  type: boolean
-  required: false
-  default: false
-  unused: false
-  description: |
-    注目記事として優先的に表示される可能性がある。
-    一部テンプレートやバッジ表示で強調される。
-
-post_deprecated:
-  type: boolean
-  required: false
-  default: false
-  unused: true
-  description: |
-    廃止予定・非推奨のコンテンツを示す。
-    バッジ表示やスタイル上の警告に利用される予定だが、現時点では表示制御には未使用。
-
-post_beta:
-  type: boolean
-  required: false
-  default: false
-  unused: true
-  description: |
-    実験的またはベータ版の内容を示す。
-    将来的に不安定なコンテンツに視覚的ラベルを付ける用途で使用される。
-
 post_audience:
   type: enum
   required: false
@@ -100,7 +46,62 @@ post_audience:
   description: |
     記事の対象読者を示す。`internal` は社内向け、`external` は外部公開。
     ラベルやバッジ表示の補助的な用途。
+    
+post_priority:
+  type: integer
+  required: false
+  default: 99
+  unused: false
+  description: 並び順制御用の数値（1〜999）。小さいほど上位に表示される
+  
+post_featured:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: |
+    注目記事として優先的に表示される可能性がある。
+    一部テンプレートやバッジ表示で強調される。
+    
+post_beta:
+  type: boolean
+  required: false
+  default: false
+  unused: true
+  description: |
+    実験的またはベータ版の内容を示す。
+    将来的に不安定なコンテンツに視覚的ラベルを付ける用途で使用される。
+    
+post_deprecated:
+  type: boolean
+  required: false
+  default: false
+  unused: true
+  description: |
+    廃止予定・非推奨のコンテンツを示す。
+    バッジ表示やスタイル上の警告に利用される予定だが、現時点では表示制御には未使用。
 
+post_color:
+  type: string
+  required: false
+  default: "#cccccc"
+  unused: false
+  description: UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード
+
+post_icon:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: 表示用アイコン（FontAwesome、emoji、クラスなどを想定）
+    
+post_tooltip:
+  type: object
+  required: false
+  default: { ja: "", en: "" }
+  unused: false
+  description: ホバー時に表示する補足情報。バッジやアイコンなどに対応。多言語対応
+    
 post_private:
   type: boolean
   required: false
@@ -108,8 +109,8 @@ post_private:
   unused: true
   description: |
     閲覧制限付きコンテンツの目印。社内資料など。
-    現在はテンプレート側での制御に未使用。
-
+    現在はテンプレート側での制御に未使用。    
+    
 post_admin_only:
   type: boolean
   required: false
@@ -118,10 +119,45 @@ post_admin_only:
   description: |
     管理者専用の投稿。一般閲覧者には非表示。
     現時点ではテンプレートに反映されていない。
+    
+post_hidden:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: |
+    一覧や分類ページ、関連リンクなどすべての表示から除外する。
+    draft と異なり、準備中というより「見せたくない」明示的非表示。
+    URL 直打ちでのアクセスは可能。
 
+post_hidden_reason:
+  type: object
+  required: false
+  default: { ja: "", en: "" }
+  unused: false
+  description: 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）
+
+post_draft:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: |
+    下書き状態の記事。通常は一覧や分類ページに表示されず、ビルド対象にも含めない。
+    GitHub Pages 上では Jekyll の `draft: true` 機能が使えないため、Liquid による制御を行う。
+    URL を知っていればページ表示は可能。
+    
 # ----------
 # Jekyll
 # ----------
+# layout
 # title
 # date
 # description
+# categories
+# tags
+# permalink
+# ----------
+# device
+# lang
+# ----------
