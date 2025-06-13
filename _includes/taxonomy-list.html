@@ -3,7 +3,7 @@
 {%- assign type = include.type | default: 'categories' -%} {# 'categories' or 'tags' #}
 {%- assign ui = include.common_ui | default: {} -%}
 {%- assign warnings_data = include.common_warnings_data | default: {} -%}
-{%- assign schema = include.common_schema | default: {} -%} {# <--- ここは必要 #}
+{%- assign schema = include.taxonomy_schema | default: {} -%} {# <--- ここは必要 #}
 
 {# render_format を device の値に応じて設定 #}
 {%- assign render_format = 'html' -%} {# デフォルトをhtmlに設定 #}
