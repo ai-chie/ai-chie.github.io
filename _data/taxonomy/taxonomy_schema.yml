@@ -6,6 +6,7 @@ layout:
   default: ""
   unused: false
   description: Jekyll
+  group:
   
 layout_mobile:
   type: string
@@ -13,6 +14,7 @@ layout_mobile:
   default: ""
   unused: false
   description:
+  group:
 
 layout_text:
   type: string
@@ -20,20 +22,34 @@ layout_text:
   default: ""
   unused: false
   description:
+  group:
   
 device:
   type: string
   required: true
   default: "text"
   unused: false
-  description:
+  description: 設定がない場合はpathから取得
+  group:
   
 lang:
   type: string
   required: true
   default: "ja"
   unused: false
-  description:
+  description: 設定がない場合はpathから取得
+  group:
+
+type:
+  type: enum
+  values:
+    - categories
+    - tags
+  required: false
+  default: categories
+  unused: false
+  description: カテゴリ、タグなど。設定がない場合はpathから取得
+  group:
 
 slug:
   type: string
@@ -204,6 +220,7 @@ permalink:
   default: ""
   unused: false
   description: Jekyll
+  group:
   
 permalink_mobile:
   type: string
@@ -211,6 +228,7 @@ permalink_mobile:
   default: ""
   unused: false
   description:
+  group:
 
 permalink_text:
   type: string
@@ -218,6 +236,7 @@ permalink_text:
   default: ""
   unused: false
   description:
+  group:
   
 aliases: # 追加
   type: array
