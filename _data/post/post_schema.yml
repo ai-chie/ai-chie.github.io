@@ -231,6 +231,27 @@ draft:
     下書き状態の記事。通常は一覧や分類ページに表示されず、ビルド対象にも含めない。
     GitHub Pages 上では Jekyll の `draft: true` 機能が使えないため、Liquid による制御を行う。
     URL を知っていればページ表示は可能。
+    
+output_text: # 追加
+  type: boolean
+  required: false
+  default: true
+  unused: false
+  description: text構成に出力対象とする。Frontmatterで制御。
+
+output_pc: # 追加
+  type: boolean
+  required: false
+  default: true
+  unused: false
+  description: PC構成に出力対象とする。Frontmatterで制御。
+
+output_mobile: # 追加
+  type: boolean
+  required: false
+  default: true
+  unused: false
+  description: モバイル構成に出力対象とする。Frontmatterで制御。
   
 permalink:
   type: string
