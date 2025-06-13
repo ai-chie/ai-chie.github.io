@@ -5,12 +5,97 @@
 # タグ・カテゴリと競合した場合、記事側の設定を優先
 # --------------------------------------------------
 
+layout:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: Jekyll
+  
+layout_mobile:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description:
+
+layout_text:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description:
+  
+device:
+  type: string
+  required: true
+  default: "text"
+  unused: false
+  description:
+  
+lang:
+  type: string
+  required: true
+  default: "ja"
+  unused: false
+  description:
+  
 id:
   type: string
   required: true
   default: ""
   unused: false
   description: timestamp(yyyymmddhhmm + uuid + lang)（例：202506131646+0900_uuid_ja）
+  
+title:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: Jekyll
+  
+description:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: Jekyll
+  
+authors:
+  type: array
+  items:
+    type: string
+  required: false
+  default: []
+  unused: false
+  description:
+  
+categories:
+  type: array
+  items:
+    type: string
+  required: false
+  default: []
+  unused: false
+  description: Jekyll
+  
+tags:
+  type: array
+  items:
+    type: string
+  required: false
+  default: []
+  unused: false
+  description: Jekyll
+  
+images:
+  type: array
+  items:
+    type: string
+  required: false
+  default: []
+  unused: false
+  description:  
   
 modified_timestamp:
   type: string
@@ -146,25 +231,41 @@ draft:
     下書き状態の記事。通常は一覧や分類ページに表示されず、ビルド対象にも含めない。
     GitHub Pages 上では Jekyll の `draft: true` 機能が使えないため、Liquid による制御を行う。
     URL を知っていればページ表示は可能。
-    
+  
+permalink:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: Jekyll
+  
+permalink_mobile:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description:
+
+permalink_text:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description:
+  
 # ----------
 # Jekyll
 # ----------
 # layout
 # title
-# date
-# author
+# date #undifined
+# author #undifined
 # description
 # categories
 # tags
-# image
+# image #undifined
 # permalink
 
-# ----------
-# Project Specific
-# ----------
-# device
-# lang
 # ----------
 # Project Specific: Taxonomy Only
 # ----------
