@@ -1,5 +1,7 @@
 ---
 layout: text-taxonomy
+layout_mobile: text-taxonomy
+layout_text: text-taxonomy
 lang: ja
 type: categories
 slug: test

@@ -2,72 +2,72 @@
 
 # 多言語・UI・出力制御に対応した構造（共通スキーマ）
 
-- taxonomy_slug: sample
-  taxonomy_name:
+- slug: sample
+  name:
     ja: サンプル
     en: sample
-  taxonomy_description:         # タグやカテゴリの説明文。一覧や個別ページで表示
+  description:         # タグやカテゴリの説明文。一覧や個別ページで表示
     ja: これはサンプルタグの説明です。
     en: This is the description for the sample tag.
-  taxonomy_link: ""             # リンク先を上書きする場合に使用
-  taxonomy_audience:            # internal = 内部向け / external = 公開向け
+  link: ""             # リンク先を上書きする場合に使用
+  audience:            # internal = 内部向け / external = 公開向け
     - external
-  taxonomy_priority: 1          # 並び順制御用（小さいほど上位）
-  taxonomy_featured: false      # 注目トピックとして強調表示（★アイコン等）
-  taxonomy_beta: false          # 実験中の分類（🧪などのアイコン表示）
-  taxonomy_deprecated: false    # 非推奨・廃止予定（⚠アイコン付きで警告）
-  taxonomy_color: "#3366cc"     # UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード
-  taxonomy_icon: "flask"        # 表示用アイコン（FontAwesome、emoji、クラスなどを想定）
-  taxonomy_tooltip:             # ホバー時に表示する補足情報。バッジやアイコンなどに対応
+  priority: 1          # 並び順制御用（小さいほど上位）
+  featured: false      # 注目トピックとして強調表示（★アイコン等）
+  beta: false          # 実験中の分類（🧪などのアイコン表示）
+  deprecated: false    # 非推奨・廃止予定（⚠アイコン付きで警告）
+  color: "#3366cc"     # UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード
+  icon: "flask"        # 表示用アイコン（FontAwesome、emoji、クラスなどを想定）
+  tooltip:             # ホバー時に表示する補足情報。バッジやアイコンなどに対応
     ja: サンプル
     en: sample
-  taxonomy_private: false       # 内部資料や限定公開向けなど。基本的に外部公開しない分類
-  taxonomy_admin_only: false    # 管理者用。UIには原則表示されない
-  taxonomy_hidden: false        # 完全に表示対象外とする（一覧・記事ページすべてに非表示）。trueならページや一覧に出力しない
-  taxonomy_hidden_reason:       # 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）
+  private: false       # 内部資料や限定公開向けなど。基本的に外部公開しない分類
+  admin_only: false    # 管理者用。UIには原則表示されない
+  hidden: false        # 完全に表示対象外とする（一覧・記事ページすべてに非表示）。trueならページや一覧に出力しない
+  hidden_reason:       # 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）
     ja:
     en:
-  taxonomy_draft: false         # trueなら仮出力。本番に含めない
-  taxonomy_output_text: true    # text構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
-  taxonomy_output_pc: true      # PC構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
-  taxonomy_output_mobile: true  # モバイル構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
-  taxonomy_aliases:
+  draft: false         # trueなら仮出力。本番に含めない
+  output_text: true    # text構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
+  output_pc: true      # PC構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
+  output_mobile: true  # モバイル構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
+  aliases:
     - サンプル
     - sample                    # 検索やslug補完のための別名指定
                                 # Liquidテンプレートがタクソノミーリストを表示する際に、エイリアスを表示したり、
                                 # それに基づいて何かをフィルタリングしたりするロジックは現在のところはなく、
                                 # Jekyllのサイト検索機能の検索インデックスの生成ロジックでの利用や、外部ツール連携などで使用する可能性あり
                                 
-- taxonomy_slug: post
-  taxonomy_name:
+- slug: post
+  name:
     ja: 記事
     en: post
-  taxonomy_description:         # タグやカテゴリの説明文。一覧や個別ページで表示
+  description:         # タグやカテゴリの説明文。一覧や個別ページで表示
     ja: これは記事タグの説明です。
     en: This is the description for the post tag.
-  taxonomy_link: ""             # リンク先を上書きする場合に使用
-  taxonomy_audience:            # internal = 内部向け / external = 公開向け
+  link: ""             # リンク先を上書きする場合に使用
+  audience:            # internal = 内部向け / external = 公開向け
     - external
-  taxonomy_priority: 1          # 並び順制御用（小さいほど上位）
-  taxonomy_featured: false      # 注目トピックとして強調表示（★アイコン等）
-  taxonomy_beta: false          # 実験中の分類（🧪などのアイコン表示）
-  taxonomy_deprecated: false    # 非推奨・廃止予定（⚠アイコン付きで警告）
-  taxonomy_color: "#3366cc"     # UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード
-  taxonomy_icon: "flask"        # 表示用アイコン（FontAwesome、emoji、クラスなどを想定）
-  taxonomy_tooltip:             # ホバー時に表示する補足情報。バッジやアイコンなどに対応
+  priority: 1          # 並び順制御用（小さいほど上位）
+  featured: false      # 注目トピックとして強調表示（★アイコン等）
+  beta: false          # 実験中の分類（🧪などのアイコン表示）
+  deprecated: false    # 非推奨・廃止予定（⚠アイコン付きで警告）
+  color: "#3366cc"     # UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード
+  icon: "flask"        # 表示用アイコン（FontAwesome、emoji、クラスなどを想定）
+  tooltip:             # ホバー時に表示する補足情報。バッジやアイコンなどに対応
     ja: 記事
     en: post
-  taxonomy_private: false       # 内部資料や限定公開向けなど。基本的に外部公開しない分類
-  taxonomy_admin_only: false    # 管理者用。UIには原則表示されない
-  taxonomy_hidden: false        # 完全に表示対象外とする（一覧・記事ページすべてに非表示）。trueならページや一覧に出力しない
-  taxonomy_hidden_reason:       # 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）
+  private: false       # 内部資料や限定公開向けなど。基本的に外部公開しない分類
+  admin_only: false    # 管理者用。UIには原則表示されない
+  hidden: false        # 完全に表示対象外とする（一覧・記事ページすべてに非表示）。trueならページや一覧に出力しない
+  hidden_reason:       # 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）
     ja:
     en:
-  taxonomy_draft: false         # trueなら仮出力。本番に含めない
-  taxonomy_output_text: true    # text構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
-  taxonomy_output_pc: true      # PC構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
-  taxonomy_output_mobile: true  # モバイル構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
-  taxonomy_aliases:
+  draft: false         # trueなら仮出力。本番に含めない
+  output_text: true    # text構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
+  output_pc: true      # PC構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
+  output_mobile: true  # モバイル構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
+  aliases:
     - 記事
     - post                      # 検索やslug補完のための別名指定
                                 # Liquidテンプレートがタクソノミーリストを表示する際に、エイリアスを表示したり、
