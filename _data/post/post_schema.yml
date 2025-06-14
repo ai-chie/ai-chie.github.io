@@ -6,23 +6,23 @@
 id:
   type: string
   required: true
-  default: ""
+  default: ''
   unused: false
   description: timestamp(yyyymmddhhmm + uuid + lang)（例：202506131646+0900_uuid_ja）
   
 title:
   type: string
   required: false
-  default: ""
+  default: ''
   unused: false
-  description:
+  description: 記事のタイトル。SEOや一覧表示、ページタイトルに使用される。
   
 description:
   type: string
   required: false
-  default: ""
+  default: ''
   unused: false
-  description:
+  description: 記事の要約や説明文。検索結果やOGP、meta descriptionに使用される。
   
 authors:
   type: array
@@ -31,7 +31,7 @@ authors:
   required: false
   default: []
   unused: false
-  description:
+  description: 投稿の執筆者。複数可。
   
 categories:
   type: array
@@ -40,7 +40,7 @@ categories:
   required: false
   default: []
   unused: false
-  description:
+  description: 所属カテゴリ。taxonomyと連携し分類に使用。
   
 tags:
   type: array
@@ -49,7 +49,7 @@ tags:
   required: false
   default: []
   unused: false
-  description:
+  description: 関連タグ一覧。taxonomyと連携しフィルタやUI出力に使用。
   
 images:
   type: array
@@ -58,19 +58,19 @@ images:
   required: false
   default: []
   unused: false
-  description:  
+  description: 関連画像のURLやパス一覧。OGPや本文表示に利用。
   
 created_timestamp:
   type: string
   required: false
-  default: ""
+  default: ''
   unused: false
   description: timestamp(yyyymmddhhmm)
   
 modified_timestamp:
   type: string
   required: false
-  default: ""
+  default: ''
   unused: false
   description: timestamp(yyyymmddhhmm)
   
@@ -131,16 +131,16 @@ color:
 icon:
   type: string
   required: false
-  default: ""
+  default: ''
   unused: false
   description: 表示用アイコン（FontAwesome、emoji、クラスなどを想定）。
     
 tooltip:
   type: string
   required: false
-  default: ""
+  default: ''
   unused: false
-  description: ホバー時に表示する補足情報。バッジやアイコンなどに対応。多言語対応。
+  description: ホバー時に表示する補足情報。バッジやアイコンなどに対応。投稿ファイルは言語ごとに分かれているため、多言語objectではなくstringで記述。
     
 private:
   type: boolean
@@ -169,7 +169,7 @@ hidden:
 hidden_reason:
   type: string
   required: false
-  default: ""
+  default: ''
   unused: false
   description: 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）。
 
@@ -191,20 +191,31 @@ output_device:
   description: |
     スクリプトでの出力制御用。リストにある{device}構成に自動出力。（_pages/{device}/{lang}/*.md）。
     スクリプトで出力する*.mdのFrontmatter「device:」に設定。
+    （※この値はスクリプト内部での判定用であり、Front Matter にはコピーされない）
 
 output_layout_setting:
   type: object
   required: false
-  default: { pc: "post", mobile: "mobile-post", text: "text-post" }
+  default:
+    pc: post
+    mobile: mobile-post
+    text: text-post
   unused: false
-  description: スクリプトで出力する*.mdのFrontmatter「layout:」に設定。
-
+  description: |
+    スクリプトで出力する*.mdのFrontmatter「layout:」に設定。
+    （※この値はスクリプト内部での判定用であり、Front Matter にはコピーされない）
+  
 output_permalink_setting:
   type: object
   required: false
-  default: { pc: "/{device}/{lang}/", mobile: "/{device}/{lang}/", text: "/{device}/{lang}/" }
+  default:
+    pc: /{device}/{lang}/
+    mobile: /{device}/{lang}/
+    text: /{device}/{lang}/
   unused: false
-  description: スクリプトで出力する*.mdのFrontmatter「permalink:」に設定。
+  description: |
+    スクリプトで出力する*.mdのFrontmatter「permalink:」に設定。
+    （※この値はスクリプト内部での判定用であり、Front Matter にはコピーされない）
   
 # output_pc:
 #   type: boolean
@@ -272,9 +283,13 @@ output_permalink_setting:
 lang:
   type: string
   required: true
-  default: "ja"
+  default: 'ja'
   unused: false
-  description:
+  description: 記事の言語。ja、enなど。
+  calculated: true
+  values:
+  - ja
+  - en
 
 # ----------
 # *.mdに追加するFrontmatter
@@ -283,23 +298,36 @@ lang:
 device:
   type: string
   required: true
-  default: {output_device}
+  default: null
   unused: false
-  description: スクリプトで出力する*.mdのFrontmatterに設定。「output_device:」の値。例：{pc/mobile/text}。
+  description: |
+    スクリプトで出力する*.mdのFrontmatterに設定。「output_device:」の値。例：{pc/mobile/text}。
+    （output制御によりスクリプトで動的設定され、Front Matter に出力される）
+  calculated: true
+  values:
+  - pc
+  - mobile
+  - text
   
 layout:
   type: string
   required: false
-  default: {output_layout_setting}
+  default: null
   unused: false
-  description: スクリプトで出力する*.mdのFrontmatterに設定。「output_layout_setting:」の値。
-
+  description: |
+    スクリプトで出力する*.mdのFrontmatterに設定。「output_layout_setting:」の値。
+    （output制御によりスクリプトで動的設定され、Front Matter に出力される）
+  calculated: true
+  
 permalink:
   type: string
   required: false
-  default: {output_permalink_setting}
+  default: null
   unused: false
-  description: スクリプトで出力する*.mdのFrontmatterに設定。「output_layout_permalink:」の値。
+  description: |
+    スクリプトで出力する*.mdのFrontmatterに設定。「output_layout_permalink:」の値。
+    （output制御によりスクリプトで動的設定され、Front Matter に出力される）
+  calculated: true
 
 # ----------
 # Jekyll
