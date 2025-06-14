@@ -1,4 +1,3 @@
-# _data/taxonomy/taxonomy_schema.yml (修正案 - 追加フィールド対応)
 
 slug:
   type: string
@@ -14,6 +13,13 @@ name:
   unused: false
   description: 【必須】タグやカテゴリの名称。多言語対応 {ja "日本語名", en "English Name"}
 
+title:
+  type: object
+  required: true
+  default: { ja: "unknown", en: "unknown" }
+  unused: false
+  description: 【必須】多言語対応 {ja "日本語タイトル", en "English title"}
+  
 description:
   type: object
   required: false
@@ -57,63 +63,63 @@ beta:
   required: false
   default: false
   unused: false
-  description: 実験中の分類（🧪などのアイコン表示）
+  description: 実験中の分類（🧪などのアイコン表示）。
 
 deprecated:
   type: boolean
   required: false
   default: false
   unused: false
-  description: 非推奨・廃止予定（⚠アイコン付きで警告）
+  description: 非推奨・廃止予定（⚠アイコン付きで警告）。
 
 color:
   type: string
   required: false
   default: "#cccccc"
   unused: false
-  description: UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード
+  description: UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード。
 
 icon:
   type: string
   required: false
   default: ""
   unused: false
-  description: 表示用アイコン（FontAwesome、emoji、クラスなどを想定）
+  description: 表示用アイコン（FontAwesome、emoji、クラスなどを想定）。
 
 tooltip:
   type: object
   required: false
   default: { ja: "", en: "" }
   unused: false
-  description: ホバー時に表示する補足情報。バッジやアイコンなどに対応。多言語対応
+  description: ホバー時に表示する補足情報。バッジやアイコンなどに対応。多言語対応。
 
 private:
   type: boolean
   required: false
   default: false
   unused: false
-  description: 内部資料や限定公開向けなど。基本的に外部公開しない分類
+  description: 内部資料や限定公開向けなど。基本的に外部公開しない分類。
 
 admin_only:
   type: boolean
   required: false
   default: false
   unused: false
-  description: 管理者用。UIには原則表示されない
+  description: 管理者用。UIには原則表示されない。
 
 hidden:
   type: boolean
   required: false
   default: false
   unused: false
-  description: 完全に表示対象外とする（一覧・記事ページすべてに非表示）。trueならページや一覧に出力しない
+  description: 完全に表示対象外とする（一覧・記事ページすべてに非表示）。trueならページや一覧に出力しない。
 
 hidden_reason:
   type: object
   required: false
   default: { ja: "", en: "" }
   unused: false
-  description: 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）
+  description: 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）。
 
 draft:
   type: boolean
@@ -122,28 +128,36 @@ draft:
   unused: false
   description: trueなら仮出力。本番に含めない
 
-# ----------
-
-output_pc: # 追加
+aliases:
+  type: array
+  items:
+    type: string
+  required: false
+  default: []
+  unused: false
+  description: |
+    検索やslug補完のための別名指定
+    
+output_pc:
   type: boolean
   required: false
   default: true
   unused: false
-  description: _data/...{type}.ymlで設定。スクリプト出力制御用。該当する{device}構成に自動出力。（_pages/{device}/{lang}/{type}/）
+  description: スクリプトでの出力制御用。trueで該当する{device}構成に自動出力。（_pages/{device}/{lang}/{type}/*.md）
   
 layout_pc:
   type: string
   required: false
   default: ""
   unused: false
-  description:
+  description: スクリプトで出力する*.mdのFrontmatter「layout:」に設定。
 
 permalink_pc:
   type: string
   required: false
   default: ""
   unused: false
-  description:
+  description: スクリプトで出力する*.mdのFrontmatter「permalink:」に設定。
   
 output_mobile:
   type: boolean
@@ -187,19 +201,23 @@ permalink_text:
   unused: false
   description:
 
+# ----------
+# *.mdに追加するFrontmatter
+# ----------
+
 device:
   type: string
   required: true
   default: "text"
   unused: false
-  description: 設定がない場合はpathから取得
+  description: スクリプトで出力する*.mdのFrontmatterに設定。{pc/mobile/text}
   
 lang:
   type: string
   required: true
   default: "ja"
   unused: false
-  description: 設定がない場合はpathから取得
+  description: スクリプトで出力する*.mdのFrontmatterに設定。{ja/en}
   
 type:
   type: enum
@@ -209,19 +227,20 @@ type:
   required: false
   default: categories
   unused: false
-  description: カテゴリ、タグなど。設定がない場合はpathから取得
-  
-aliases:
-  type: array
-  items:
-    type: string
-  required: false
-  default: []
-  unused: false
-  description: |
-    検索やslug補完のための別名指定
-    Liquidテンプレートがタクソノミーリストを表示する際に、エイリアスを表示したり、
-    それに基づいて何かをフィルタリングしたりするロジックは現在のところはなく、
-    Jekyllのサイト検索機能の検索インデックスの生成ロジックでの利用や、外部ツール連携などで使用する可能性あり
+  description: スクリプトで出力する*.mdのFrontmatterに設定。{categories/tags}
 
+layout:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: スクリプトで出力する*.mdのFrontmatterに設定。
+
+permalink:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: スクリプトで出力する*.mdのFrontmatterに設定。
   
+
