@@ -107,11 +107,6 @@ _pages:
 
     ja:
 
-      categories:
-
-        __files__:
-        - [test.md, _pages/text/ja/categories/test.md]
-
       __files__:
       - [index.md, _pages/text/ja/index.md]
 
@@ -162,6 +157,8 @@ docs:
 
   __files__:
   - [.keep, docs/.keep]
+  - [jekyll_taxonomy_unification_design_rev_man_3_share_202506150020.md, docs/jekyll_taxonomy_unification_design_rev_man_3_share_202506150020.md]
+  - [project_purpose_notes_man_3_share_202506150024.md, docs/project_purpose_notes_man_3_share_202506150024.md]
 
 root_files:
 
