@@ -4,73 +4,73 @@ slug:
   required: true
   default: "unknown"
   unused: false
-  description: 【必須】タグやカテゴリのslug
+  description: 【必須】タグやカテゴリのslug。
 
 name:
   type: object
   required: true
   default: { ja: "unknown", en: "unknown" }
   unused: false
-  description: 【必須】タグやカテゴリの名称。多言語対応 {ja "日本語名", en "English Name"}
+  description: 【必須】タグやカテゴリの名称。多言語対応 {ja "日本語名", en "English Name"}。
 
 title:
   type: object
   required: true
   default: { ja: "unknown", en: "unknown" }
   unused: false
-  description: 【必須】多言語対応 {ja "日本語タイトル", en "English title"}
+  description: 【必須】多言語対応 {ja "日本語タイトル", en "English title"}。
   
 description:
   type: object
   required: false
   default: { ja: "", en: "" }
   unused: false
-  description: タグやカテゴリの説明文。一覧や個別ページで表示。多言語対応
+  description: タグやカテゴリの説明文。一覧や個別ページで表示。多言語対応。
 
 link:
   type: string
   required: false
   default: ""
   unused: false
-  description: リンク先を上書きする場合に使用
+  description: リンク先を上書きする場合に使用。
 
 audience:
   type: enum
-  values:
-    - internal  # 内部向け
-    - external  # 公開向け
   required: false
   default: external
+  values:
+    - internal
+    - external
   unused: false
-  description: 対象読者の区分（🌐=external, 🔒=internal）。internal = 内部向け / external = 公開向け
+  description: 対象読者の区分（🌐=external, 🔒=internal）。internal = 内部向け / external = 外部公開向け。
 
 priority:
   type: integer
   required: false
   default: 99
   unused: false
-  description: 並び順制御用の数値（1〜999）。小さいほど上位に表示される
+  description: 並び順制御用の数値（1〜999）。小さいほど上位に表示される。
 
 featured:
   type: boolean
   required: false
   default: false
   unused: false
-  description: 注目トピックとして強調表示（★アイコン等）
+  description: 注目トピックとして優先的に表示。強調表示（★アイコン等）。一部テンプレートやバッジ表示で強調される。
 
 beta:
   type: boolean
   required: false
   default: false
   unused: false
-  description: 実験中の分類（🧪などのアイコン表示）。
+  description: 実験的またはベータ版。不安定なコンテンツに視覚的ラベルを付ける用途で使用される。（🧪などのアイコン表示）。
 
 deprecated:
   type: boolean
   required: false
   default: false
   unused: false
-  description: 非推奨・廃止予定（⚠アイコン付きで警告）。
+  description: 非推奨・廃止予定（⚠アイコン付きで警告）。バッジ表示やスタイル上の警告に利用される。
 
 color:
   type: string
@@ -98,21 +98,24 @@ private:
   required: false
   default: false
   unused: false
-  description: 内部資料や限定公開向けなど。基本的に外部公開しない分類。
+  description: 内部資料や限定公開向けなど。基本的に外部公開しない。
 
 admin_only:
   type: boolean
   required: false
   default: false
   unused: false
-  description: 管理者用。UIには原則表示されない。
+  description: 管理者専用。一般閲覧者には非表示。
 
 hidden:
   type: boolean
   required: false
   default: false
   unused: false
-  description: 完全に表示対象外とする（一覧・記事ページすべてに非表示）。trueならページや一覧に出力しない。
+  description: |
+    完全に表示対象外とする（一覧・記事ページ・関連リンクなどすべてに非表示）。trueならページや一覧に出力しない。
+    draft と異なり、準備中というより「見せたくない」明示的非表示。
+    URL 直打ちでのアクセスは可能。  
 
 hidden_reason:
   type: object
@@ -126,7 +129,9 @@ draft:
   required: false
   default: false
   unused: false
-  description: trueなら仮出力。本番に含めない
+  description: |
+    下書き状態。通常は表示されず、ビルド対象にも含めない。
+    Jekyll の `draft: true` 機能が使えない場合も想定し、Liquid による制御も行う。
 
 aliases:
   type: array
@@ -136,7 +141,7 @@ aliases:
   default: []
   unused: false
   description: |
-    検索やslug補完のための別名指定
+    検索やslug補完のための別名指定。
     
 output_pc:
   type: boolean
@@ -243,4 +248,3 @@ permalink:
   unused: false
   description: スクリプトで出力する*.mdのFrontmatterに設定。
   
-
