@@ -91,8 +91,7 @@ audience:
     - internal
     - external
   unused: true
-  description: |
-    記事の対象読者を示す。`internal` は社内向け、`external` は外部公開。
+  description:  対象読者の区分（🌐=external, 🔒=internal）。internal = 内部向け / external = 外部公開向け。
     
 priority:
   type: integer
@@ -106,27 +105,21 @@ featured:
   required: false
   default: false
   unused: false
-  description: |
-    注目記事として優先的に表示。
-    一部テンプレートやバッジ表示で強調される。
+  description: 注目トピックとして優先的に表示。強調表示（★アイコン等）。一部テンプレートやバッジ表示で強調される。
     
 beta:
   type: boolean
   required: false
   default: false
   unused: true
-  description: |
-    実験的またはベータ版の内容を示す。
-    不安定なコンテンツに視覚的ラベルを付ける用途で使用される。
-    
+  description: 実験的またはベータ版。不安定なコンテンツに視覚的ラベルを付ける用途で使用される。（🧪などのアイコン表示）。
+
 deprecated:
   type: boolean
   required: false
   default: false
   unused: true
-  description: |
-    廃止予定・非推奨のコンテンツを示す。
-    バッジ表示やスタイル上の警告に利用される。
+  description: 非推奨・廃止予定（⚠アイコン付きで警告）。バッジ表示やスタイル上の警告に利用される。
 
 color:
   type: string
@@ -154,16 +147,14 @@ private:
   required: false
   default: false
   unused: true
-  description: |
-    閲覧制限付きコンテンツの目印。社内資料など。
+  description: 内部資料や限定公開向けなど。基本的に外部公開しない。
     
 admin_only:
   type: boolean
   required: false
   default: false
   unused: true
-  description: |
-    管理者専用の投稿。一般閲覧者には非表示。
+  description: 管理者専用。一般閲覧者には非表示。
     
 hidden:
   type: boolean
@@ -171,7 +162,7 @@ hidden:
   default: false
   unused: false
   description: |
-    一覧や分類ページ、関連リンクなどすべての表示から除外する。
+    完全に表示対象外とする（一覧・記事ページ・関連リンクなどすべてに非表示）。trueならページや一覧に出力しない。
     draft と異なり、準備中というより「見せたくない」明示的非表示。
     URL 直打ちでのアクセスは可能。
 
@@ -188,9 +179,8 @@ draft:
   default: false
   unused: false
   description: |
-    下書き状態の記事。通常は一覧や分類ページに表示されず、ビルド対象にも含めない。
-    GitHub Pages 上では Jekyll の `draft: true` 機能が使えないため、Liquid による制御を行う。
-    URL を知っていればページ表示は可能。
+    下書き状態。通常は表示されず、ビルド対象にも含めない。
+    Jekyll の `draft: true` 機能が使えない場合も想定し、Liquid による制御も行う。
     
 output_pc:
   type: boolean
@@ -255,13 +245,6 @@ permalink_text:
   unused: false
   description:
 
-device:
-  type: string
-  required: true
-  default: "text"
-  unused: false
-  description:
-  
 lang:
   type: string
   required: true
@@ -273,6 +256,13 @@ lang:
 # *.mdに追加するFrontmatter
 # ----------
 
+device:
+  type: string
+  required: true
+  default: "text"
+  unused: false
+  description: スクリプトで出力する*.mdのFrontmatterに設定。{pc/mobile/text}
+  
 layout:
   type: string
   required: false
