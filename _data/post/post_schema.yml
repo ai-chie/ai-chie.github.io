@@ -5,7 +5,7 @@
 # タグ・カテゴリと競合した場合、記事側の設定を優先
 # --------------------------------------------------
 
-layout:
+layout_pc:
   type: string
   required: false
   default: ""
@@ -253,7 +253,7 @@ output_text: # 追加
   unused: false
   description: text構成に出力対象とする。Frontmatterで制御。
   
-permalink:
+permalink_pc:
   type: string
   required: false
   default: ""

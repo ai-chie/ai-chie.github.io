@@ -1,63 +1,11 @@
 # _data/taxonomy/taxonomy_schema.yml (修正案 - 追加フィールド対応)
 
-layout:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description: Jekyll
-  group:
-  
-layout_mobile:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description:
-  group:
-
-layout_text:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description:
-  group:
-  
-device:
-  type: string
-  required: true
-  default: "text"
-  unused: false
-  description: 設定がない場合はpathから取得
-  group:
-  
-lang:
-  type: string
-  required: true
-  default: "ja"
-  unused: false
-  description: 設定がない場合はpathから取得
-  group:
-
-type:
-  type: enum
-  values:
-    - categories
-    - tags
-  required: false
-  default: categories
-  unused: false
-  description: カテゴリ、タグなど。設定がない場合はpathから取得
-  group:
-
 slug:
   type: string
   required: true
   default: "unknown"
   unused: false
   description: 【必須】タグやカテゴリのslug
-  group: 必須情報
 
 name:
   type: object
@@ -65,7 +13,6 @@ name:
   default: { ja: "unknown", en: "unknown" }
   unused: false
   description: 【必須】タグやカテゴリの名称。多言語対応 {ja "日本語名", en "English Name"}
-  group: 必須情報
 
 description:
   type: object
@@ -73,7 +20,6 @@ description:
   default: { ja: "", en: "" }
   unused: false
   description: タグやカテゴリの説明文。一覧や個別ページで表示。多言語対応
-  group: 表示補助・説明メタ情報
 
 link:
   type: string
@@ -81,7 +27,6 @@ link:
   default: ""
   unused: false
   description: リンク先を上書きする場合に使用
-  group: 表示補助・説明メタ情報
 
 audience:
   type: enum
@@ -92,7 +37,6 @@ audience:
   default: external
   unused: false
   description: 対象読者の区分（🌐=external, 🔒=internal）。internal = 内部向け / external = 公開向け
-  group: 公開範囲（対象読者）
 
 priority:
   type: integer
@@ -100,7 +44,6 @@ priority:
   default: 99
   unused: false
   description: 並び順制御用の数値（1〜999）。小さいほど上位に表示される
-  group: UI装飾・強調表示
 
 featured:
   type: boolean
@@ -108,7 +51,6 @@ featured:
   default: false
   unused: false
   description: 注目トピックとして強調表示（★アイコン等）
-  group: UI装飾・強調表示
 
 beta:
   type: boolean
@@ -116,7 +58,6 @@ beta:
   default: false
   unused: false
   description: 実験中の分類（🧪などのアイコン表示）
-  group: UI装飾・強調表示
 
 deprecated:
   type: boolean
@@ -124,7 +65,6 @@ deprecated:
   default: false
   unused: false
   description: 非推奨・廃止予定（⚠アイコン付きで警告）
-  group: UI装飾・強調表示
 
 color:
   type: string
@@ -132,7 +72,6 @@ color:
   default: "#cccccc"
   unused: false
   description: UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード
-  group: UI装飾・強調表示
 
 icon:
   type: string
@@ -140,7 +79,6 @@ icon:
   default: ""
   unused: false
   description: 表示用アイコン（FontAwesome、emoji、クラスなどを想定）
-  group: 表示補助・説明メタ情報
 
 tooltip:
   type: object
@@ -148,7 +86,6 @@ tooltip:
   default: { ja: "", en: "" }
   unused: false
   description: ホバー時に表示する補足情報。バッジやアイコンなどに対応。多言語対応
-  group: 表示補助・説明メタ情報
 
 private:
   type: boolean
@@ -156,7 +93,6 @@ private:
   default: false
   unused: false
   description: 内部資料や限定公開向けなど。基本的に外部公開しない分類
-  group: 表示制御（制限・非表示系）
 
 admin_only:
   type: boolean
@@ -164,7 +100,6 @@ admin_only:
   default: false
   unused: false
   description: 管理者用。UIには原則表示されない
-  group: 表示制御（制限・非表示系）
 
 hidden:
   type: boolean
@@ -172,7 +107,6 @@ hidden:
   default: false
   unused: false
   description: 完全に表示対象外とする（一覧・記事ページすべてに非表示）。trueならページや一覧に出力しない
-  group: 表示制御（制限・非表示系）
 
 hidden_reason:
   type: object
@@ -180,7 +114,6 @@ hidden_reason:
   default: { ja: "", en: "" }
   unused: false
   description: 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）
-  group: 表示補助・説明メタ情報
 
 draft:
   type: boolean
@@ -188,47 +121,64 @@ draft:
   default: false
   unused: false
   description: trueなら仮出力。本番に含めない
-  group: 表示制御（制限・非表示系）
+
+# ----------
 
 output_pc: # 追加
   type: boolean
   required: false
   default: true
   unused: false
-  description: PC構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
-  group: 表示制御（出力対象）
-
-output_mobile: # 追加
-  type: boolean
-  required: false
-  default: true
-  unused: false
-  description: モバイル構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
-  group: 表示制御（出力対象）
+  description: _data/...{type}.ymlで設定。スクリプト出力制御用。該当する{device}構成に自動出力。（_pages/{device}/{lang}/{type}/）
   
-output_text: # 追加
-  type: boolean
-  required: false
-  default: true
-  unused: false
-  description: text構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
-  group: 表示制御（出力対象）
-  
-permalink:
+layout_pc:
   type: string
   required: false
   default: ""
   unused: false
-  description: Jekyll
-  group:
+  description:
+
+permalink_pc:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description:
   
+output_mobile:
+  type: boolean
+  required: false
+  default: true
+  unused: false
+  description:
+  
+layout_mobile:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description:
+
 permalink_mobile:
   type: string
   required: false
   default: ""
   unused: false
   description:
-  group:
+  
+output_text:
+  type: boolean
+  required: false
+  default: true
+  unused: false
+  description:
+  
+layout_text:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description:
 
 permalink_text:
   type: string
@@ -236,9 +186,32 @@ permalink_text:
   default: ""
   unused: false
   description:
-  group:
+
+device:
+  type: string
+  required: true
+  default: "text"
+  unused: false
+  description: 設定がない場合はpathから取得
   
-aliases: # 追加
+lang:
+  type: string
+  required: true
+  default: "ja"
+  unused: false
+  description: 設定がない場合はpathから取得
+  
+type:
+  type: enum
+  values:
+    - categories
+    - tags
+  required: false
+  default: categories
+  unused: false
+  description: カテゴリ、タグなど。設定がない場合はpathから取得
+  
+aliases:
   type: array
   items:
     type: string
@@ -250,5 +223,5 @@ aliases: # 追加
     Liquidテンプレートがタクソノミーリストを表示する際に、エイリアスを表示したり、
     それに基づいて何かをフィルタリングしたりするロジックは現在のところはなく、
     Jekyllのサイト検索機能の検索インデックスの生成ロジックでの利用や、外部ツール連携などで使用する可能性あり
-  group: 検索・補完
+
   
