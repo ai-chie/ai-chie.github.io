@@ -1,45 +1,8 @@
-# _data/post/post_schema.yml
-
 # --------------------------------------------------
 # 投稿（記事）に設定できる属性一覧とその仕様
 # タグ・カテゴリと競合した場合、記事側の設定を優先
 # --------------------------------------------------
 
-layout_pc:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description: Jekyll
-  
-layout_mobile:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description:
-
-layout_text:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description:
-  
-device:
-  type: string
-  required: true
-  default: "text"
-  unused: false
-  description:
-  
-lang:
-  type: string
-  required: true
-  default: "ja"
-  unused: false
-  description:
-  
 id:
   type: string
   required: true
@@ -52,14 +15,14 @@ title:
   required: false
   default: ""
   unused: false
-  description: Jekyll
+  description:
   
 description:
   type: string
   required: false
   default: ""
   unused: false
-  description: Jekyll
+  description:
   
 authors:
   type: array
@@ -77,7 +40,7 @@ categories:
   required: false
   default: []
   unused: false
-  description: Jekyll
+  description:
   
 tags:
   type: array
@@ -86,7 +49,7 @@ tags:
   required: false
   default: []
   unused: false
-  description: Jekyll
+  description:
   
 images:
   type: array
@@ -118,7 +81,7 @@ related_posts_lang:
   required: false
   default: []
   unused: false
-  description: 紐づく他言語の記事のID
+  description: 紐づく他言語の記事のID。
   
 audience:
   type: enum
@@ -130,14 +93,13 @@ audience:
   unused: true
   description: |
     記事の対象読者を示す。`internal` は社内向け、`external` は外部公開。
-    ラベルやバッジ表示の補助的な用途。
     
 priority:
   type: integer
   required: false
   default: 99
   unused: false
-  description: 並び順制御用の数値（1〜999）。小さいほど上位に表示される
+  description: 並び順制御用の数値（1〜999）。小さいほど上位に表示される。
   
 featured:
   type: boolean
@@ -145,7 +107,7 @@ featured:
   default: false
   unused: false
   description: |
-    注目記事として優先的に表示される可能性がある。
+    注目記事として優先的に表示。
     一部テンプレートやバッジ表示で強調される。
     
 beta:
@@ -155,7 +117,7 @@ beta:
   unused: true
   description: |
     実験的またはベータ版の内容を示す。
-    将来的に不安定なコンテンツに視覚的ラベルを付ける用途で使用される。
+    不安定なコンテンツに視覚的ラベルを付ける用途で使用される。
     
 deprecated:
   type: boolean
@@ -164,28 +126,28 @@ deprecated:
   unused: true
   description: |
     廃止予定・非推奨のコンテンツを示す。
-    バッジ表示やスタイル上の警告に利用される予定だが、現時点では表示制御には未使用。
+    バッジ表示やスタイル上の警告に利用される。
 
 color:
   type: string
   required: false
   default: "#cccccc"
   unused: false
-  description: UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード
+  description: UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード。
 
 icon:
   type: string
   required: false
   default: ""
   unused: false
-  description: 表示用アイコン（FontAwesome、emoji、クラスなどを想定）
+  description: 表示用アイコン（FontAwesome、emoji、クラスなどを想定）。
     
 tooltip:
   type: object
   required: false
   default: { ja: "", en: "" }
   unused: false
-  description: ホバー時に表示する補足情報。バッジやアイコンなどに対応。多言語対応
+  description: ホバー時に表示する補足情報。バッジやアイコンなどに対応。多言語対応。
     
 private:
   type: boolean
@@ -194,7 +156,6 @@ private:
   unused: true
   description: |
     閲覧制限付きコンテンツの目印。社内資料など。
-    現在はテンプレート側での制御に未使用。    
     
 admin_only:
   type: boolean
@@ -203,7 +164,6 @@ admin_only:
   unused: true
   description: |
     管理者専用の投稿。一般閲覧者には非表示。
-    現時点ではテンプレートに反映されていない。
     
 hidden:
   type: boolean
@@ -220,7 +180,7 @@ hidden_reason:
   required: false
   default: { ja: "", en: "" }
   unused: false
-  description: 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）
+  description: 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）。
 
 draft:
   type: boolean
@@ -232,35 +192,56 @@ draft:
     GitHub Pages 上では Jekyll の `draft: true` 機能が使えないため、Liquid による制御を行う。
     URL を知っていればページ表示は可能。
     
-output_pc: # 追加
+output_pc:
   type: boolean
   required: false
   default: true
   unused: false
-  description: PC構成に出力対象とする。Frontmatterで制御。
+  description: スクリプトでの出力制御用。trueで該当する{device}構成に自動出力。（_pages/{device}/{lang}/*.md）。Frontmatterで制御。
 
-output_mobile: # 追加
-  type: boolean
+layout_pc:
+  type: string
   required: false
-  default: true
+  default: ""
   unused: false
-  description: モバイル構成に出力対象とする。Frontmatterで制御。
-  
-output_text: # 追加
-  type: boolean
-  required: false
-  default: true
-  unused: false
-  description: text構成に出力対象とする。Frontmatterで制御。
-  
+  description: スクリプトで出力する*.mdのFrontmatter「layout:」に設定。
+
 permalink_pc:
   type: string
   required: false
   default: ""
   unused: false
-  description: Jekyll
+  description: スクリプトで出力する*.mdのFrontmatter「permalink:」に設定。
   
+output_mobile:
+  type: boolean
+  required: false
+  default: true
+  unused: false
+  description:
+
+layout_mobile:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description:
+
 permalink_mobile:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description:
+  
+output_text:
+  type: boolean
+  required: false
+  default: true
+  unused: false
+  description:
+
+layout_text:
   type: string
   required: false
   default: ""
@@ -273,7 +254,39 @@ permalink_text:
   default: ""
   unused: false
   description:
+
+device:
+  type: string
+  required: true
+  default: "text"
+  unused: false
+  description:
   
+lang:
+  type: string
+  required: true
+  default: "ja"
+  unused: false
+  description:
+
+# ----------
+# *.mdに追加するFrontmatter
+# ----------
+
+layout:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: スクリプトで出力する*.mdのFrontmatterに設定。
+
+permalink:
+  type: string
+  required: false
+  default: ""
+  unused: false
+  description: スクリプトで出力する*.mdのFrontmatterに設定。
+
 # ----------
 # Jekyll
 # ----------
