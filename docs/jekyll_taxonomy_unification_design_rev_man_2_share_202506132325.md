@@ -136,7 +136,7 @@ permalink_text: /text/ja/categories/test/
 ## ✅ 今後の移行支援
 
 - ✅ `_posts/*.md` → 各デバイス出力用 `_pages/` テンプレート展開スクリプト
-- ✅ `_includes/` テンプレートの text/pc/mobile 共通化
+- ✅ `_includes/` テンプレートの text/pc/mobile 共通化 or 分離支援
 
 ---
 
