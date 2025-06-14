@@ -90,7 +90,7 @@ audience:
   values:
     - internal
     - external
-  unused: true
+  unused: false
   description:  対象読者の区分（🌐=external, 🔒=internal）。internal = 内部向け / external = 外部公開向け。
     
 priority:
@@ -111,14 +111,14 @@ beta:
   type: boolean
   required: false
   default: false
-  unused: true
+  unused: false
   description: 実験的またはベータ版。不安定なコンテンツに視覚的ラベルを付ける用途で使用される。（🧪などのアイコン表示）。
 
 deprecated:
   type: boolean
   required: false
   default: false
-  unused: true
+  unused: false
   description: 非推奨・廃止予定（⚠アイコン付きで警告）。バッジ表示やスタイル上の警告に利用される。
 
 color:
@@ -146,14 +146,14 @@ private:
   type: boolean
   required: false
   default: false
-  unused: true
+  unused: false
   description: 内部資料や限定公開向けなど。基本的に外部公開しない。
     
 admin_only:
   type: boolean
   required: false
   default: false
-  unused: true
+  unused: false
   description: 管理者専用。一般閲覧者には非表示。
     
 hidden:
