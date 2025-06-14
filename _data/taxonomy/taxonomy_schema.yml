@@ -312,7 +312,7 @@ lang:
   unused: false
   description: |
     スクリプトで出力する*.mdのFrontmatterに設定。「output_lang:」の値。例：{ja/en}。
-    output制御によりスクリプトで動的設定され、Front Matter に出力される）
+    （output制御によりスクリプトで動的設定され、Front Matter に出力される）
   calculated: true
   values:
   - ja
@@ -357,7 +357,7 @@ permalink:
   default: null
   unused: false
   description: |
-    スクリプトで出力する*.mdのFrontmatterに設定。「output_layout_permalink:」の値。
+    スクリプトで出力する*.mdのFrontmatterに設定。「output_permalink_setting:」の値。
     （output制御によりスクリプトで動的設定され、Front Matter に出力される）
   calculated: true
   
