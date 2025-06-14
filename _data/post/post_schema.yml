@@ -60,14 +60,14 @@ images:
   unused: false
   description:  
   
-modified_timestamp:
+created_timestamp:
   type: string
   required: false
   default: ""
   unused: false
   description: timestamp(yyyymmddhhmm)
   
-created_timestamp:
+modified_timestamp:
   type: string
   required: false
   default: ""
