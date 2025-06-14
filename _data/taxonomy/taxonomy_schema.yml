@@ -143,68 +143,112 @@ aliases:
   description: |
     検索やslug補完のための別名指定。
     
-output_pc:
-  type: boolean
+output_device:
+  type: array
+  values: [pc, mobile, text]
   required: false
-  default: true
+  default: [pc, mobile, text]
   unused: false
-  description: スクリプトでの出力制御用。trueで該当する{device}構成に自動出力。（_pages/{device}/{lang}/{type}/*.md）
+  description: |
+    スクリプトでの出力制御用。リストにある{device}構成に自動出力。（_pages/{device}/{lang}/{type}/*.md）。
+    スクリプトで出力する*.mdのFrontmatter「device:」に設定。
   
-layout_pc:
-  type: string
+output_lang:
+  type: array
+  values: [ja, en]
   required: false
-  default: ""
+  default: [ja, en]
+  unused: false
+  description: |
+    スクリプトでの出力制御用。リストにある{lang}構成に自動出力。（_pages/{device}/{lang}/{type}/*.md）。
+    スクリプトで出力する*.mdのFrontmatter「lang:」に設定。
+  
+output_type:
+  type: array
+  values: [categories, tags]
+  required: false
+  default: [categories, tags]
+  unused: false
+  description: |
+    スクリプトでの出力制御用。リストにある{type}構成に自動出力。（_pages/{device}/{lang}/{type}/*.md）。
+    スクリプトで出力する*.mdのFrontmatter「type:」に設定。
+  
+output_layout_setting:
+  type: object
+  required: false
+  default: { pc: "taxonomy", mobile: "taxonomy", text: "taxonomy" }
   unused: false
   description: スクリプトで出力する*.mdのFrontmatter「layout:」に設定。
-
-permalink_pc:
-  type: string
+  
+output_permalink_setting:
+  type: object
   required: false
-  default: ""
+  default: { pc: "/{device}/{lang}/{type}/", mobile: "/{device}/{lang}/{type}/", text: "/{device}/{lang}/{type}/" }
   unused: false
   description: スクリプトで出力する*.mdのFrontmatter「permalink:」に設定。
   
-output_mobile:
-  type: boolean
-  required: false
-  default: true
-  unused: false
-  description:
+# output_pc:
+#   type: boolean
+#   required: false
+#   default: true
+#   unused: false
+#   description: スクリプトでの出力制御用。trueで該当する{device}構成に自動出力。（_pages/{device}/{lang}/{type}/*.md）
   
-layout_mobile:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description:
+# layout_pc:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description: スクリプトで出力する*.mdのFrontmatter「layout:」に設定。
 
-permalink_mobile:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description:
+# permalink_pc:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description: スクリプトで出力する*.mdのFrontmatter「permalink:」に設定。
   
-output_text:
-  type: boolean
-  required: false
-  default: true
-  unused: false
-  description:
+# output_mobile:
+#   type: boolean
+#   required: false
+#   default: true
+#   unused: false
+#   description:
   
-layout_text:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description:
+# layout_mobile:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
 
-permalink_text:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description:
+# permalink_mobile:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
+  
+# output_text:
+#   type: boolean
+#   required: false
+#   default: true
+#   unused: false
+#   description:
+  
+# layout_text:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
+
+# permalink_text:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
 
 # ----------
 # *.mdに追加するFrontmatter
@@ -213,38 +257,45 @@ permalink_text:
 device:
   type: string
   required: true
-  default: "text"
+  default: {output_device}
   unused: false
-  description: スクリプトで出力する*.mdのFrontmatterに設定。{pc/mobile/text}
+  description: スクリプトで出力する*.mdのFrontmatterに設定。「output_device:」の値。例：pc/mobile/text。
   
 lang:
   type: string
   required: true
-  default: "ja"
+  default: {output_lang}
   unused: false
-  description: スクリプトで出力する*.mdのFrontmatterに設定。{ja/en}
+  description: スクリプトで出力する*.mdのFrontmatterに設定。「output_lang:」の値。例：{ja/en}。
   
 type:
-  type: enum
-  values:
-    - categories
-    - tags
-  required: false
-  default: categories
+  type: string
+  required: true
+  default: {output_type}
   unused: false
-  description: スクリプトで出力する*.mdのFrontmatterに設定。{categories/tags}
+  description: スクリプトで出力する*.mdのFrontmatterに設定。「output_type:」の値。例：{categories/tags}。
+  
+# type:
+#   type: enum
+#   values:
+#     - categories
+#     - tags
+#   required: false
+#   default: {output_type}
+#   unused: false
+#   description: スクリプトで出力する*.mdのFrontmatterに設定。「output_type:」の値。例：{categories/tags}。
 
 layout:
   type: string
   required: false
-  default: ""
+  default: {output_layout_setting}
   unused: false
-  description: スクリプトで出力する*.mdのFrontmatterに設定。
+  description: スクリプトで出力する*.mdのFrontmatterに設定。「output_layout_setting:」の値。
 
 permalink:
   type: string
   required: false
-  default: ""
+  default: {output_permalink_setting}
   unused: false
-  description: スクリプトで出力する*.mdのFrontmatterに設定。
+  description: スクリプトで出力する*.mdのFrontmatterに設定。「output_layout_permalink:」の値。
   

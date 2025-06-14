@@ -1,40 +1,42 @@
-# Taxonomy 拡張テンプレート（_data/taxonomy/categories.yml or tags.yml）
-
-# 多言語・UI・出力制御に対応した構造（共通スキーマ）
 
 - slug: test
   name:
     ja: テスト
     en: test
-  description:         # タグやカテゴリの説明文。一覧や個別ページで表示
-    ja: これはテストカテゴリの説明です。
-    en: This is the description for the test category.
-  link: ""             # リンク先を上書きする場合に使用
-  audience:            # internal = 内部向け / external = 公開向け
-    - external
-  priority: 1          # 並び順制御用（小さいほど上位）
-  featured: false      # 注目トピックとして強調表示（★アイコン等）
-  beta: false          # 実験中の分類（🧪などのアイコン表示）
-  deprecated: false    # 非推奨・廃止予定（⚠アイコン付きで警告）
-  color: "#3366cc"     # UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード
-  icon: "flask"        # 表示用アイコン（FontAwesome、emoji、クラスなどを想定）
-  tooltip:             # ホバー時に表示する補足情報。バッジやアイコンなどに対応
+  title:
     ja: テスト
     en: test
-  private: false       # 内部資料や限定公開向けなど。基本的に外部公開しない分類
-  admin_only: false    # 管理者用。UIには原則表示されない
-  hidden: false        # 完全に表示対象外とする（一覧・記事ページすべてに非表示）。trueならページや一覧に出力しない
-  hidden_reason:       # 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）
+  description:
+    ja: これはテストカテゴリの説明です。
+    en: This is the description for the test category.
+  link: ""
+  audience:
+    - external
+  priority: 5
+  featured: false
+  beta: false
+  deprecated: false
+  color: "#3366cc"
+  icon: "flask"
+  tooltip:
+    ja: テスト
+    en: test
+  private: false
+  admin_only: false
+  hidden: false
+  hidden_reason:
     ja:
     en:
-  draft: false         # trueなら仮出力。本番に含めない
-  output_text: true    # text構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
-  output_pc: true      # PC構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
-  output_mobile: true  # モバイル構成に出力対象とする。Frontmatterで制御。Liquidテンプレートにロジックなし。
-  aliases:
-    - test
-    - テスト                     # 検索やslug補完のための別名指定
-                                # Liquidテンプレートがタクソノミーリストを表示する際に、エイリアスを表示したり、
-                                # それに基づいて何かをフィルタリングしたりするロジックは現在のところはなく、
-                                # Jekyllのサイト検索機能の検索インデックスの生成ロジックでの利用や、外部ツール連携などで使用する可能性あり
-                                
+  draft: false
+  aliases: []
+  output_device: [pc, mobile, text]
+  output_lang: [ja, en]
+  output_type: [categories]
+  output_layout_setting: { pc: "taxonomy", mobile: "taxonomy", text: "taxonomy" }
+  output_permalink_setting: { pc: "/{device}/{lang}/{type}/", mobile: "/{device}/{lang}/{type}/", text: "/{device}/{lang}/{type}/" }
+  device: {output_device}
+  lang:  {output_lang}
+  type: {output_type}
+  layout: {output_layout_setting}
+  permalink: {output_permalink_setting}
+  
