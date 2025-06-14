@@ -136,9 +136,9 @@ icon:
   description: 表示用アイコン（FontAwesome、emoji、クラスなどを想定）。
     
 tooltip:
-  type: object
+  type: string
   required: false
-  default: { ja: "", en: "" }
+  default: ""
   unused: false
   description: ホバー時に表示する補足情報。バッジやアイコンなどに対応。多言語対応。
     
@@ -167,9 +167,9 @@ hidden:
     URL 直打ちでのアクセスは可能。
 
 hidden_reason:
-  type: object
+  type: string
   required: false
-  default: { ja: "", en: "" }
+  default: ""
   unused: false
   description: 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）。
 
@@ -181,69 +181,93 @@ draft:
   description: |
     下書き状態。通常は表示されず、ビルド対象にも含めない。
     Jekyll の `draft: true` 機能が使えない場合も想定し、Liquid による制御も行う。
-    
-output_pc:
-  type: boolean
-  required: false
-  default: true
-  unused: false
-  description: スクリプトでの出力制御用。trueで該当する{device}構成に自動出力。（_pages/{device}/{lang}/*.md）。Frontmatterで制御。
 
-layout_pc:
-  type: string
+output_device:
+  type: array
+  values: [pc, mobile, text]
   required: false
-  default: ""
+  default: [pc, mobile, text]
+  unused: false
+  description: |
+    スクリプトでの出力制御用。リストにある{device}構成に自動出力。（_pages/{device}/{lang}/*.md）。
+    スクリプトで出力する*.mdのFrontmatter「device:」に設定。
+
+output_layout_setting:
+  type: object
+  required: false
+  default: { pc: "post", mobile: "mobile-post", text: "text-post" }
   unused: false
   description: スクリプトで出力する*.mdのFrontmatter「layout:」に設定。
 
-permalink_pc:
-  type: string
+output_permalink_setting:
+  type: object
   required: false
-  default: ""
+  default: { pc: "/{device}/{lang}/", mobile: "/{device}/{lang}/", text: "/{device}/{lang}/" }
   unused: false
   description: スクリプトで出力する*.mdのFrontmatter「permalink:」に設定。
   
-output_mobile:
-  type: boolean
-  required: false
-  default: true
-  unused: false
-  description:
+# output_pc:
+#   type: boolean
+#   required: false
+#   default: true
+#   unused: false
+#   description: スクリプトでの出力制御用。trueで該当する{device}構成に自動出力。（_pages/{device}/{lang}/*.md）。Frontmatterで制御。
 
-layout_mobile:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description:
+# layout_pc:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description: スクリプトで出力する*.mdのFrontmatter「layout:」に設定。
 
-permalink_mobile:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description:
+# permalink_pc:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description: スクリプトで出力する*.mdのFrontmatter「permalink:」に設定。
   
-output_text:
-  type: boolean
-  required: false
-  default: true
-  unused: false
-  description:
+# output_mobile:
+#   type: boolean
+#   required: false
+#   default: true
+#   unused: false
+#   description:
 
-layout_text:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description:
+# layout_mobile:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
 
-permalink_text:
-  type: string
-  required: false
-  default: ""
-  unused: false
-  description:
+# permalink_mobile:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
+  
+# output_text:
+#   type: boolean
+#   required: false
+#   default: true
+#   unused: false
+#   description:
+
+# layout_text:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
+
+# permalink_text:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
 
 lang:
   type: string
@@ -259,23 +283,23 @@ lang:
 device:
   type: string
   required: true
-  default: "text"
+  default: {output_device}
   unused: false
-  description: スクリプトで出力する*.mdのFrontmatterに設定。{pc/mobile/text}
+  description: スクリプトで出力する*.mdのFrontmatterに設定。「output_device:」の値。例：{pc/mobile/text}。
   
 layout:
   type: string
   required: false
-  default: ""
+  default: {output_layout_setting}
   unused: false
-  description: スクリプトで出力する*.mdのFrontmatterに設定。
+  description: スクリプトで出力する*.mdのFrontmatterに設定。「output_layout_setting:」の値。
 
 permalink:
   type: string
   required: false
-  default: ""
+  default: {output_permalink_setting}
   unused: false
-  description: スクリプトで出力する*.mdのFrontmatterに設定。
+  description: スクリプトで出力する*.mdのFrontmatterに設定。「output_layout_permalink:」の値。
 
 # ----------
 # Jekyll
