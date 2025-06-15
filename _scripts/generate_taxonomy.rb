@@ -87,7 +87,16 @@ all_entries.each do |entry|
     path = File.join(OUTPUT_PAGES, target["device"], target["lang"], target["type"], "#{target["slug"]}.md")
     if seen_paths.include?(path)
       puts "[WARN] Conflict: duplicate slug for #{path}"
-      conflicts << { "path" => path, "slug" => target["slug"], "type" => target["type"], "lang" => target["lang"], "device" => target["device"] }
+      conflicts << {
+  "path" => path,
+  "slug" => target["slug"],
+  "type" => target["type"],
+  "lang" => target["lang"],
+  "device" => target["device"],
+  "name" => target["name"],
+  "title" => target["title"],
+  "description" => target["description"]
+}
       next
     end
     seen_paths << path
