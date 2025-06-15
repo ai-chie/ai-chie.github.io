@@ -56,6 +56,11 @@ def write_markdown(target)
   dir = File.join(OUTPUT_PAGES, target["device"], target["lang"], target["type"])
   FileUtils.mkdir_p(dir)
   FileUtils.touch(File.join(dir, ".keep"))
+  if target["slug"].to_s.strip.empty?
+  puts "[ERROR] Missing slug in entry: #{target.inspect}"
+  next
+end
+
   path = File.join(dir, "#{target["slug"]}.md")
   puts "[WRITE] #{path}"
   File.write(path, <<~FRONTMATTER)
