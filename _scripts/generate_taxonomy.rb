@@ -34,23 +34,23 @@ def expand_targets(entry)
   langs   = entry["output_lang"] || []
   types   = entry["output_type"] || []
 
-  combinations = devices.product(langs, types)
-  puts "[LOG] Entry: slug=#{entry["slug"]} → Generating #{combinations.size} variants"
-  combinations.map do |device, lang, type|
+  devices.product(langs, types).map do |device, lang, type|
     layout = entry["output_layout_setting"][device]
     permalink_template = entry["output_permalink_setting"][device]
     slug = entry["slug"]
     {
-      "slug"      => slug,
-      "name"      => entry["name"][lang],
-      "device"    => device,
-      "lang"      => lang,
-      "type"      => type,
-      "layout"    => layout,
-      "permalink" => permalink_template.gsub("{device}", device)
-                                       .gsub("{lang}", lang)
-                                       .gsub("{type}", type)
-                                       .gsub("{slug}", slug)
+      "slug"        => slug,
+      "name"        => entry["name"][lang],
+      "title"       => entry["title"][lang],
+      "description" => entry["description"][lang],
+      "device"      => device,
+      "lang"        => lang,
+      "type"        => type,
+      "layout"      => layout,
+      "permalink"   => permalink_template.gsub("{device}", device)
+                                         .gsub("{lang}", lang)
+                                         .gsub("{type}", type)
+                                         .gsub("{slug}", slug)
     }
   end
 end
@@ -61,11 +61,13 @@ def write_markdown(target)
   FileUtils.touch(File.join(dir, ".keep"))
 
   path = File.join(dir, "#{target["slug"]}.md")
-  puts "[WRITE] #{path}"  # ← ログ出力
+  puts "[WRITE] #{path}"
   File.write(path, <<~FRONTMATTER)
     ---
     slug: #{target["slug"].inspect}
     name: #{target["name"].inspect}
+    title: #{target["title"].inspect}
+    description: #{target["description"].inspect}
     device: #{target["device"].inspect}
     lang: #{target["lang"].inspect}
     type: #{target["type"].inspect}
