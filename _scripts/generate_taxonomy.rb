@@ -67,7 +67,7 @@ def write_markdown(target)
     "title" => target["title"],
     "description" => target["description"]
   }
-  next
+    next
 end
 
   path = File.join(dir, "#{target["slug"]}.md")
