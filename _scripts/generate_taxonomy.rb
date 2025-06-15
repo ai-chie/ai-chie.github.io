@@ -181,8 +181,8 @@ base_dirs.each do |dir|
 end
 
 # YAML出力
-File.write("#{DATA_DIR}/generated_taxonomy.yml", { "generated" => generated }.to_yaml)
-File.write("#{DATA_DIR}/missing_slug_terms.yml", { "missing" => missing }.to_yaml)
-File.write("#{DATA_DIR}/slug_conflicts.yml", { "conflicts" => conflicts }.to_yaml)
+# File.write("#{DATA_DIR}/taxonomy/script_output/generated_taxonomy.yml", { "generated" => generated }.to_yaml)
+File.write("#{DATA_DIR}/taxonomy/script_output/missing_slug_terms.yml", { "missing" => missing }.to_yaml)
+File.write("#{DATA_DIR}/taxonomy/script_output/slug_conflicts.yml", { "conflicts" => conflicts }.to_yaml)
 
 puts "[DONE] taxonomy ページと中間データを出力しました。"
