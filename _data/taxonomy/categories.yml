@@ -48,7 +48,7 @@
     mobile: /{device}/{lang}/{type}/
     text: /{device}/{lang}/{type}/
   
-- slug: test2
+- slug: test1
   name:
     ja: テスト２
     en: test2
