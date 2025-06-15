@@ -25,7 +25,7 @@ head_content: "{% include head-minimal.html %}" # AI向けhead部品を指定
     {{ content }}
 
     {% for type_item in types_list %}
-        <!-- {# <h2>{{ common_ui.title[type][lang] }}</h2> #} -->
+        <!-- {# <h2>{{ taxonomy_ui.title[type][lang] }}</h2> #} -->
         {% include taxonomy-list.html
             device=device
             lang=lang
