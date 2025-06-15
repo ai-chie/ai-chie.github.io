@@ -233,6 +233,11 @@ _proj_mgmt:
 
   script:
 
+    output:
+
+      __files__:
+      - [proj-dir-tree.yml, _proj_mgmt/script/output/proj-dir-tree.yml]
+
     __files__:
     - [generate_proj_dir_tree.py, _proj_mgmt/script/generate_proj_dir_tree.py]
 
@@ -267,7 +272,7 @@ docs:
 
   __files__:
   - [.keep, docs/.keep]
-  - [design_202506150515.md, docs/design_202506150515.md]
+  - [design_202506152046.md, docs/design_202506152046.md]
   - [project_purpose_notes_202506150024.md, docs/project_purpose_notes_202506150024.md]
 
 root_files:
