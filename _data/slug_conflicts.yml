@@ -1,1 +1,32 @@
---- {}
+---
+conflicts:
+- path: _pages/pc/ja/categories/test1.md
+  slug: test1
+  type: categories
+  lang: ja
+  device: pc
+- path: _pages/pc/en/categories/test1.md
+  slug: test1
+  type: categories
+  lang: en
+  device: pc
+- path: _pages/mobile/ja/categories/test1.md
+  slug: test1
+  type: categories
+  lang: ja
+  device: mobile
+- path: _pages/mobile/en/categories/test1.md
+  slug: test1
+  type: categories
+  lang: en
+  device: mobile
+- path: _pages/text/ja/categories/test1.md
+  slug: test1
+  type: categories
+  lang: ja
+  device: text
+- path: _pages/text/en/categories/test1.md
+  slug: test1
+  type: categories
+  lang: en
+  device: text
