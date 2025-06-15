@@ -59,24 +59,68 @@ def write_markdown(target)
   FileUtils.touch(File.join(dir, ".keep"))
   path = File.join(dir, "#{target["slug"]}.md")
   puts "[WRITE] #{path}"
-  File.write(path, <<~FRONTMATTER)
-    ---
-    slug: #{target["slug"].inspect}
-    name: #{target["name"].inspect}
-    title: #{target["title"].inspect}
-    description: #{target["description"].inspect}
-    device: #{target["device"].inspect}
-    lang: #{target["lang"].inspect}
-    type: #{target["type"].inspect}
-    layout: #{target["layout"].inspect}
-    permalink: #{target["permalink"].inspect}
-    ---
-  FRONTMATTER
+  begin
+    File.write(path, <<~FRONTMATTER)
+      ---
+      slug: #{target["slug"].inspect}
+      name: #{target["name"].inspect}
+      title: #{target["title"].inspect}
+      description: #{target["description"].inspect}
+      device: #{target["device"].inspect}
+      lang: #{target["lang"].inspect}
+      type: #{target["type"].inspect}
+      layout: #{target["layout"].inspect}
+      permalink: #{target["permalink"].inspect}
+      ---
+    FRONTMATTER
+  rescue => e
+    puts "[ERROR] Failed to write #{path}: #{e.message}"
+  end
 end
 
 schema = load_yaml(SCHEMA_FILE)
-categories = load_yaml(CATEGORIES_FILE).map { |entry| apply_schema(entry, schema).merge("output_type" => ["categories"]) }
-tags = load_yaml(TAGS_FILE).map { |entry| apply_schema(entry, schema).merge("output_type" => ["tags"]) }
+
+# スキーマ検証 + 翻訳言語不足 + スキーマ適用
+categories = load_yaml(CATEGORIES_FILE).map do |entry|
+  unexpected_keys = entry.keys - schema.keys
+  unless unexpected_keys.empty?
+    puts "[WARN] Unexpected keys in entry (#{entry["slug"] || "no-slug"}): #{unexpected_keys}"
+  end
+
+  %w[name title description].each do |field|
+    value = entry[field]
+    next unless value.is_a?(Hash)
+    langs = entry["output_lang"] || []
+    langs.each do |lang|
+      unless value.key?(lang)
+        puts "[WARN] Missing #{field}[#{lang}] in slug=#{entry["slug"]}"
+      end
+    end
+  end
+
+  apply_schema(entry, schema).merge("output_type" => ["categories"])
+end
+
+tags = load_yaml(TAGS_FILE).map do |entry|
+  unexpected_keys = entry.keys - schema.keys
+  unless unexpected_keys.empty?
+    puts "[WARN] Unexpected keys in entry (#{entry["slug"] || "no-slug"}): #{unexpected_keys}"
+  end
+
+  %w[name title description].each do |field|
+    value = entry[field]
+    next unless value.is_a?(Hash)
+    langs = entry["output_lang"] || []
+    langs.each do |lang|
+      unless value.key?(lang)
+        puts "[WARN] Missing #{field}[#{lang}] in slug=#{entry["slug"]}"
+      end
+    end
+  end
+
+  apply_schema(entry, schema).merge("output_type" => ["tags"])
+end
+
 all_entries = categories + tags
 
 generated = []
@@ -100,9 +144,7 @@ all_entries.each do |entry|
   end
 
   expand_targets(entry).each do |target|
-    if target["slug"].to_s.strip.empty?
-      next  # 二重防止
-    end
+    next if target["slug"].to_s.strip.empty?
 
     path = File.join(OUTPUT_PAGES, target["device"], target["lang"], target["type"], "#{target["slug"]}.md")
     if seen_paths.include?(path)
@@ -126,7 +168,7 @@ all_entries.each do |entry|
   end
 end
 
-# 不要ファイルの削除
+# 不要な.mdファイルの削除
 expected_paths = generated.map { |t| t["path"] }.to_set
 base_dirs = Dir.glob("#{OUTPUT_PAGES}/*/*/*").select { |f| File.directory?(f) }
 base_dirs.each do |dir|
@@ -138,7 +180,7 @@ base_dirs.each do |dir|
   end
 end
 
-# 中間ファイル出力
+# YAML出力
 File.write("#{DATA_DIR}/generated_taxonomy.yml", { "generated" => generated }.to_yaml)
 File.write("#{DATA_DIR}/missing_slug_terms.yml", { "missing" => missing }.to_yaml)
 File.write("#{DATA_DIR}/slug_conflicts.yml", { "conflicts" => conflicts }.to_yaml)
