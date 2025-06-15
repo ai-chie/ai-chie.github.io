@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'yaml'
 require 'fileutils'
+require 'set'
 
 # ---------- 設定 ----------
 TAXONOMY_DIR = "_data/taxonomy"
@@ -97,6 +98,20 @@ all_entries.each do |entry|
     generated << target.merge("path" => File.join(
       OUTPUT_PAGES, target["device"], target["lang"], target["type"], "#{target["slug"]}.md"
     ))
+  end
+end
+
+# ---------- 不要なファイルの削除 ----------
+expected_paths = generated.map { |t| t["path"] }.to_set
+
+base_dirs = Dir.glob("#{OUTPUT_PAGES}/*/*/*").select { |f| File.directory?(f) }
+
+base_dirs.each do |dir|
+  Dir.glob(File.join(dir, "*.md")).each do |file|
+    unless expected_paths.include?(file)
+      puts "[DELETE] #{file}"
+      File.delete(file)
+    end
   end
 end
 
