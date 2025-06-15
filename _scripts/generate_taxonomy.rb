@@ -19,12 +19,9 @@ rescue => e
 end
 
 def apply_schema(entry, schema)
-  result = {}
-  if !entry.is_a?(Hash)
-    warn "[WARN] Unexpected entry format: #{entry.inspect}"
-    return result
-  end
+  return {} unless entry.is_a?(Hash)
 
+  result = {}
   schema.each do |key, meta|
     next if meta["calculated"]
     result[key] = entry.key?(key) ? entry[key] : meta["default"]
