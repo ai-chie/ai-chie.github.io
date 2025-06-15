@@ -2,7 +2,7 @@
 slug:
   type: string
   required: true
-  default: unknown
+  default:
   unused: false
   description: 【必須】タグやカテゴリのslug。
 
