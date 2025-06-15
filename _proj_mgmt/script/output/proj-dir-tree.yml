@@ -1,0 +1,283 @@
+
+.github:
+
+  workflows:
+
+    proj_mgmt_workflows:
+
+      __files__:
+      - [build_and_commit.yml, .github/workflows/proj_mgmt_workflows/build_and_commit.yml]
+      - [gemfile-lock-artifact.yml, .github/workflows/proj_mgmt_workflows/gemfile-lock-artifact.yml]
+      - [yaml-to-json.yml, .github/workflows/proj_mgmt_workflows/yaml-to-json.yml]
+
+    __files__:
+    - [generate-proj-dir-tree.yml, .github/workflows/generate-proj-dir-tree.yml]
+    - [generate-taxonomy.yml, .github/workflows/generate-taxonomy.yml]
+
+_admin:
+
+  data:
+
+    __files__:
+    - [allowed_categories_list.yml, _admin/data/allowed_categories_list.yml]
+    - [allowed_tags_list.yml, _admin/data/allowed_tags_list.yml]
+
+  generated:
+
+    __files__:
+    - [allowed_categories_list.json, _admin/generated/allowed_categories_list.json]
+    - [allowed_tags_list.json, _admin/generated/allowed_tags_list.json]
+
+  scripts:
+
+    __files__:
+    - [convert-yaml-to-json.js, _admin/scripts/convert-yaml-to-json.js]
+    - [package.json, _admin/scripts/package.json]
+
+  __files__:
+  - [allowed_categories-tags-lists.js, _admin/allowed_categories-tags-lists.js]
+  - [autofill-date.js, _admin/autofill-date.js]
+  - [autofill-uuid.js, _admin/autofill-uuid.js]
+  - [index.html, _admin/index.html]
+  - [uuid.js, _admin/uuid.js]
+
+_data:
+
+  lang:
+
+    __files__:
+    - [taxonomy_badge.yml, _data/lang/taxonomy_badge.yml]
+    - [taxonomy_ui.yml, _data/lang/taxonomy_ui.yml]
+    - [taxonomy_warning.yml, _data/lang/taxonomy_warning.yml]
+
+  post:
+
+    __files__:
+    - [post_schema.yml, _data/post/post_schema.yml]
+
+  taxonomy:
+
+    script_output:
+
+      __files__:
+      - [missing_slug_terms.yml, _data/taxonomy/script_output/missing_slug_terms.yml]
+      - [slug_conflicts.yml, _data/taxonomy/script_output/slug_conflicts.yml]
+
+    __files__:
+    - [categories.yml, _data/taxonomy/categories.yml]
+    - [tags.yml, _data/taxonomy/tags.yml]
+    - [taxonomy_schema.yml, _data/taxonomy/taxonomy_schema.yml]
+
+_export:
+
+  __files__:
+  - [.keep, _export/.keep]
+
+_includes:
+
+  contents:
+
+    __files__:
+    - [welcome.ja.md, _includes/contents/welcome.ja.md]
+
+  __files__:
+  - [head-meta.html, _includes/head-meta.html]
+  - [head-minimal.html, _includes/head-minimal.html]
+  - [lang_switch.html, _includes/lang_switch.html]
+  - [post-attribute-check.html, _includes/post-attribute-check.html]
+  - [post-list-item.html, _includes/post-list-item.html]
+  - [post-list.html, _includes/post-list.html]
+  - [taxonomy-badge.html, _includes/taxonomy-badge.html]
+  - [taxonomy-list-block.html, _includes/taxonomy-list-block.html]
+  - [taxonomy-list.html, _includes/taxonomy-list.html]
+  - [taxonomy_data_preparer.html, _includes/taxonomy_data_preparer.html]
+  - [taxonomy_list_generator.html, _includes/taxonomy_list_generator.html]
+
+_layouts:
+
+  __files__:
+  - [base.html, _layouts/base.html]
+  - [default.html, _layouts/default.html]
+  - [post.html, _layouts/post.html]
+  - [text-post.html, _layouts/text-post.html]
+  - [text-taxonomy-index.html, _layouts/text-taxonomy-index.html]
+  - [text-taxonomy.html, _layouts/text-taxonomy.html]
+
+_log:
+
+  __files__:
+  - [.keep, _log/.keep]
+
+_pages:
+
+  mobile:
+
+    en:
+
+      categories:
+
+        __files__:
+        - [.keep, _pages/mobile/en/categories/.keep]
+        - [test1.md, _pages/mobile/en/categories/test1.md]
+        - [test2.md, _pages/mobile/en/categories/test2.md]
+
+      tags:
+
+        __files__:
+        - [.keep, _pages/mobile/en/tags/.keep]
+        - [sample1.md, _pages/mobile/en/tags/sample1.md]
+        - [sample2.md, _pages/mobile/en/tags/sample2.md]
+
+    ja:
+
+      categories:
+
+        __files__:
+        - [.keep, _pages/mobile/ja/categories/.keep]
+        - [test1.md, _pages/mobile/ja/categories/test1.md]
+        - [test2.md, _pages/mobile/ja/categories/test2.md]
+
+      tags:
+
+        __files__:
+        - [.keep, _pages/mobile/ja/tags/.keep]
+        - [sample1.md, _pages/mobile/ja/tags/sample1.md]
+        - [sample2.md, _pages/mobile/ja/tags/sample2.md]
+
+  pc:
+
+    en:
+
+      categories:
+
+        __files__:
+        - [.keep, _pages/pc/en/categories/.keep]
+        - [test1.md, _pages/pc/en/categories/test1.md]
+        - [test2.md, _pages/pc/en/categories/test2.md]
+
+      tags:
+
+        __files__:
+        - [.keep, _pages/pc/en/tags/.keep]
+        - [sample1.md, _pages/pc/en/tags/sample1.md]
+        - [sample2.md, _pages/pc/en/tags/sample2.md]
+
+    ja:
+
+      categories:
+
+        __files__:
+        - [.keep, _pages/pc/ja/categories/.keep]
+        - [test1.md, _pages/pc/ja/categories/test1.md]
+        - [test2.md, _pages/pc/ja/categories/test2.md]
+
+      tags:
+
+        __files__:
+        - [.keep, _pages/pc/ja/tags/.keep]
+        - [sample1.md, _pages/pc/ja/tags/sample1.md]
+        - [sample2.md, _pages/pc/ja/tags/sample2.md]
+
+  text:
+
+    en:
+
+      categories:
+
+        __files__:
+        - [.keep, _pages/text/en/categories/.keep]
+        - [test1.md, _pages/text/en/categories/test1.md]
+        - [test2.md, _pages/text/en/categories/test2.md]
+
+      tags:
+
+        __files__:
+        - [.keep, _pages/text/en/tags/.keep]
+        - [sample1.md, _pages/text/en/tags/sample1.md]
+        - [sample2.md, _pages/text/en/tags/sample2.md]
+
+    ja:
+
+      categories:
+
+        __files__:
+        - [.keep, _pages/text/ja/categories/.keep]
+        - [test1.md, _pages/text/ja/categories/test1.md]
+        - [test2.md, _pages/text/ja/categories/test2.md]
+
+      tags:
+
+        __files__:
+        - [.keep, _pages/text/ja/tags/.keep]
+        - [sample1.md, _pages/text/ja/tags/sample1.md]
+        - [sample2.md, _pages/text/ja/tags/sample2.md]
+
+      __files__:
+      - [index.md, _pages/text/ja/index.md]
+
+_posts:
+
+  __files__:
+  - [2025-05-30-example.ja.md, _posts/2025-05-30-example.ja.md]
+
+_proj_mgmt:
+
+  ref_protected:
+
+    __files__:
+    - [2025-05-30-example.ja_template.md, _proj_mgmt/ref_protected/2025-05-30-example.ja_template.md]
+    - [categories_template.yml, _proj_mgmt/ref_protected/categories_template.yml]
+    - [post_schema_template.yml, _proj_mgmt/ref_protected/post_schema_template.yml]
+    - [tags_template.yml, _proj_mgmt/ref_protected/tags_template.yml]
+    - [taxonomy_schema_template.yml, _proj_mgmt/ref_protected/taxonomy_schema_template.yml]
+
+  script:
+
+    __files__:
+    - [generate_proj_dir_tree.py, _proj_mgmt/script/generate_proj_dir_tree.py]
+
+_scripts:
+
+  __files__:
+  - [generate_sitemap_text.rb, _scripts/generate_sitemap_text.rb]
+  - [generate_taxonomy.rb, _scripts/generate_taxonomy.rb]
+
+assets:
+
+  images:
+
+    article:
+
+      2025-05-30-example.en:
+
+        __files__:
+        - [image_1-en.png, assets/images/article/2025-05-30-example.en/image_1-en.png]
+
+      2025-05-30-example.ja:
+
+        __files__:
+        - [image_1-ja.png, assets/images/article/2025-05-30-example.ja/image_1-ja.png]
+
+  js:
+
+    __files__:
+    - [.keep, assets/js/.keep]
+
+docs:
+
+  __files__:
+  - [.keep, docs/.keep]
+  - [design_202506150515.md, docs/design_202506150515.md]
+  - [project_purpose_notes_202506150024.md, docs/project_purpose_notes_202506150024.md]
+
+root_files:
+
+  __files__:
+  - [.gitattributes, .gitattributes]
+  - [Gemfile, Gemfile]
+  - [Gemfile.lock, Gemfile.lock]
+  - [README.md, README.md]
+  - [_config.yml, _config.yml]
+  - [_config_text.yml, _config_text.yml]
+  - [robots.txt, robots.txt]
+  - [sitemap.xml, sitemap.xml]
