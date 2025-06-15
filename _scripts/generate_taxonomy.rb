@@ -28,6 +28,8 @@ def apply_schema(entry, schema)
 end
 
 def expand_targets(entry)
+  return [] if entry["slug"].to_s.strip.empty?  # 安全ガード
+
   devices = entry["output_device"] || []
   langs   = entry["output_lang"] || []
   types   = entry["output_type"] || []
@@ -44,10 +46,11 @@ def expand_targets(entry)
       "lang"        => lang,
       "type"        => type,
       "layout"      => layout,
-      "permalink"   => permalink_template.gsub("{device}", device)
-                                         .gsub("{lang}", lang)
-                                         .gsub("{type}", type)
-                                         .gsub("{slug}", slug)
+      "permalink"   => permalink_template.to_s
+                                          .gsub("{device}", device)
+                                          .gsub("{lang}", lang)
+                                          .gsub("{type}", type)
+                                          .gsub("{slug}", slug)
     }
   end
 end
@@ -121,7 +124,7 @@ all_entries.each do |entry|
   end
 end
 
-# 不要ファイル削除
+# 不要ファイルの削除
 expected_paths = generated.map { |t| t["path"] }.to_set
 base_dirs = Dir.glob("#{OUTPUT_PAGES}/*/*/*").select { |f| File.directory?(f) }
 base_dirs.each do |dir|
