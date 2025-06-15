@@ -56,20 +56,6 @@ def write_markdown(target)
   dir = File.join(OUTPUT_PAGES, target["device"], target["lang"], target["type"])
   FileUtils.mkdir_p(dir)
   FileUtils.touch(File.join(dir, ".keep"))
-  if target["slug"].to_s.strip.empty?
-  puts "[ERROR] Missing slug in entry: #{target.inspect}"
-  missing << {
-    "slug" => nil,
-    "type" => target["type"],
-    "lang" => target["lang"],
-    "device" => target["device"],
-    "name" => target["name"],
-    "title" => target["title"],
-    "description" => target["description"]
-  }
-    next
-end
-
   path = File.join(dir, "#{target["slug"]}.md")
   puts "[WRITE] #{path}"
   File.write(path, <<~FRONTMATTER)
@@ -99,28 +85,43 @@ seen_paths = Set.new
 
 all_entries.each do |entry|
   expand_targets(entry).each do |target|
+    if target["slug"].to_s.strip.empty?
+      puts "[ERROR] Missing slug in entry: #{target.inspect}"
+      missing << {
+        "slug" => nil,
+        "type" => target["type"],
+        "lang" => target["lang"],
+        "device" => target["device"],
+        "name" => target["name"],
+        "title" => target["title"],
+        "description" => target["description"]
+      }
+      next
+    end
+
     path = File.join(OUTPUT_PAGES, target["device"], target["lang"], target["type"], "#{target["slug"]}.md")
     if seen_paths.include?(path)
       puts "[WARN] Conflict: duplicate slug for #{path}"
       conflicts << {
-  "path" => path,
-  "slug" => target["slug"],
-  "type" => target["type"],
-  "lang" => target["lang"],
-  "device" => target["device"],
-  "name" => target["name"],
-  "title" => target["title"],
-  "description" => target["description"]
-}
+        "path" => path,
+        "slug" => target["slug"],
+        "type" => target["type"],
+        "lang" => target["lang"],
+        "device" => target["device"],
+        "name" => target["name"],
+        "title" => target["title"],
+        "description" => target["description"]
+      }
       next
     end
+
     seen_paths << path
     write_markdown(target)
     generated << target.merge("path" => path)
   end
 end
 
-# 不要ファイルの削除
+# 不要ファイル削除
 expected_paths = generated.map { |t| t["path"] }.to_set
 base_dirs = Dir.glob("#{OUTPUT_PAGES}/*/*/*").select { |f| File.directory?(f) }
 base_dirs.each do |dir|
@@ -132,7 +133,7 @@ base_dirs.each do |dir|
   end
 end
 
-# 中間出力
+# 中間ファイル出力
 File.write("#{DATA_DIR}/generated_taxonomy.yml", { "generated" => generated }.to_yaml)
 File.write("#{DATA_DIR}/missing_slug_terms.yml", { "missing" => missing }.to_yaml)
 File.write("#{DATA_DIR}/slug_conflicts.yml", { "conflicts" => conflicts }.to_yaml)
