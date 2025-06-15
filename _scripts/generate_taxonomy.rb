@@ -58,6 +58,15 @@ def write_markdown(target)
   FileUtils.touch(File.join(dir, ".keep"))
   if target["slug"].to_s.strip.empty?
   puts "[ERROR] Missing slug in entry: #{target.inspect}"
+  missing << {
+    "slug" => nil,
+    "type" => target["type"],
+    "lang" => target["lang"],
+    "device" => target["device"],
+    "name" => target["name"],
+    "title" => target["title"],
+    "description" => target["description"]
+  }
   next
 end
 
@@ -85,6 +94,7 @@ all_entries = categories + tags
 
 generated = []
 conflicts = []
+missing = []
 seen_paths = Set.new
 
 all_entries.each do |entry|
@@ -124,7 +134,7 @@ end
 
 # 中間出力
 File.write("#{DATA_DIR}/generated_taxonomy.yml", { "generated" => generated }.to_yaml)
-File.write("#{DATA_DIR}/missing_slug_terms.yml", {}.to_yaml)
+File.write("#{DATA_DIR}/missing_slug_terms.yml", { "missing" => missing }.to_yaml)
 File.write("#{DATA_DIR}/slug_conflicts.yml", { "conflicts" => conflicts }.to_yaml)
 
 puts "[DONE] taxonomy ページと中間データを出力しました。"

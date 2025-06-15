@@ -1,6 +1,6 @@
 # スキーマ定義：taxonomy_schema.yml
 
-- slug: test1
+- slug:
   name:
     ja: テスト１
     en: test1

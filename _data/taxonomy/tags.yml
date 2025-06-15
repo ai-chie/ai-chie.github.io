@@ -48,7 +48,7 @@
     mobile: /{device}/{lang}/{type}/
     text: /{device}/{lang}/{type}/
 
-- slug: sample2
+- slug: sample1
   name:
     ja: サンプル２
     en: sample2
