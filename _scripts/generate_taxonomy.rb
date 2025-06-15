@@ -20,6 +20,11 @@ end
 
 def apply_schema(entry, schema)
   result = {}
+  if !entry.is_a?(Hash)
+    warn "[WARN] Unexpected entry format: #{entry.inspect}"
+    return result
+  end
+
   schema.each do |key, meta|
     next if meta["calculated"]
     result[key] = entry.key?(key) ? entry[key] : meta["default"]
@@ -72,10 +77,16 @@ end
 
 # ---------- 実行 ----------
 schema = load_yaml(SCHEMA_FILE)
-categories = load_yaml(CATEGORIES_FILE).map { |entry| apply_schema(entry, schema).merge("output_type" => ["categories"]) }
-tags       = load_yaml(TAGS_FILE).map       { |entry| apply_schema(entry, schema).merge("output_type" => ["tags"]) }
-all_entries = categories + tags
 
+categories = load_yaml(CATEGORIES_FILE).map do |entry|
+  apply_schema(entry, schema).merge("output_type" => ["categories"])
+end
+
+tags = load_yaml(TAGS_FILE).map do |entry|
+  apply_schema(entry, schema).merge("output_type" => ["tags"])
+end
+
+all_entries = categories + tags
 generated = []
 
 all_entries.each do |entry|
