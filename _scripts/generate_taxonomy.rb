@@ -34,7 +34,9 @@ def expand_targets(entry)
   langs   = entry["output_lang"] || []
   types   = entry["output_type"] || []
 
-  devices.product(langs, types).map do |device, lang, type|
+  combinations = devices.product(langs, types)
+  puts "[LOG] Entry: slug=#{entry["slug"]} → Generating #{combinations.size} variants"
+  combinations.map do |device, lang, type|
     layout = entry["output_layout_setting"][device]
     permalink_template = entry["output_permalink_setting"][device]
     slug = entry["slug"]
@@ -59,6 +61,7 @@ def write_markdown(target)
   FileUtils.touch(File.join(dir, ".keep"))
 
   path = File.join(dir, "#{target["slug"]}.md")
+  puts "[WRITE] #{path}"  # ← ログ出力
   File.write(path, <<~FRONTMATTER)
     ---
     slug: #{target["slug"].inspect}
