@@ -28,8 +28,6 @@ def apply_schema(entry, schema)
 end
 
 def expand_targets(entry)
-  return [] if entry["slug"].to_s.strip.empty?  # 安全ガード
-
   devices = entry["output_device"] || []
   langs   = entry["output_lang"] || []
   types   = entry["output_type"] || []
@@ -87,19 +85,23 @@ missing = []
 seen_paths = Set.new
 
 all_entries.each do |entry|
+  if entry["slug"].to_s.strip.empty?
+    puts "[ERROR] Missing slug in entry: #{entry.inspect}"
+    missing << {
+      "slug" => nil,
+      "type" => entry["output_type"]&.first,
+      "lang" => entry["output_lang"]&.first,
+      "device" => entry["output_device"]&.first,
+      "name" => entry.dig("name", "ja") || entry.dig("name", "en"),
+      "title" => entry.dig("title", "ja") || entry.dig("title", "en"),
+      "description" => entry.dig("description", "ja") || entry.dig("description", "en")
+    }
+    next
+  end
+
   expand_targets(entry).each do |target|
     if target["slug"].to_s.strip.empty?
-      puts "[ERROR] Missing slug in entry: #{target.inspect}"
-      missing << {
-        "slug" => nil,
-        "type" => target["type"],
-        "lang" => target["lang"],
-        "device" => target["device"],
-        "name" => target["name"],
-        "title" => target["title"],
-        "description" => target["description"]
-      }
-      next
+      next  # 二重防止
     end
 
     path = File.join(OUTPUT_PAGES, target["device"], target["lang"], target["type"], "#{target["slug"]}.md")
