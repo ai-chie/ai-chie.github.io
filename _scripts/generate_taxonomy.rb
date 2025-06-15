@@ -15,7 +15,7 @@ def load_yaml(path)
   YAML.load_file(path)
 rescue => e
   warn "[WARN] Failed to load YAML #{path}: #{e.message}"
-  {}
+  []
 end
 
 def apply_schema(entry, schema)
@@ -72,9 +72,9 @@ end
 
 # ---------- 実行 ----------
 schema = load_yaml(SCHEMA_FILE)
-categories = apply_schema(load_yaml(CATEGORIES_FILE), schema).merge("output_type" => ["categories"])
-tags       = apply_schema(load_yaml(TAGS_FILE), schema).merge("output_type" => ["tags"])
-all_entries = [categories, tags]
+categories = load_yaml(CATEGORIES_FILE).map { |entry| apply_schema(entry, schema).merge("output_type" => ["categories"]) }
+tags       = load_yaml(TAGS_FILE).map       { |entry| apply_schema(entry, schema).merge("output_type" => ["tags"]) }
+all_entries = categories + tags
 
 generated = []
 
