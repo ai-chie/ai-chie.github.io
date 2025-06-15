@@ -1,8 +1,8 @@
 ---
 slug: "test1"
-name: "テスト２"
-title: "テスト２"
-description: "これはテスト２カテゴリの説明です。"
+name: "テスト１"
+title: "テスト１"
+description: "これはテスト１カテゴリの説明です。"
 device: "text"
 lang: "ja"
 type: "categories"

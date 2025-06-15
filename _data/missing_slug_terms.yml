@@ -1,9 +1,2 @@
 ---
-missing:
-- slug:
-  type: categories
-  lang: ja
-  device: pc
-  name: テスト１
-  title: テスト１
-  description: これはテスト１カテゴリの説明です。
+missing: []

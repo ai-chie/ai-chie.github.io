@@ -1,8 +1,8 @@
 ---
-slug: "test1"
-name: "test1"
-title: "test1"
-description: "This is the description for the test1 category."
+slug: "test2"
+name: "test2"
+title: "test2"
+description: "This is the description for the test2 category."
 device: "mobile"
 lang: "en"
 type: "categories"
