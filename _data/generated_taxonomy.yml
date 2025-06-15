@@ -1,9 +1,9 @@
 ---
 generated:
 - slug: test1
-  name: テスト１
-  title: テスト１
-  description: これはテスト１カテゴリの説明です。
+  name: テスト２
+  title: テスト２
+  description: これはテスト２カテゴリの説明です。
   device: pc
   lang: ja
   type: categories
@@ -11,9 +11,9 @@ generated:
   permalink: "/pc/ja/categories/"
   path: _pages/pc/ja/categories/test1.md
 - slug: test1
-  name: test1
-  title: test1
-  description: This is the description for the test1 category.
+  name: test2
+  title: test2
+  description: This is the description for the test2 category.
   device: pc
   lang: en
   type: categories
@@ -21,9 +21,9 @@ generated:
   permalink: "/pc/en/categories/"
   path: _pages/pc/en/categories/test1.md
 - slug: test1
-  name: テスト１
-  title: テスト１
-  description: これはテスト１カテゴリの説明です。
+  name: テスト２
+  title: テスト２
+  description: これはテスト２カテゴリの説明です。
   device: mobile
   lang: ja
   type: categories
@@ -31,9 +31,9 @@ generated:
   permalink: "/mobile/ja/categories/"
   path: _pages/mobile/ja/categories/test1.md
 - slug: test1
-  name: test1
-  title: test1
-  description: This is the description for the test1 category.
+  name: test2
+  title: test2
+  description: This is the description for the test2 category.
   device: mobile
   lang: en
   type: categories
@@ -41,9 +41,9 @@ generated:
   permalink: "/mobile/en/categories/"
   path: _pages/mobile/en/categories/test1.md
 - slug: test1
-  name: テスト１
-  title: テスト１
-  description: これはテスト１カテゴリの説明です。
+  name: テスト２
+  title: テスト２
+  description: これはテスト２カテゴリの説明です。
   device: text
   lang: ja
   type: categories
@@ -51,9 +51,9 @@ generated:
   permalink: "/text/ja/categories/"
   path: _pages/text/ja/categories/test1.md
 - slug: test1
-  name: test1
-  title: test1
-  description: This is the description for the test1 category.
+  name: test2
+  title: test2
+  description: This is the description for the test2 category.
   device: text
   lang: en
   type: categories
@@ -120,63 +120,3 @@ generated:
   layout: taxonomy
   permalink: "/text/en/tags/"
   path: _pages/text/en/tags/sample1.md
-- slug: sample2
-  name: サンプル２
-  title: サンプル２
-  description: これはサンプル２タグの説明です。
-  device: pc
-  lang: ja
-  type: tags
-  layout: taxonomy
-  permalink: "/pc/ja/tags/"
-  path: _pages/pc/ja/tags/sample2.md
-- slug: sample2
-  name: sample2
-  title: sample2
-  description: This is the description for the sample2 tag.
-  device: pc
-  lang: en
-  type: tags
-  layout: taxonomy
-  permalink: "/pc/en/tags/"
-  path: _pages/pc/en/tags/sample2.md
-- slug: sample2
-  name: サンプル２
-  title: サンプル２
-  description: これはサンプル２タグの説明です。
-  device: mobile
-  lang: ja
-  type: tags
-  layout: taxonomy
-  permalink: "/mobile/ja/tags/"
-  path: _pages/mobile/ja/tags/sample2.md
-- slug: sample2
-  name: sample2
-  title: sample2
-  description: This is the description for the sample2 tag.
-  device: mobile
-  lang: en
-  type: tags
-  layout: taxonomy
-  permalink: "/mobile/en/tags/"
-  path: _pages/mobile/en/tags/sample2.md
-- slug: sample2
-  name: サンプル２
-  title: サンプル２
-  description: これはサンプル２タグの説明です。
-  device: text
-  lang: ja
-  type: tags
-  layout: taxonomy
-  permalink: "/text/ja/tags/"
-  path: _pages/text/ja/tags/sample2.md
-- slug: sample2
-  name: sample2
-  title: sample2
-  description: This is the description for the sample2 tag.
-  device: text
-  lang: en
-  type: tags
-  layout: taxonomy
-  permalink: "/text/en/tags/"
-  path: _pages/text/en/tags/sample2.md

@@ -1,50 +1,50 @@
 ---
 conflicts:
-- path: _pages/pc/ja/categories/test1.md
-  slug: test1
-  type: categories
+- path: _pages/pc/ja/tags/sample1.md
+  slug: sample1
+  type: tags
   lang: ja
   device: pc
-  name: テスト２
-  title: テスト２
-  description: これはテスト２カテゴリの説明です。
-- path: _pages/pc/en/categories/test1.md
-  slug: test1
-  type: categories
+  name: サンプル２
+  title: サンプル２
+  description: これはサンプル２タグの説明です。
+- path: _pages/pc/en/tags/sample1.md
+  slug: sample1
+  type: tags
   lang: en
   device: pc
-  name: test2
-  title: test2
-  description: This is the description for the test2 category.
-- path: _pages/mobile/ja/categories/test1.md
-  slug: test1
-  type: categories
+  name: sample2
+  title: sample2
+  description: This is the description for the sample2 tag.
+- path: _pages/mobile/ja/tags/sample1.md
+  slug: sample1
+  type: tags
   lang: ja
   device: mobile
-  name: テスト２
-  title: テスト２
-  description: これはテスト２カテゴリの説明です。
-- path: _pages/mobile/en/categories/test1.md
-  slug: test1
-  type: categories
+  name: サンプル２
+  title: サンプル２
+  description: これはサンプル２タグの説明です。
+- path: _pages/mobile/en/tags/sample1.md
+  slug: sample1
+  type: tags
   lang: en
   device: mobile
-  name: test2
-  title: test2
-  description: This is the description for the test2 category.
-- path: _pages/text/ja/categories/test1.md
-  slug: test1
-  type: categories
+  name: sample2
+  title: sample2
+  description: This is the description for the sample2 tag.
+- path: _pages/text/ja/tags/sample1.md
+  slug: sample1
+  type: tags
   lang: ja
   device: text
-  name: テスト２
-  title: テスト２
-  description: これはテスト２カテゴリの説明です。
-- path: _pages/text/en/categories/test1.md
-  slug: test1
-  type: categories
+  name: サンプル２
+  title: サンプル２
+  description: これはサンプル２タグの説明です。
+- path: _pages/text/en/tags/sample1.md
+  slug: sample1
+  type: tags
   lang: en
   device: text
-  name: test2
-  title: test2
-  description: This is the description for the test2 category.
+  name: sample2
+  title: sample2
+  description: This is the description for the sample2 tag.
