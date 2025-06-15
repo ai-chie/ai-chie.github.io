@@ -1,6 +1,6 @@
 # スキーマ定義：taxonomy_schema.yml
 
-- slug:
+- slug: test1
   name:
     ja: テスト１
     en: test1
@@ -48,7 +48,7 @@
     mobile: /{device}/{lang}/{type}/
     text: /{device}/{lang}/{type}/
   
-- slug: test1
+- slug: test2
   name:
     ja: テスト２
     en: test2
