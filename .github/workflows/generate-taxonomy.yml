@@ -25,7 +25,7 @@ jobs:
 
       - name: Generate taxonomy pages
         run: |
-          ruby scripts/generate_taxonomy.rb
+          ruby _scripts/generate_taxonomy.rb
 
       - name: Commit and push changes
         run: |
