@@ -1,0 +1,363 @@
+
+slug:
+  type: string
+  required: true
+  default: unknown
+  unused: false
+  description: 【必須】タグやカテゴリのslug。
+
+name:
+  type: object
+  required: true
+  default:
+    ja: unknown
+    en: unknown
+  unused: false
+  description: 【必須】タグやカテゴリの名称。多言語対応 {ja "日本語名", en "English Name"}。
+
+title:
+  type: object
+  required: true
+  default:
+    ja: unknown
+    en: unknown
+  unused: false
+  description: 【必須】多言語対応 {ja "日本語タイトル", en "English title"}。
+  
+description:
+  type: object
+  required: false
+  default:
+    ja: ''
+    en: ''
+  unused: false
+  description: タグやカテゴリの説明文。一覧や個別ページで表示。多言語対応。
+
+link:
+  type: string
+  required: false
+  default: ''
+  unused: false
+  description: リンク先を上書きする場合に使用。
+
+audience:
+  type: enum
+  required: false
+  default: external
+  values:
+    - internal
+    - external
+  unused: false
+  description: 対象読者の区分（🌐=external, 🔒=internal）。internal = 内部向け / external = 外部公開向け。
+
+priority:
+  type: integer
+  required: false
+  default: 99
+  unused: false
+  description: 並び順制御用の数値（1〜999）。小さいほど上位に表示される。
+
+featured:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 注目トピックとして優先的に表示。強調表示（★アイコン等）。一部テンプレートやバッジ表示で強調される。
+
+beta:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 実験的またはベータ版。不安定なコンテンツに視覚的ラベルを付ける用途で使用される。（🧪などのアイコン表示）。
+
+deprecated:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 非推奨・廃止予定（⚠アイコン付きで警告）。バッジ表示やスタイル上の警告に利用される。
+
+color:
+  type: string
+  required: false
+  default: "#cccccc"
+  unused: false
+  description: UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード。
+
+icon:
+  type: string
+  required: false
+  default: ''
+  unused: false
+  description: 表示用アイコン（FontAwesome、emoji、クラスなどを想定）。
+
+tooltip:
+  type: object
+  required: false
+  default:
+    ja: ''
+    en: ''
+  unused: false
+  description: ホバー時に表示する補足情報。バッジやアイコンなどに対応。多言語対応。
+
+private:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 内部資料や限定公開向けなど。基本的に外部公開しない。
+
+admin_only:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 管理者専用。一般閲覧者には非表示。
+
+hidden:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: |
+    完全に表示対象外とする（一覧・記事ページ・関連リンクなどすべてに非表示）。trueならページや一覧に出力しない。
+    draft と異なり、準備中というより「見せたくない」明示的非表示。
+    URL 直打ちでのアクセスは可能。  
+
+hidden_reason:
+  type: object
+  required: false
+  default:
+    ja: ''
+    en: ''
+  unused: false
+  description: 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）。
+
+draft:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: |
+    下書き状態。通常は表示されず、ビルド対象にも含めない。
+    Jekyll の `draft: true` 機能が使えない場合も想定し、Liquid による制御も行う。
+
+aliases:
+  type: array
+  items:
+    type: string
+  required: false
+  default: []
+  unused: false
+  description: |
+    検索やslug補完のための別名指定。
+    
+output_device:
+  type: array
+  values:
+  - pc
+  - mobile
+  - text
+  required: false
+  default:
+  - pc
+  - mobile
+  - text
+  unused: false
+  description: |
+    スクリプトでの出力制御用。リストにある{device}構成に自動出力。（_pages/{device}/{lang}/{type}/*.md）。
+    スクリプトで出力する*.mdのFrontmatter「device:」に設定。
+    （※この値はスクリプト内部での判定用であり、Front Matter にはコピーされない）
+  
+output_lang:
+  type: array
+  values:
+  - ja
+  - en
+  required: false
+  default:
+  - ja
+  - en
+  unused: false
+  description: |
+    スクリプトでの出力制御用。リストにある{lang}構成に自動出力。（_pages/{device}/{lang}/{type}/*.md）。
+    スクリプトで出力する*.mdのFrontmatter「lang:」に設定。
+    （※この値はスクリプト内部での判定用であり、Front Matter にはコピーされない）
+  
+output_type:
+  type: array
+  values:
+  - categories
+  - tags
+  required: false
+  default:
+  - categories
+  - tags
+  unused: false
+  description: |
+    スクリプトでの出力制御用。リストにある{type}構成に自動出力。（_pages/{device}/{lang}/{type}/*.md）。
+    スクリプトで出力する*.mdのFrontmatter「type:」に設定。
+    （※この値はスクリプト内部での判定用であり、Front Matter にはコピーされない）
+  
+output_layout_setting:
+  type: object
+  required: false
+  default:
+    pc: taxonomy
+    mobile: taxonomy
+    text: taxonomy
+  unused: false
+  description: |
+    スクリプトで出力する*.mdのFrontmatter「layout:」に設定。
+    （※この値はスクリプト内部での判定用であり、Front Matter にはコピーされない）
+  
+output_permalink_setting:
+  type: object
+  required: false
+  default:
+    pc: /{device}/{lang}/{type}/
+    mobile: /{device}/{lang}/{type}/
+    text: /{device}/{lang}/{type}/
+  unused: false
+  description: |
+    スクリプトで出力する*.mdのFrontmatter「permalink:」に設定。
+    （※この値はスクリプト内部での判定用であり、Front Matter にはコピーされない）
+  
+# output_pc:
+#   type: boolean
+#   required: false
+#   default: true
+#   unused: false
+#   description: スクリプトでの出力制御用。trueで該当する{device}構成に自動出力。（_pages/{device}/{lang}/{type}/*.md）
+  
+# layout_pc:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description: スクリプトで出力する*.mdのFrontmatter「layout:」に設定。
+
+# permalink_pc:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description: スクリプトで出力する*.mdのFrontmatter「permalink:」に設定。
+  
+# output_mobile:
+#   type: boolean
+#   required: false
+#   default: true
+#   unused: false
+#   description:
+  
+# layout_mobile:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
+
+# permalink_mobile:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
+  
+# output_text:
+#   type: boolean
+#   required: false
+#   default: true
+#   unused: false
+#   description:
+  
+# layout_text:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
+
+# permalink_text:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
+
+# ----------
+# *.mdに追加するFrontmatter
+# ----------
+
+device:
+  type: string
+  required: true
+  default: null
+  unused: false
+  description: |
+    スクリプトで出力する*.mdのFrontmatterに設定。「output_device:」の値。例：pc/mobile/text。
+    （output制御によりスクリプトで動的設定され、Front Matter に出力される）
+  calculated: true
+  values:
+  - pc
+  - mobile
+  - text
+  
+lang:
+  type: string
+  required: true
+  default: null
+  unused: false
+  description: |
+    スクリプトで出力する*.mdのFrontmatterに設定。「output_lang:」の値。例：{ja/en}。
+    （output制御によりスクリプトで動的設定され、Front Matter に出力される）
+  calculated: true
+  values:
+  - ja
+  - en
+  
+type:
+  type: string
+  required: true
+  default: null
+  unused: false
+  description: |
+    スクリプトで出力する*.mdのFrontmatterに設定。「output_type:」の値。例：{categories/tags}。
+    （output制御によりスクリプトで動的設定され、Front Matter に出力される）
+  calculated: true
+  values:
+  - categories
+  - tags
+  
+# type:
+#   type: enum
+#   values:
+#     - categories
+#     - tags
+#   required: false
+#   default: {output_type}
+#   unused: false
+#   description: スクリプトで出力する*.mdのFrontmatterに設定。「output_type:」の値。例：{categories/tags}。
+
+layout:
+  type: string
+  required: false
+  default: null
+  unused: false
+  description: |
+    スクリプトで出力する*.mdのFrontmatterに設定。「output_layout_setting:」の値。
+    （output制御によりスクリプトで動的設定され、Front Matter に出力される）
+  calculated: true
+
+permalink:
+  type: string
+  required: false
+  default: null
+  unused: false
+  description: |
+    スクリプトで出力する*.mdのFrontmatterに設定。「output_permalink_setting:」の値。
+    （output制御によりスクリプトで動的設定され、Front Matter に出力される）
+  calculated: true
+  
