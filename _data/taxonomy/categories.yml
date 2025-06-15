@@ -1,15 +1,15 @@
 # スキーマ定義：taxonomy_schema.yml
 
-- slug: test
+- slug: test1
   name:
-    ja: テスト
-    en: test
+    ja: テスト１
+    en: test1
   title:
-    ja: テスト
-    en: test
+    ja: テスト１
+    en: test1
   description:
-    ja: これはテストカテゴリの説明です。
-    en: This is the description for the test category.
+    ja: これはテスト１カテゴリの説明です。
+    en: This is the description for the test1 category.
   link: ''
   audience:
     - external
@@ -20,8 +20,8 @@
   color: "#3366cc"
   icon: flask
   tooltip:
-    ja: テスト
-    en: test
+    ja: テスト１
+    en: test1
   private: false
   admin_only: false
   hidden: false
@@ -48,3 +48,51 @@
     mobile: /{device}/{lang}/{type}/
     text: /{device}/{lang}/{type}/
   
+- slug: test2
+  name:
+    ja: テスト２
+    en: test2
+  title:
+    ja: テスト２
+    en: test2
+  description:
+    ja: これはテスト２カテゴリの説明です。
+    en: This is the description for the test2 category.
+  link: ''
+  audience:
+    - external
+  priority: 5
+  featured: false
+  beta: false
+  deprecated: false
+  color: "#3366cc"
+  icon: flask
+  tooltip:
+    ja: テスト２
+    en: test2
+  private: false
+  admin_only: false
+  hidden: false
+  hidden_reason:
+    ja: ''
+    en: ''
+  draft: false
+  aliases: []
+  output_device:
+  - pc
+  - mobile
+  - text
+  output_lang:
+  - ja
+  - en
+  output_type:
+  - categories
+  output_layout_setting:
+    pc: taxonomy
+    mobile: taxonomy
+    text: taxonomy
+  output_permalink_setting:
+    pc: /{device}/{lang}/{type}/
+    mobile: /{device}/{lang}/{type}/
+    text: /{device}/{lang}/{type}/
+    

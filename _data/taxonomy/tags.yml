@@ -1,15 +1,15 @@
 # スキーマ定義：taxonomy_schema.yml
 
-- slug: sample
+- slug: sample1
   name:
-    ja: サンプル
-    en: sample
+    ja: サンプル１
+    en: sample1
   title:
-    ja: サンプル
-    en: sample
+    ja: サンプル１
+    en: sample1
   description:
-    ja: これはサンプルタグの説明です。
-    en: This is the description for the sample tag.
+    ja: これはサンプル１タグの説明です。
+    en: This is the description for the sample1 tag.
   link: ''
   audience:
     - external
@@ -20,8 +20,56 @@
   color: "#3366cc"
   icon: flask
   tooltip:
-    ja: サンプル
-    en: sample
+    ja: サンプル１
+    en: sample1
+  private: false
+  admin_only: false
+  hidden: false
+  hidden_reason:
+    ja: ''
+    en: ''
+  draft: false
+  aliases: []
+  output_device:
+  - pc
+  - mobile
+  - text
+  output_lang:
+  - ja
+  - en
+  output_type:
+  - tags
+  output_layout_setting:
+    pc: taxonomy
+    mobile: taxonomy
+    text: taxonomy
+  output_permalink_setting:
+    pc: /{device}/{lang}/{type}/
+    mobile: /{device}/{lang}/{type}/
+    text: /{device}/{lang}/{type}/
+
+- slug: sample2
+  name:
+    ja: サンプル２
+    en: sample2
+  title:
+    ja: サンプル２
+    en: sample2
+  description:
+    ja: これはサンプル２タグの説明です。
+    en: This is the description for the sample2 tag.
+  link: ''
+  audience:
+    - external
+  priority: 5
+  featured: false
+  beta: false
+  deprecated: false
+  color: "#3366cc"
+  icon: flask
+  tooltip:
+    ja: サンプル２
+    en: sample2
   private: false
   admin_only: false
   hidden: false
