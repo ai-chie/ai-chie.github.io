@@ -1,8 +1,8 @@
 ---
 slug: "test1"
-name: "test1"
-title: "test1"
-description: "This is the description for the test1 category."
+name: "test2"
+title: "test2"
+description: "This is the description for the test2 category."
 device: "text"
 lang: "en"
 type: "categories"
