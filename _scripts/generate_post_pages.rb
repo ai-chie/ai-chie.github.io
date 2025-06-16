@@ -12,7 +12,7 @@ OUTPUT_DIR   = '_pages'
 # ===============================
 def apply_schema(frontmatter, schema)
   schema.each do |key, meta|
-    next if meta['calculated']  # device/layout/permalink などは出力補完対象
+    next if meta['calculated'] # device/layout/permalink などは出力補完対象
 
     value = frontmatter[key]
 
@@ -115,7 +115,7 @@ def expand_targets(post, schema)
 end
 
 # ===============================
-# 出力処理（output_* を除外）
+# 出力処理（---重複防止 + output_* 除外 + YAML整形）
 # ===============================
 def write_post_page(target)
   out_dir = File.join(OUTPUT_DIR, target[:device], target[:lang])
@@ -125,7 +125,7 @@ def write_post_page(target)
 
   puts "[WRITE] #{out_path}"
 
-  # ⛔ 出力対象から除外する内部用キー
+  # 除外対象キー（内部補助フィールド）
   excluded_keys = %w[
     output_device
     output_layout_setting
@@ -141,11 +141,15 @@ def write_post_page(target)
     'lang'      => target[:lang],
   })
 
-  File.write(out_path, <<~FRONTMATTER + "\n" + target[:content])
+  # YAML文字列生成（先頭の---を除去）
+  yaml_text = YAML.dump(final_frontmatter).sub(/\A---\s*\n?/, '').rstrip
+
+  File.write(out_path, <<~TEXT)
     ---
-    #{final_frontmatter.to_yaml.strip}
+    #{yaml_text}
     ---
-  FRONTMATTER
+    #{target[:content]}
+  TEXT
 end
 
 # ===============================
