@@ -127,7 +127,7 @@ def write_post_page(target)
     'lang'      => target[:lang],
   })
 
-  yaml_text = Psych.dump(final_frontmatter).sub(/\A---\s*\n?/, '').rstrip
+  yaml_text = Psych.dump(final_frontmatter).sub(/\A---\s*\n?/, '').gsub(/^(-\s+)/, '  \1').rstrip
 
   File.write(out_path, <<~TEXT)
     ---
