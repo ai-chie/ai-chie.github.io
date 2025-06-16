@@ -131,7 +131,7 @@ def write_post_page(target)
 
   io = StringIO.new
   emitter = Psych::Emitter.new(io)
-  emitter.start_stream
+  emitter.start_stream(Psych::Nodes::Stream::UTF8)
   emitter.start_document(nil, [], true)
   emitter.visit(tree)
   emitter.end_document
