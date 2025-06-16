@@ -4,6 +4,7 @@ require 'fileutils'
 require 'date'
 require 'psych'
 require 'stringio'
+require 'set'
 
 POSTS_DIR    = '_posts'
 SCHEMA_FILE  = '_data/post/post_schema.yml'
@@ -33,13 +34,13 @@ def apply_schema(frontmatter, schema)
 
     expected_type = meta['type']
     type_mismatch = case expected_type
-    when "string"  then !value.is_a?(String)
-    when "array"   then !value.is_a?(Array)
-    when "boolean" then ![true, false].include?(value)
-    when "integer" then !value.is_a?(Integer)
-    when "object"  then !value.is_a?(Hash)
-    else false
-    end
+                    when "string"  then !value.is_a?(String)
+                    when "array"   then !value.is_a?(Array)
+                    when "boolean" then ![true, false].include?(value)
+                    when "integer" then !value.is_a?(Integer)
+                    when "object"  then !value.is_a?(Hash)
+                    else false
+                    end
 
     if type_mismatch
       warn "[WARN] Type mismatch for #{key}: expected #{expected_type}, got #{value.class}"
@@ -91,8 +92,8 @@ def expand_targets(post, schema)
   devices.map do |device|
     layout    = layout_settings[device]
     permalink = permalink_settings[device].to_s
-                 .gsub('{device}', device)
-                 .gsub('{lang}', lang)
+                   .gsub('{device}', device)
+                   .gsub('{lang}', lang)
 
     {
       filename: filename,
@@ -135,12 +136,29 @@ end
 
 schema = YAML.load_file(SCHEMA_FILE)
 
-# 生成対象ファイルの一覧を収集
+seen_ids = Set.new
 generated_paths = []
 
 Dir.glob("#{POSTS_DIR}/*.md").each do |path|
   post = parse_post(path, schema)
   next unless post
+
+  # unexpected keys 警告
+  extra_keys = post[:frontmatter].keys - schema.keys
+  unless extra_keys.empty?
+    warn "[WARN] Unexpected keys in post #{post[:path]}: #{extra_keys}"
+  end
+
+  # 投稿ID重複チェック
+  post_id = post[:frontmatter]['id']
+  if post_id.nil? || post_id.strip.empty?
+    warn "[WARN] Missing id in post #{post[:path]}"
+  elsif seen_ids.include?(post_id)
+    warn "[WARN] Duplicate id detected: #{post_id} in #{post[:path]}"
+  else
+    seen_ids << post_id
+  end
+
   expand_targets(post, schema).each do |target|
     path = File.join(OUTPUT_DIR, target[:device], target[:lang], target[:filename])
     generated_paths << path
@@ -148,7 +166,7 @@ Dir.glob("#{POSTS_DIR}/*.md").each do |path|
   end
 end
 
-# taxonomy式 同期削除
+# taxonomy式 同期削除処理
 generated_set = generated_paths.to_set
 base_dirs = Dir.glob("#{OUTPUT_DIR}/*/*").select { |f| File.directory?(f) }
 base_dirs.each do |dir|
