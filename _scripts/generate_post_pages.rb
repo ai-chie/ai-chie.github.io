@@ -60,7 +60,18 @@ def parse_post(path, schema)
   end
   content_lines = lines[(i+1)..-1] || []
 
-  frontmatter = YAML.safe_load(frontmatter_lines.join)
+  begin
+    frontmatter = YAML.safe_load(frontmatter_lines.join)
+  rescue => e
+    warn "[ERROR] Failed to parse front matter in #{path}: #{e.message}"
+    return nil
+  end
+
+  unless frontmatter.is_a?(Hash)
+    warn "[ERROR] Invalid front matter in #{path}: not a hash"
+    return nil
+  end
+
   frontmatter = apply_schema(frontmatter, schema)
 
   {
