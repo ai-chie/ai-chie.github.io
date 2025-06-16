@@ -2,6 +2,7 @@
 require 'yaml'
 require 'fileutils'
 require 'set'
+require 'psych'
 
 TAXONOMY_DIR = "_data/taxonomy"
 SCHEMA_FILE  = "#{TAXONOMY_DIR}/taxonomy_schema.yml"
@@ -20,21 +21,62 @@ end
 def apply_schema(entry, schema)
   return {} unless entry.is_a?(Hash)
   result = {}
+
   schema.each do |key, meta|
     next if meta["calculated"]
-    result[key] = entry.key?(key) ? entry[key] : meta["default"]
+    value = entry[key]
+
+    if meta["required"] && !entry.key?(key)
+      puts "[WARN] Required key missing: #{key} in slug=#{entry["slug"] || "no-slug"}"
+    end
+
+    unless entry.key?(key) && !entry[key].nil?
+      entry[key] = meta["default"]
+    end
+    value = entry[key]
+    result[key] = value
+
+    expected_type = meta["type"]
+    type_mismatch = case expected_type
+    when "string"  then !value.is_a?(String)
+    when "array"   then !value.is_a?(Array)
+    when "boolean" then ![true, false].include?(value)
+    when "integer" then !value.is_a?(Integer)
+    when "object"  then !value.is_a?(Hash)
+    else false
+    end
+
+    if type_mismatch
+      puts "[WARN] Type mismatch for #{key} in slug=#{entry["slug"] || "no-slug"}: expected #{expected_type}, got #{value.class}"
+    end
   end
+
   result
+end
+
+def warn_unexpected_keys(entry, schema, context_label)
+  extra_keys = entry.keys - schema.keys
+  unless extra_keys.empty?
+    puts "[WARN] Unexpected keys in #{context_label}: #{extra_keys}"
+  end
 end
 
 def expand_targets(entry)
   devices = entry["output_device"] || []
   langs   = entry["output_lang"] || []
   types   = entry["output_type"] || []
+  layout_map = entry["output_layout_setting"] || {}
+  permalink_map = entry["output_permalink_setting"] || {}
+  slug = entry["slug"]
+
   devices.product(langs, types).map do |device, lang, type|
-    layout = entry["output_layout_setting"][device]
-    permalink_template = entry["output_permalink_setting"][device]
-    slug = entry["slug"]
+    layout    = layout_map[device]
+    permalink = permalink_map[device].to_s
+                  .gsub("{device}", device)
+                  .gsub("{lang}", lang)
+                  .gsub("{type}", type)
+                  .gsub("{slug}", slug)
+
     {
       "slug"        => slug,
       "name"        => entry["name"][lang],
@@ -44,80 +86,52 @@ def expand_targets(entry)
       "lang"        => lang,
       "type"        => type,
       "layout"      => layout,
-      "permalink"   => permalink_template.to_s
-                                          .gsub("{device}", device)
-                                          .gsub("{lang}", lang)
-                                          .gsub("{type}", type)
-                                          .gsub("{slug}", slug)
+      "permalink"   => permalink,
+      "path"        => File.join(OUTPUT_PAGES, device, lang, type, "#{slug}.md")
     }
   end
 end
 
+def build_frontmatter(target)
+  {
+    "slug"        => target["slug"],
+    "name"        => target["name"],
+    "title"       => target["title"],
+    "description" => target["description"],
+    "device"      => target["device"],
+    "lang"        => target["lang"],
+    "type"        => target["type"],
+    "layout"      => target["layout"],
+    "permalink"   => target["permalink"]
+  }
+end
+
 def write_markdown(target)
-  dir = File.join(OUTPUT_PAGES, target["device"], target["lang"], target["type"])
+  path = target["path"]
+  dir = File.dirname(path)
   FileUtils.mkdir_p(dir)
   FileUtils.touch(File.join(dir, ".keep"))
-  path = File.join(dir, "#{target["slug"]}.md")
   puts "[WRITE] #{path}"
-  begin
-    File.write(path, <<~FRONTMATTER)
-      ---
-      slug: #{target["slug"].inspect}
-      name: #{target["name"].inspect}
-      title: #{target["title"].inspect}
-      description: #{target["description"].inspect}
-      device: #{target["device"].inspect}
-      lang: #{target["lang"].inspect}
-      type: #{target["type"].inspect}
-      layout: #{target["layout"].inspect}
-      permalink: #{target["permalink"].inspect}
-      ---
-    FRONTMATTER
-  rescue => e
-    puts "[ERROR] Failed to write #{path}: #{e.message}"
-  end
+
+  frontmatter = build_frontmatter(target)
+  yaml_text = Psych.dump(frontmatter).sub(/\A---\s*\n?/, '').gsub(/^(-\s+)/, '  \1').rstrip
+
+  File.write(path, <<~TEXT)
+    ---
+    #{yaml_text}
+    ---
+  TEXT
 end
 
 schema = load_yaml(SCHEMA_FILE)
 
-# スキーマ検証 + 翻訳言語不足 + スキーマ適用
 categories = load_yaml(CATEGORIES_FILE).map do |entry|
-  unexpected_keys = entry.keys - schema.keys
-  unless unexpected_keys.empty?
-    puts "[WARN] Unexpected keys in entry (#{entry["slug"] || "no-slug"}): #{unexpected_keys}"
-  end
-
-  %w[name title description].each do |field|
-    value = entry[field]
-    next unless value.is_a?(Hash)
-    langs = entry["output_lang"] || []
-    langs.each do |lang|
-      unless value.key?(lang)
-        puts "[WARN] Missing #{field}[#{lang}] in slug=#{entry["slug"]}"
-      end
-    end
-  end
-
+  warn_unexpected_keys(entry, schema, "slug=#{entry["slug"] || "no-slug"}")
   apply_schema(entry, schema).merge("output_type" => ["categories"])
 end
 
 tags = load_yaml(TAGS_FILE).map do |entry|
-  unexpected_keys = entry.keys - schema.keys
-  unless unexpected_keys.empty?
-    puts "[WARN] Unexpected keys in entry (#{entry["slug"] || "no-slug"}): #{unexpected_keys}"
-  end
-
-  %w[name title description].each do |field|
-    value = entry[field]
-    next unless value.is_a?(Hash)
-    langs = entry["output_lang"] || []
-    langs.each do |lang|
-      unless value.key?(lang)
-        puts "[WARN] Missing #{field}[#{lang}] in slug=#{entry["slug"]}"
-      end
-    end
-  end
-
+  warn_unexpected_keys(entry, schema, "slug=#{entry["slug"] || "no-slug"}")
   apply_schema(entry, schema).merge("output_type" => ["tags"])
 end
 
@@ -144,31 +158,19 @@ all_entries.each do |entry|
   end
 
   expand_targets(entry).each do |target|
-    next if target["slug"].to_s.strip.empty?
-
-    path = File.join(OUTPUT_PAGES, target["device"], target["lang"], target["type"], "#{target["slug"]}.md")
+    path = target["path"]
     if seen_paths.include?(path)
       puts "[WARN] Conflict: duplicate slug for #{path}"
-      conflicts << {
-        "path" => path,
-        "slug" => target["slug"],
-        "type" => target["type"],
-        "lang" => target["lang"],
-        "device" => target["device"],
-        "name" => target["name"],
-        "title" => target["title"],
-        "description" => target["description"]
-      }
+      conflicts << target
       next
     end
 
     seen_paths << path
     write_markdown(target)
-    generated << target.merge("path" => path)
+    generated << target
   end
 end
 
-# 不要な.mdファイルの削除
 expected_paths = generated.map { |t| t["path"] }.to_set
 base_dirs = Dir.glob("#{OUTPUT_PAGES}/*/*/*").select { |f| File.directory?(f) }
 base_dirs.each do |dir|
@@ -180,8 +182,6 @@ base_dirs.each do |dir|
   end
 end
 
-# YAML出力
-# File.write("#{DATA_DIR}/taxonomy/script_output/generated_taxonomy.yml", { "generated" => generated }.to_yaml)
 File.write("#{DATA_DIR}/taxonomy/script_output/missing_slug_terms.yml", { "missing" => missing }.to_yaml)
 File.write("#{DATA_DIR}/taxonomy/script_output/slug_conflicts.yml", { "conflicts" => conflicts }.to_yaml)
 
