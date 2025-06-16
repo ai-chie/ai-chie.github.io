@@ -1,4 +1,5 @@
 ---
+# _スキーマ定義：post_schema.yml
 id: yyyymmddhhmm+0900_uuid_ja
 title: サンプル記事（日本語）
 description: サンプル記事の説明
