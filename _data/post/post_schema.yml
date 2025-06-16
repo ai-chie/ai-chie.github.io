@@ -287,7 +287,7 @@ lang:
   unused: false
   description: 記事の言語。ja、enなど。
   calculated: false
-  values:
+  values: # 出力展開先の投稿を削除する際の対象先の決定に使用されている。
   - ja
   - en
 

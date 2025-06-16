@@ -7,27 +7,40 @@ POSTS_DIR    = '_posts'
 SCHEMA_FILE  = '_data/post/post_schema.yml'
 OUTPUT_DIR   = '_pages'
 
-# ----------------------------------------
-# スキーマ適用：デフォルト補完 + enum検証 + 型チェック
-# ----------------------------------------
+# ===============================
+# クリーンアップ対象を自動決定
+# ===============================
+def cleanup_output_dirs(schema)
+  devices = schema.dig('output_device', 'values') || %w[pc mobile text]
+  langs   = schema.dig('lang', 'values') || %w[ja en]
+
+  devices.product(langs).each do |device, lang|
+    dir = File.join(OUTPUT_DIR, device, lang)
+    if Dir.exist?(dir)
+      puts "[CLEAN] Removing old output: #{dir}"
+      FileUtils.rm_rf(dir)
+    end
+  end
+end
+
+# ===============================
+# スキーマ補完・検証（required/default/enum/type）
+# ===============================
 def apply_schema(frontmatter, schema)
   schema.each do |key, meta|
-    next if meta['calculated']  # device/layout/permalink などは補完対象で別処理
+    next if meta['calculated']
 
     value = frontmatter[key]
 
-    # 必須チェック
     if meta['required'] && !frontmatter.key?(key)
       warn "[WARN] Required key missing: #{key}"
     end
 
-    # デフォルト補完
     unless frontmatter.key?(key) && !frontmatter[key].nil?
       frontmatter[key] = meta['default']
       value = frontmatter[key]
     end
 
-    # enum検証
     if meta['values'] && value
       [value].flatten.each do |v|
         unless meta['values'].include?(v)
@@ -36,7 +49,6 @@ def apply_schema(frontmatter, schema)
       end
     end
 
-    # 型検証
     expected_type = meta['type']
     actual_type = value.class
 
@@ -57,9 +69,9 @@ def apply_schema(frontmatter, schema)
   frontmatter
 end
 
-# ----------------------------------------
-# Front Matter展開（output_device単位に複製）
-# ----------------------------------------
+# ===============================
+# device × lang に展開
+# ===============================
 def expand_targets(post, schema)
   filename = File.basename(post[:path])
   lang     = post[:frontmatter]['lang']
@@ -86,9 +98,9 @@ def expand_targets(post, schema)
   end
 end
 
-# ----------------------------------------
-# 投稿ファイル読込（Front Matter + 本文）
-# ----------------------------------------
+# ===============================
+# 投稿ファイル読み込み
+# ===============================
 def parse_post(path, schema)
   lines = File.readlines(path)
   if lines[0].strip != "---"
@@ -114,9 +126,9 @@ def parse_post(path, schema)
   }
 end
 
-# ----------------------------------------
-# 書き出し処理
-# ----------------------------------------
+# ===============================
+# 出力処理
+# ===============================
 def write_post_page(target)
   out_dir = File.join(OUTPUT_DIR, target[:device], target[:lang])
   FileUtils.mkdir_p(out_dir)
@@ -136,10 +148,13 @@ def write_post_page(target)
   FRONTMATTER
 end
 
-# ----------------------------------------
+# ===============================
 # 実行本体
-# ----------------------------------------
+# ===============================
 schema = YAML.load_file(SCHEMA_FILE)
+
+# クリーンアップ（全対象 device × lang）
+cleanup_output_dirs(schema)
 
 Dir.glob("#{POSTS_DIR}/*.md").each do |path|
   post = parse_post(path, schema)

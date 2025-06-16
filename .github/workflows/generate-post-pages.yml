@@ -1,0 +1,48 @@
+name: Generate Post Pages
+
+on:
+  workflow_dispatch:       # 手動実行を許可
+  push:
+    paths:
+      - '_posts/**'        # 投稿ファイルが変更されたとき
+      - '_data/post/**'    # スキーマや設定が変更されたとき
+      - '_scripts/generate_post_pages.rb'
+
+permissions:
+  contents: write
+  
+jobs:
+  generate-post-pages:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 💎 Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'  # 必要に応じてバージョンを調整
+          bundler-cache: true
+
+      - name: 📦 Install dependencies
+        run: |
+          bundle config path vendor/bundle
+          bundle install
+
+      - name: 🛠 Run post page generator
+        run: |
+          ruby _scripts/generate_post_pages.rb
+
+      - name: ✅ Commit and push generated pages
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add _pages/
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "🔄 Auto-generate post pages from _posts/"
+            git push
+          fi
