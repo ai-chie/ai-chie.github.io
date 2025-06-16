@@ -2,32 +2,29 @@
 require 'yaml'
 require 'fileutils'
 require 'date'
+require 'psych'
 
 POSTS_DIR    = '_posts'
 SCHEMA_FILE  = '_data/post/post_schema.yml'
 OUTPUT_DIR   = '_pages'
 
 # ===============================
-# スキーマ補完・検証（required/default/values/type）
+# スキーマ補完・検証
 # ===============================
 def apply_schema(frontmatter, schema)
   schema.each do |key, meta|
-    next if meta['calculated'] # device/layout/permalink などは出力補完対象
-
+    next if meta['calculated']
     value = frontmatter[key]
 
-    # 必須チェック
     if meta['required'] && !frontmatter.key?(key)
       warn "[WARN] Required key missing: #{key}"
     end
 
-    # デフォルト補完
     unless frontmatter.key?(key) && !frontmatter[key].nil?
       frontmatter[key] = meta['default']
       value = frontmatter[key]
     end
 
-    # values（enum）検証
     if meta['values'] && value
       [value].flatten.each do |v|
         unless meta['values'].include?(v)
@@ -36,10 +33,7 @@ def apply_schema(frontmatter, schema)
       end
     end
 
-    # 型検証
     expected_type = meta['type']
-    actual_type = value.class
-
     type_mismatch = case expected_type
     when "string"  then !value.is_a?(String)
     when "array"   then !value.is_a?(Array)
@@ -50,7 +44,7 @@ def apply_schema(frontmatter, schema)
     end
 
     if type_mismatch
-      warn "[WARN] Type mismatch for #{key}: expected #{expected_type}, got #{actual_type}"
+      warn "[WARN] Type mismatch for #{key}: expected #{expected_type}, got #{value.class}"
     end
   end
 
@@ -62,10 +56,7 @@ end
 # ===============================
 def parse_post(path, schema)
   lines = File.readlines(path)
-  if lines[0].strip != "---"
-    warn "[WARN] No Front Matter in #{path}"
-    return nil
-  end
+  return nil unless lines[0].strip == "---"
 
   i = 1
   frontmatter_lines = []
@@ -86,12 +77,11 @@ def parse_post(path, schema)
 end
 
 # ===============================
-# 出力対象展開（device × lang）
+# 出力対象展開
 # ===============================
 def expand_targets(post, schema)
   filename = File.basename(post[:path])
   lang     = post[:frontmatter]['lang']
-
   devices = post[:frontmatter]['output_device'] || schema.dig('output_device', 'default')
   layout_settings    = post[:frontmatter]['output_layout_setting']    || schema.dig('output_layout_setting', 'default')
   permalink_settings = post[:frontmatter]['output_permalink_setting'] || schema.dig('output_permalink_setting', 'default')
@@ -115,23 +105,34 @@ def expand_targets(post, schema)
 end
 
 # ===============================
-# 出力処理（---重複防止 + output_* 除外 + YAML整形）
+# 安全な投稿ページ削除（.md のみ）
+# ===============================
+def cleanup_post_pages(schema)
+  devices = schema['output_device']['values'] || %w[pc mobile text]
+  langs   = schema['lang']['values'] || %w[ja en]
+
+  devices.product(langs).each do |device, lang|
+    dir = File.join(OUTPUT_DIR, device, lang)
+    next unless Dir.exist?(dir)
+
+    Dir.glob(File.join(dir, "*.md")).each do |path|
+      puts "[CLEAN] Removing old post file: #{path}"
+      FileUtils.rm(path)
+    end
+  end
+end
+
+# ===============================
+# 出力処理（output_* 除外 + YAML整形）
 # ===============================
 def write_post_page(target)
   out_dir = File.join(OUTPUT_DIR, target[:device], target[:lang])
   FileUtils.mkdir_p(out_dir)
   FileUtils.touch(File.join(out_dir, ".keep"))
   out_path = File.join(out_dir, target[:filename])
-
   puts "[WRITE] #{out_path}"
 
-  # 除外対象キー（内部補助フィールド）
-  excluded_keys = %w[
-    output_device
-    output_layout_setting
-    output_permalink_setting
-  ]
-
+  excluded_keys = %w[output_device output_layout_setting output_permalink_setting]
   filtered_frontmatter = target[:frontmatter].reject { |k, _| excluded_keys.include?(k) }
 
   final_frontmatter = filtered_frontmatter.merge({
@@ -141,8 +142,15 @@ def write_post_page(target)
     'lang'      => target[:lang],
   })
 
-  # YAML文字列生成（先頭の---を除去）
-  yaml_text = YAML.dump(final_frontmatter).sub(/\A---\s*\n?/, '').rstrip
+  tree = Psych::Visitors::YAMLTree.create(final_frontmatter)
+  emitter = Psych::Emitter.new
+  emitter.io = StringIO.new
+  emitter.start_stream
+  emitter.start_document(nil, [], true)
+  emitter.visit(tree)
+  emitter.end_document
+  emitter.end_stream
+  yaml_text = emitter.io.string.sub(/\A---\s*\n?/, '').rstrip
 
   File.write(out_path, <<~TEXT)
     ---
@@ -156,6 +164,8 @@ end
 # 実行本体
 # ===============================
 schema = YAML.load_file(SCHEMA_FILE)
+
+cleanup_post_pages(schema)
 
 Dir.glob("#{POSTS_DIR}/*.md").each do |path|
   post = parse_post(path, schema)
