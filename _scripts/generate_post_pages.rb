@@ -8,39 +8,26 @@ SCHEMA_FILE  = '_data/post/post_schema.yml'
 OUTPUT_DIR   = '_pages'
 
 # ===============================
-# クリーンアップ対象を自動決定
-# ===============================
-def cleanup_output_dirs(schema)
-  devices = schema.dig('output_device', 'values') || %w[pc mobile text]
-  langs   = schema.dig('lang', 'values') || %w[ja en]
-
-  devices.product(langs).each do |device, lang|
-    dir = File.join(OUTPUT_DIR, device, lang)
-    if Dir.exist?(dir)
-      puts "[CLEAN] Removing old output: #{dir}"
-      FileUtils.rm_rf(dir)
-    end
-  end
-end
-
-# ===============================
-# スキーマ補完・検証（required/default/enum/type）
+# スキーマ補完・検証（required/default/values/type）
 # ===============================
 def apply_schema(frontmatter, schema)
   schema.each do |key, meta|
-    next if meta['calculated']
+    next if meta['calculated']  # device/layout/permalink などは出力補完対象
 
     value = frontmatter[key]
 
+    # 必須チェック
     if meta['required'] && !frontmatter.key?(key)
       warn "[WARN] Required key missing: #{key}"
     end
 
+    # デフォルト補完
     unless frontmatter.key?(key) && !frontmatter[key].nil?
       frontmatter[key] = meta['default']
       value = frontmatter[key]
     end
 
+    # values（enum）検証
     if meta['values'] && value
       [value].flatten.each do |v|
         unless meta['values'].include?(v)
@@ -49,6 +36,7 @@ def apply_schema(frontmatter, schema)
       end
     end
 
+    # 型検証
     expected_type = meta['type']
     actual_type = value.class
 
@@ -67,35 +55,6 @@ def apply_schema(frontmatter, schema)
   end
 
   frontmatter
-end
-
-# ===============================
-# device × lang に展開
-# ===============================
-def expand_targets(post, schema)
-  filename = File.basename(post[:path])
-  lang     = post[:frontmatter]['lang']
-
-  devices = post[:frontmatter]['output_device'] || schema.dig('output_device', 'default')
-  layout_settings    = post[:frontmatter]['output_layout_setting']    || schema.dig('output_layout_setting', 'default')
-  permalink_settings = post[:frontmatter]['output_permalink_setting'] || schema.dig('output_permalink_setting', 'default')
-
-  devices.map do |device|
-    layout    = layout_settings[device]
-    permalink = permalink_settings[device].to_s
-                 .gsub('{device}', device)
-                 .gsub('{lang}', lang)
-
-    {
-      filename: filename,
-      device: device,
-      lang: lang,
-      layout: layout,
-      permalink: permalink,
-      content: post[:content],
-      frontmatter: post[:frontmatter]
-    }
-  end
 end
 
 # ===============================
@@ -127,7 +86,36 @@ def parse_post(path, schema)
 end
 
 # ===============================
-# 出力処理
+# 出力対象展開（device × lang）
+# ===============================
+def expand_targets(post, schema)
+  filename = File.basename(post[:path])
+  lang     = post[:frontmatter]['lang']
+
+  devices = post[:frontmatter]['output_device'] || schema.dig('output_device', 'default')
+  layout_settings    = post[:frontmatter]['output_layout_setting']    || schema.dig('output_layout_setting', 'default')
+  permalink_settings = post[:frontmatter]['output_permalink_setting'] || schema.dig('output_permalink_setting', 'default')
+
+  devices.map do |device|
+    layout    = layout_settings[device]
+    permalink = permalink_settings[device].to_s
+                 .gsub('{device}', device)
+                 .gsub('{lang}', lang)
+
+    {
+      filename: filename,
+      device: device,
+      lang: lang,
+      layout: layout,
+      permalink: permalink,
+      content: post[:content],
+      frontmatter: post[:frontmatter]
+    }
+  end
+end
+
+# ===============================
+# 出力処理（output_* を除外）
 # ===============================
 def write_post_page(target)
   out_dir = File.join(OUTPUT_DIR, target[:device], target[:lang])
@@ -136,14 +124,26 @@ def write_post_page(target)
   out_path = File.join(out_dir, target[:filename])
 
   puts "[WRITE] #{out_path}"
+
+  # ⛔ 出力対象から除外する内部用キー
+  excluded_keys = %w[
+    output_device
+    output_layout_setting
+    output_permalink_setting
+  ]
+
+  filtered_frontmatter = target[:frontmatter].reject { |k, _| excluded_keys.include?(k) }
+
+  final_frontmatter = filtered_frontmatter.merge({
+    'device'    => target[:device],
+    'layout'    => target[:layout],
+    'permalink' => target[:permalink],
+    'lang'      => target[:lang],
+  })
+
   File.write(out_path, <<~FRONTMATTER + "\n" + target[:content])
     ---
-    #{target[:frontmatter].merge({
-      'device'    => target[:device],
-      'layout'    => target[:layout],
-      'permalink' => target[:permalink],
-      'lang'      => target[:lang],
-    }).to_yaml.strip}
+    #{final_frontmatter.to_yaml.strip}
     ---
   FRONTMATTER
 end
@@ -152,9 +152,6 @@ end
 # 実行本体
 # ===============================
 schema = YAML.load_file(SCHEMA_FILE)
-
-# クリーンアップ（全対象 device × lang）
-cleanup_output_dirs(schema)
 
 Dir.glob("#{POSTS_DIR}/*.md").each do |path|
   post = parse_post(path, schema)
