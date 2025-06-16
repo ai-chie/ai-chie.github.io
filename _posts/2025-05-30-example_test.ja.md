@@ -5,10 +5,6 @@ description: サンプル記事の説明
 
 created_timestamp: yyyymmddhhmm
 modified_timestamp: yyyymmddhhmm
-
-device: {output_device}
-layout: {output_layout_setting}
-permalink: {output_permalink_setting}
 ---
 
 これは日本語の記事のサンプルです。
