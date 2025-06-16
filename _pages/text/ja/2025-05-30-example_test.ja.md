@@ -4,9 +4,6 @@ title: サンプル記事（日本語）
 description: サンプル記事の説明
 created_timestamp: yyyymmddhhmm
 modified_timestamp: yyyymmddhhmm
-device: text
-layout: text-post
-permalink: "/text/ja/"
 authors: []
 categories: []
 tags: []
@@ -26,6 +23,9 @@ hidden: false
 hidden_reason: ''
 draft: false
 lang: ja
+device: text
+layout: text-post
+permalink: "/text/ja/"
 ---
 
 これは日本語の記事のサンプルです。
