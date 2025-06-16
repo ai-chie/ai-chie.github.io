@@ -2,9 +2,6 @@
 id: yyyymmddhhmm+0900_uuid_ja
 title: サンプル記事（日本語）
 description: サンプル記事の説明
-authors:
-  - author1
-  - author2
 categories:
   - テスト
   - テスト２
@@ -19,23 +16,24 @@ modified_timestamp: yyyymmddhhmm
 related_posts_lang:
   - id1
   - id2
+lang: ja
+device: pc
+layout: post
+permalink: "/pc/ja/"
+authors: []
 audience: external
-priority: 5
-featured: true
+priority: 99
+featured: false
 beta: false
 deprecated: false
 color: "#cccccc"
-icon: flask
-tooltip: サンプル記事（日本語）
+icon: ''
+tooltip: ''
 private: false
 admin_only: false
 hidden: false
 hidden_reason: ''
 draft: false
-lang: ja
-device: text
-layout: text-post
-permalink: "/text/ja/"
 ---
 
 これは日本語の記事のサンプルです。
