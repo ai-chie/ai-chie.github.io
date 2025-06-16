@@ -106,21 +106,6 @@ def expand_targets(post, schema)
   end
 end
 
-def cleanup_post_pages(schema)
-  devices = schema['output_device']['values'] || %w[pc mobile text]
-  langs   = schema['lang']['values'] || %w[ja en]
-
-  devices.product(langs).each do |device, lang|
-    dir = File.join(OUTPUT_DIR, device, lang)
-    next unless Dir.exist?(dir)
-
-    Dir.glob(File.join(dir, "*.md")).each do |path|
-      puts "[CLEAN] Removing old post file: #{path}"
-      FileUtils.rm(path)
-    end
-  end
-end
-
 def write_post_page(target)
   out_dir = File.join(OUTPUT_DIR, target[:device], target[:lang])
   FileUtils.mkdir_p(out_dir)
@@ -149,12 +134,28 @@ def write_post_page(target)
 end
 
 schema = YAML.load_file(SCHEMA_FILE)
-cleanup_post_pages(schema)
+
+# 生成対象ファイルの一覧を収集
+generated_paths = []
 
 Dir.glob("#{POSTS_DIR}/*.md").each do |path|
   post = parse_post(path, schema)
   next unless post
   expand_targets(post, schema).each do |target|
+    path = File.join(OUTPUT_DIR, target[:device], target[:lang], target[:filename])
+    generated_paths << path
     write_post_page(target)
+  end
+end
+
+# taxonomy式 同期削除
+generated_set = generated_paths.to_set
+base_dirs = Dir.glob("#{OUTPUT_DIR}/*/*").select { |f| File.directory?(f) }
+base_dirs.each do |dir|
+  Dir.glob(File.join(dir, "*.md")).each do |file|
+    unless generated_set.include?(file)
+      puts "[DELETE] #{file}"
+      File.delete(file)
+    end
   end
 end
