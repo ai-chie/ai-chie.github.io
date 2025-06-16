@@ -2,15 +2,6 @@
 id: yyyymmddhhmm+0900_uuid_ja
 title: サンプル記事（日本語）
 description: サンプル記事の説明
-categories:
-  - テスト
-  - テスト２
-tags:
-  - サンプル
-  - 記事
-images:
-  - image1
-  - image2
 created_timestamp: yyyymmddhhmm
 modified_timestamp: yyyymmddhhmm
 related_posts_lang:
@@ -21,6 +12,9 @@ device: mobile
 layout: mobile-post
 permalink: "/mobile/ja/"
 authors: []
+categories: []
+tags: []
+images: []
 audience: external
 priority: 99
 featured: false
