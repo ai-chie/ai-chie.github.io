@@ -8,29 +8,52 @@ SCHEMA_FILE  = '_data/post/post_schema.yml'
 OUTPUT_DIR   = '_pages'
 
 # ----------------------------------------
-# スキーマ適用：デフォルト補完 + enum検証 + 必須チェック
+# スキーマ適用：デフォルト補完 + enum検証 + 型チェック
 # ----------------------------------------
 def apply_schema(frontmatter, schema)
   schema.each do |key, meta|
-    next if meta['calculated'] # layout, permalink, device は対象外
+    next if meta['calculated']  # device/layout/permalink などは補完対象で別処理
 
+    value = frontmatter[key]
+
+    # 必須チェック
     if meta['required'] && !frontmatter.key?(key)
       warn "[WARN] Required key missing: #{key}"
     end
 
+    # デフォルト補完
     unless frontmatter.key?(key) && !frontmatter[key].nil?
       frontmatter[key] = meta['default']
+      value = frontmatter[key]
     end
 
-    if meta['values'] && frontmatter[key]
-      values = [frontmatter[key]].flatten # string or array 両対応
-      values.each do |v|
+    # enum検証
+    if meta['values'] && value
+      [value].flatten.each do |v|
         unless meta['values'].include?(v)
           warn "[WARN] Invalid value for #{key}: #{v.inspect} (allowed: #{meta['values']})"
         end
       end
     end
+
+    # 型検証
+    expected_type = meta['type']
+    actual_type = value.class
+
+    type_mismatch = case expected_type
+    when "string"  then !value.is_a?(String)
+    when "array"   then !value.is_a?(Array)
+    when "boolean" then ![true, false].include?(value)
+    when "integer" then !value.is_a?(Integer)
+    when "object"  then !value.is_a?(Hash)
+    else false
+    end
+
+    if type_mismatch
+      warn "[WARN] Type mismatch for #{key}: expected #{expected_type}, got #{actual_type}"
+    end
   end
+
   frontmatter
 end
 
@@ -92,7 +115,7 @@ def parse_post(path, schema)
 end
 
 # ----------------------------------------
-# 書き出し
+# 書き出し処理
 # ----------------------------------------
 def write_post_page(target)
   out_dir = File.join(OUTPUT_DIR, target[:device], target[:lang])

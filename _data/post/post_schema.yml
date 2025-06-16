@@ -286,6 +286,10 @@ lang:
   default: 'ja'
   unused: false
   description: 記事の言語。ja、enなど。
+  calculated: false
+  values:
+  - ja
+  - en
 
 # ----------
 # *.mdに追加するFrontmatter
