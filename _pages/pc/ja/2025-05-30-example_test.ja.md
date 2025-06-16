@@ -3,7 +3,6 @@ id: yyyymmddhhmm+0900_uuid_ja
 lang: ja
 device: pc
 layout: post
-permalink: "/pc/ja/"
 title: ''
 description: ''
 authors: []
@@ -26,6 +25,7 @@ admin_only: false
 hidden: false
 hidden_reason: ''
 draft: false
+permalink: "/pc/ja/"
 ---
 
 これは日本語の記事のサンプルです。

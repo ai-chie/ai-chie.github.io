@@ -3,7 +3,6 @@ id: yyyymmddhhmm+0900_uuid_ja
 lang: ja
 device: mobile
 layout: mobile-post
-permalink: "/mobile/ja/"
 title: ''
 description: ''
 authors: []
@@ -26,6 +25,7 @@ admin_only: false
 hidden: false
 hidden_reason: ''
 draft: false
+permalink: "/mobile/ja/"
 ---
 
 これは日本語の記事のサンプルです。
