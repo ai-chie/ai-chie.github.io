@@ -127,17 +127,7 @@ def write_post_page(target)
     'lang'      => target[:lang],
   })
 
-  tree = Psych::Visitors::YAMLTree.create(final_frontmatter)
-
-  io = StringIO.new
-  emitter = Psych::Emitter.new(io)
-  emitter.start_stream(Psych::Nodes::Stream::UTF8)
-  emitter.start_document([], [], true)
-  emitter.visit(tree)
-  emitter.end_document
-  emitter.end_stream
-
-  yaml_text = io.string.sub(/\A---\s*\n?/, '').rstrip
+  yaml_text = Psych.dump(final_frontmatter).sub(/\A---\s*\n?/, '').rstrip
 
   File.write(out_path, <<~TEXT)
     ---
