@@ -1,5 +1,5 @@
 ---
-id: yyyymmddhhmm+0900_uuid_ja
+id: ''
 title: ''
 description: ''
 authors: []
