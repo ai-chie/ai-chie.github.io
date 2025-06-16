@@ -3,14 +3,12 @@ require 'yaml'
 require 'fileutils'
 require 'date'
 require 'psych'
+require 'stringio'
 
 POSTS_DIR    = '_posts'
 SCHEMA_FILE  = '_data/post/post_schema.yml'
 OUTPUT_DIR   = '_pages'
 
-# ===============================
-# スキーマ補完・検証
-# ===============================
 def apply_schema(frontmatter, schema)
   schema.each do |key, meta|
     next if meta['calculated']
@@ -47,13 +45,9 @@ def apply_schema(frontmatter, schema)
       warn "[WARN] Type mismatch for #{key}: expected #{expected_type}, got #{value.class}"
     end
   end
-
   frontmatter
 end
 
-# ===============================
-# 投稿ファイル読み込み
-# ===============================
 def parse_post(path, schema)
   lines = File.readlines(path)
   return nil unless lines[0].strip == "---"
@@ -76,9 +70,6 @@ def parse_post(path, schema)
   }
 end
 
-# ===============================
-# 出力対象展開
-# ===============================
 def expand_targets(post, schema)
   filename = File.basename(post[:path])
   lang     = post[:frontmatter]['lang']
@@ -104,9 +95,6 @@ def expand_targets(post, schema)
   end
 end
 
-# ===============================
-# 安全な投稿ページ削除（.md のみ）
-# ===============================
 def cleanup_post_pages(schema)
   devices = schema['output_device']['values'] || %w[pc mobile text]
   langs   = schema['lang']['values'] || %w[ja en]
@@ -122,9 +110,6 @@ def cleanup_post_pages(schema)
   end
 end
 
-# ===============================
-# 出力処理（output_* 除外 + YAML整形）
-# ===============================
 def write_post_page(target)
   out_dir = File.join(OUTPUT_DIR, target[:device], target[:lang])
   FileUtils.mkdir_p(out_dir)
@@ -143,14 +128,16 @@ def write_post_page(target)
   })
 
   tree = Psych::Visitors::YAMLTree.create(final_frontmatter)
-  emitter = Psych::Emitter.new
-  emitter.io = StringIO.new
+
+  io = StringIO.new
+  emitter = Psych::Emitter.new(io)
   emitter.start_stream
   emitter.start_document(nil, [], true)
   emitter.visit(tree)
   emitter.end_document
   emitter.end_stream
-  yaml_text = emitter.io.string.sub(/\A---\s*\n?/, '').rstrip
+
+  yaml_text = io.string.sub(/\A---\s*\n?/, '').rstrip
 
   File.write(out_path, <<~TEXT)
     ---
@@ -160,11 +147,7 @@ def write_post_page(target)
   TEXT
 end
 
-# ===============================
-# 実行本体
-# ===============================
 schema = YAML.load_file(SCHEMA_FILE)
-
 cleanup_post_pages(schema)
 
 Dir.glob("#{POSTS_DIR}/*.md").each do |path|
