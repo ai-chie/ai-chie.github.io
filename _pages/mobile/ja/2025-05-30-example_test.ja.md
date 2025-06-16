@@ -1,13 +1,17 @@
 ---
 id: yyyymmddhhmm+0900_uuid_ja
-title: サンプル記事（日本語）
-description: サンプル記事の説明
-created_timestamp: yyyymmddhhmm
-modified_timestamp: yyyymmddhhmm
+lang: ja
+device: mobile
+layout: mobile-post
+permalink: "/mobile/ja/"
+title: ''
+description: ''
 authors: []
 categories: []
 tags: []
 images: []
+created_timestamp: ''
+modified_timestamp: ''
 related_posts_lang: []
 audience: external
 priority: 99
@@ -22,10 +26,6 @@ admin_only: false
 hidden: false
 hidden_reason: ''
 draft: false
-lang: ja
-device: mobile
-layout: mobile-post
-permalink: "/mobile/ja/"
 ---
 
 これは日本語の記事のサンプルです。
