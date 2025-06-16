@@ -1,8 +1,5 @@
 ---
 id: yyyymmddhhmm+0900_uuid_ja
-lang: ja
-device: pc
-layout: post
 title: ''
 description: ''
 authors: []
@@ -25,6 +22,9 @@ admin_only: false
 hidden: false
 hidden_reason: ''
 draft: false
+lang: ja
+device: pc
+layout: post
 permalink: "/pc/ja/"
 ---
 
