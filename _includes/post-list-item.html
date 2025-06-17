@@ -5,15 +5,27 @@
 {% unless post_attrs.hidden or post_attrs.draft or post_attrs.private or post_attrs.admin_only or post_attrs.audience != "external" %}
   {% if render_type == 'text' %}
     <li>
-      <a href="{{ post.url }}" title="{{ post.tooltip | escape }}">{{ post.icon }} {{ post.title }}</a>
+      <a href="{{ post.url }}" title="{{ post.tooltip | escape }}">
+        {% if post.icon contains 'fa-' or post.icon contains 'icon-' %}
+          <span class="{{ post.icon }}"></span>
+        {% else %}
+          {{ post.icon }}
+        {% endif %}
+        {{ post.title }}
+      </a>
     </li>
   {% else %}
     <li class="mb-4">
       <a href="{{ post.url }}"
          class="font-semibold hover:underline"
          style="color: {{ post.color | default: '#333' }};"
-         title="{{ post.tooltip | escape }}">
-        {{ post.icon }} {{ post.title }}
+         {% if post.tooltip != '' %}title="{{ post.tooltip | escape }}"{% endif %}>
+        {% if post.icon contains 'fa-' or post.icon contains 'icon-' %}
+          <span class="{{ post.icon }}"></span>
+        {% else %}
+          {{ post.icon }}
+        {% endif %}
+        {{ post.title }}
       </a>
 
       <div class="text-xs mt-1 space-x-1 text-gray-600">
