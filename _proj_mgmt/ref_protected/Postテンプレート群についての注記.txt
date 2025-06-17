@@ -1,0 +1,45 @@
+{%- comment -%}
+【テンプレート設計注意 - 投稿（post）関連】
+
+このテンプレートで使用する変数には以下の設計方針があります。
+投稿のフロントマター属性（post.*）と、スキーマ定義（post_schema）を明確に区別してください。
+
+────────────────────────────────────
+■ UI表示・判定に使用すべき変数
+
+- post.title                      → 投稿のタイトル
+- post.description               → 投稿の概要
+- post.url                       → リンク先URL
+- post.created_timestamp         → 作成日時（カスタム拡張）
+- post.modified_timestamp        → 更新日時（カスタム拡張）
+
+- post_attrs.hidden              → 非表示判定（post-attribute-check.html で展開済）
+- post_attrs.draft               → 下書き判定
+- post_attrs.featured            → 注目表示（★）
+- post_attrs.beta                → ベータ表示（🧪）
+- post_attrs.deprecated          → 廃止予定（⚠）
+- post_attrs.audience            → internal/external 表示判定
+- post_attrs.private             → 限定公開の除外制御
+- post_attrs.admin_only          → 管理者専用の除外制御
+- post_attrs.priority            → ソート制御
+
+────────────────────────────────────
+■ 使用してはいけない変数
+
+- post_schema.title
+- post_schema.description
+→ これらは構造仕様用であり、UI出力には **使用しないこと**
+
+────────────────────────────────────
+■ post-attribute-check.html の役割
+
+- include.post または page から postオブジェクトを受け取り、
+  スキーマ定義に基づいて post_attrs を構築（default補完含む）
+
+- 必ず post_attrs を経由して属性を参照してください。
+
+────────────────────────────────────
+
+このコメントはテンプレート設計の理解と誤用防止のために先頭に保持してください。
+{%- endcomment -%}
+

@@ -22,7 +22,10 @@ title:
     ja: unknown
     en: unknown
   unused: false
-  description: 【必須】多言語対応 {ja "日本語タイトル", en "English title"}。
+  description: |
+    【必須】多言語対応 {ja "日本語タイトル", en "English title"}。
+    【重要】このtitleは taxonomyデータの構造定義用であり、画面表示用ではありません。
+    一覧UIや個別ページで表示するtitleは、_data/taxonomy/categories.yml または tags.yml 側の値を参照してください。
   
 description:
   type: object

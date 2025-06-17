@@ -32,10 +32,6 @@
 <section>
   {%- if render_format == 'html' -%}
     <h3 class="text-lg font-bold">{{ ui.title[type][lang] }}</h3>
-    {%- assign title_obj = schema.title | default: {} -%}
-    {%- if title_obj[lang] != blank -%}
-      <p class="text-sm text-gray-600">{{ title_obj[lang] }}</p>
-    {%- endif -%}
     {%- if ui.description[type][lang] != blank -%}
       <p class="text-sm text-gray-500">{{ ui.description[type][lang] }}</p>
     {%- endif -%}

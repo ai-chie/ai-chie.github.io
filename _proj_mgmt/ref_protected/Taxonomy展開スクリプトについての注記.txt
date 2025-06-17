@@ -1,0 +1,43 @@
+=begin
+【スクリプト設計注意 - taxonomy自動展開用】
+
+このスクリプトでは、taxonomy（カテゴリ・タグ）に関する構造定義と
+個別データ（_data/taxonomy/categories.yml など）を用いて、
+Jekyllの _pages/ 以下に対応する出力ファイルを自動生成します。
+
+────────────────────────────────────
+■ データ構成の役割
+
+taxonomy_schema.yml：
+  - 各属性（title, description, color, ...）の型・required・default値を定義
+  - カテゴリ/タグデータの構造仕様を統一管理
+  - UI表示用データではない
+
+categories.yml / tags.yml：
+  - 実際のカテゴリ・タグ定義データ
+  - 多言語対応の name/title/description 等を含む
+  - 各要素には schema に準拠した属性が必要
+
+────────────────────────────────────
+■ スクリプトの責務
+
+- スキーマに従って各taxonomy項目を検証
+- schema.default を適用して不足値を補完
+- output_device / output_lang / output_type に応じた出力先を決定
+- layout, permalink を schema.output_layout_setting / output_permalink_setting に基づき生成
+- taxonomy_hidden, draft, private, admin_only などに応じて出力を抑制
+- 出力先: _pages/{device}/{lang}/{type}/{slug}/index.md
+
+────────────────────────────────────
+■ 禁止・注意事項
+
+- taxonomy_schema の title, description を UI出力用として誤って使わない
+- UIで表示すべき name/title/description は _data/taxonomy/*.yml 側に定義する
+- schemaの default は補完専用であり、画面表示用ではない
+- Jekyllのカテゴリ/タグ集計機能との二重定義・衝突に注意
+
+────────────────────────────────────
+
+このブロックは構造の理解と保守性維持のためにスクリプト冒頭に保持してください。
+=end
+

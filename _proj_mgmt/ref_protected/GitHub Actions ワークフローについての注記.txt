@@ -1,0 +1,30 @@
+# ===========================================
+# 【GitHub Actions ワークフロー設計注意】
+#
+# このファイルは Jekyllサイトのビルド・デプロイ・taxonomy展開など
+# 自動処理の一環として使用されるCI定義です。
+#
+# 以下の点に注意して構成してください：
+#
+# ✅ permissions 設定の階層と影響を正しく理解すること
+#   - YAML内 permissions: は job 単位/ workflow 単位で個別に設定可能
+#   - Settings → Actions → Workflow permissions との整合が必要
+#
+# ✅ GITHUB_TOKEN のアクセス権限は明示的に設定すること
+#   - 明示しない場合は read-only（デフォルト）で動作
+#   - write・contents: write などが必要な場面では明記する
+#
+# ✅ workflow_run や reusable workflow 呼び出し時の制限に注意
+#   - secrets/GITHUB_TOKEN の継承や制約あり
+#
+# ✅ node_modules や _site など、コミット対象外のディレクトリを扱う場合は
+#   .gitignore/.gitattributes と連携させて履歴肥大を防止すること
+#
+# ✅ Jekyllのビルド出力や taxonomy 展開などで差分コミットを行う場合、
+#   git add -N / git diff --cached 等の安全な差分検出ロジックを使うこと
+#
+# ✅ YAML構文ミスによるサイレントエラーに注意（特にインデント）
+#
+# このコメントは保守性と構造理解を支援するため、冒頭に維持してください。
+# ===========================================
+
