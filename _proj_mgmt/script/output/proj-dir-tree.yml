@@ -11,6 +11,7 @@
       - [yaml-to-json.yml, .github/workflows/proj_mgmt_workflows/yaml-to-json.yml]
 
     __files__:
+    - [generate-post-pages.yml, .github/workflows/generate-post-pages.yml]
     - [generate-proj-dir-tree.yml, .github/workflows/generate-proj-dir-tree.yml]
     - [generate-taxonomy.yml, .github/workflows/generate-taxonomy.yml]
 
@@ -99,9 +100,9 @@ _layouts:
   - [base.html, _layouts/base.html]
   - [default.html, _layouts/default.html]
   - [post.html, _layouts/post.html]
+  - [taxonomy-index.html, _layouts/taxonomy-index.html]
+  - [taxonomy.html, _layouts/taxonomy.html]
   - [text-post.html, _layouts/text-post.html]
-  - [text-taxonomy-index.html, _layouts/text-taxonomy-index.html]
-  - [text-taxonomy.html, _layouts/text-taxonomy.html]
 
 _log:
 
@@ -144,6 +145,10 @@ _pages:
         - [sample1.md, _pages/mobile/ja/tags/sample1.md]
         - [sample2.md, _pages/mobile/ja/tags/sample2.md]
 
+      __files__:
+      - [.keep, _pages/mobile/ja/.keep]
+      - [2025-05-30-example.ja.md, _pages/mobile/ja/2025-05-30-example.ja.md]
+
   pc:
 
     en:
@@ -177,6 +182,10 @@ _pages:
         - [.keep, _pages/pc/ja/tags/.keep]
         - [sample1.md, _pages/pc/ja/tags/sample1.md]
         - [sample2.md, _pages/pc/ja/tags/sample2.md]
+
+      __files__:
+      - [.keep, _pages/pc/ja/.keep]
+      - [2025-05-30-example.ja.md, _pages/pc/ja/2025-05-30-example.ja.md]
 
   text:
 
@@ -213,7 +222,8 @@ _pages:
         - [sample2.md, _pages/text/ja/tags/sample2.md]
 
       __files__:
-      - [index.md, _pages/text/ja/index.md]
+      - [.keep, _pages/text/ja/.keep]
+      - [2025-05-30-example.ja.md, _pages/text/ja/2025-05-30-example.ja.md]
 
 _posts:
 
@@ -228,6 +238,7 @@ _proj_mgmt:
     - [2025-05-30-example.ja_template.md, _proj_mgmt/ref_protected/2025-05-30-example.ja_template.md]
     - [categories_template.yml, _proj_mgmt/ref_protected/categories_template.yml]
     - [post_schema_template.yml, _proj_mgmt/ref_protected/post_schema_template.yml]
+    - [post_schema_template_2.yml, _proj_mgmt/ref_protected/post_schema_template_2.yml]
     - [tags_template.yml, _proj_mgmt/ref_protected/tags_template.yml]
     - [taxonomy_schema_template.yml, _proj_mgmt/ref_protected/taxonomy_schema_template.yml]
 
@@ -244,6 +255,7 @@ _proj_mgmt:
 _scripts:
 
   __files__:
+  - [generate_post_pages.rb, _scripts/generate_post_pages.rb]
   - [generate_sitemap_text.rb, _scripts/generate_sitemap_text.rb]
   - [generate_taxonomy.rb, _scripts/generate_taxonomy.rb]
 
@@ -284,5 +296,7 @@ root_files:
   - [README.md, README.md]
   - [_config.yml, _config.yml]
   - [_config_text.yml, _config_text.yml]
+  - [index.md, index.md]
   - [robots.txt, robots.txt]
   - [sitemap.xml, sitemap.xml]
+  - [sitemap_text.xml, sitemap_text.xml]
