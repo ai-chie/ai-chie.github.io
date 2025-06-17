@@ -1,6 +1,6 @@
 {%- assign schema = include.schema -%}
 {%- assign lang = include.lang | default: 'ja' -%}
-{%- assign labels = site.data.lang.post_badge | default: site.data.lang.taxonomy_badge -%}
+{%- assign labels = site.data.lang.post_badge -%}
 
 <span class="inline-flex items-center space-x-1 text-xs">
 
@@ -24,15 +24,21 @@
   {%- endif -%}
 
   {%- if include.tooltip -%}
-    <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded" title="{{ include.tooltip }}">🔢</span>
+    <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded" title="{{ include.tooltip }}">🛈</span>
   {%- endif -%}
 
   {%- if include.icon -%}
-    {%- if include.icon contains 'fa-' or include.icon contains 'icon-' -%}
-      <span class="px-2 py-0.5" title="{{ labels.icon_tooltip[lang] }}"><span class="{{ include.icon }}"></span></span>
-    {%- else -%}
-      <span class="px-2 py-0.5" title="{{ labels.icon_tooltip[lang] }}">{{ include.icon }}</span>
-    {%- endif -%}
+    <span class="px-2 py-0.5" title="{{ labels.icon_tooltip[lang] }}">
+      {% if include.icon contains 'fa-' or include.icon contains 'icon-' %}
+        <span class="{{ include.icon }}"></span>
+      {% else %}
+        {{ include.icon }}
+      {% endif %}
+    </span>
+  {%- endif -%}
+
+  {%- if include.hiddenReason -%}
+    <span class="px-2 py-0.5 text-red-500" title="{{ labels.hidden_reason_tooltip[lang] }}">🛈 {{ include.hiddenReason }}</span>
   {%- endif -%}
 
 </span>
