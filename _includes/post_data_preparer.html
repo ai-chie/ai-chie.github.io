@@ -7,8 +7,9 @@ merged_posts という配列で出力します。
 - 出力: merged_posts（post + post_attrs を持つハッシュ配列）
 {%- endcomment -%}
 
-{%- assign schema = site.data.post.post_schema -%}
+{%- assign schema = include.schema -%}
 {%- assign posts = include.posts -%}
+{%- assign lang = include.lang | default: 'ja' -%}
 {%- assign merged_posts = "" | split: "" -%}
 
 {%- for post in posts -%}
@@ -26,3 +27,4 @@ merged_posts という配列で出力します。
   {%- assign merged_post = post | merge: { "post_attrs": post_attrs } -%}
   {%- assign merged_posts = merged_posts | push: merged_post -%}
 {%- endfor -%}
+
