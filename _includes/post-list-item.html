@@ -1,8 +1,10 @@
 {% assign post = include.post | default: page %}
 {% assign render_type = include.render_type | default: 'text' %}
-{% include post-attribute-check.html post=post %}
+{% assign lang = include.lang | default: page.lang | default: 'ja' %}
+{% assign audience = post.audience | default: 'external' %}
+{% assign audience_label = site.data.lang.post_audience_labels[audience][lang] %}
 
-{% unless post_attrs.hidden or post_attrs.draft or post_attrs.private or post_attrs.admin_only or post_attrs.audience != "external" %}
+{% unless post.post_attrs.hidden or post.post_attrs.draft or post.post_attrs.private or post.post_attrs.admin_only or post.post_attrs.audience != "external" %}
   {% if render_type == 'text' %}
     <li>
       <a href="{{ post.url }}" title="{{ post.tooltip | escape }}">
@@ -28,15 +30,23 @@
         {{ post.title }}
       </a>
 
+      {% if post.description != '' %}
+        <div class="text-sm text-gray-500 mt-1">{{ post.description }}</div>
+      {% endif %}
+
       <div class="text-xs mt-1 space-x-1 text-gray-600">
+        {% if audience_label %}
+          <span>{{ audience_label }}</span>
+        {% endif %}
+
         {% include post-badge.html
-          featured=post_attrs.featured
-          beta=post_attrs.beta
-          deprecated=post_attrs.deprecated
-          audience=post_attrs.audience
+          featured=post.post_attrs.featured
+          beta=post.post_attrs.beta
+          deprecated=post.post_attrs.deprecated
+          audience=post.post_attrs.audience
           tooltip=post.tooltip
           icon=post.icon
-          lang=post.lang
+          lang=lang
           schema=site.data.post.post_schema
         %}
 
