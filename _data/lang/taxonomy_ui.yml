@@ -29,3 +29,23 @@ audience_labels:
   internal:
     ja: 内部向け
     en: Internal
+
+description:
+  categories:
+    ja: 投稿をカテゴリ単位で分類しています。技術、日記、考察などに分類されます。
+    en: Posts are grouped into categories like Tech, Journal, or Insights.
+  tags:
+    ja: 投稿に関連するキーワードタグです。横断的な話題でフィルタできます。
+    en: Keyword-based tags for filtering content across topics.
+
+empty_message:
+  ja: 該当する項目は見つかりませんでした。
+  en: No matching items found.
+
+error_messages:
+  data_load_failed:
+    ja: タクソノミーデータの読み込みに失敗しました。
+    en: Failed to load taxonomy data.
+  schema_invalid:
+    ja: スキーマ定義が不正です。
+    en: Schema definition is invalid.

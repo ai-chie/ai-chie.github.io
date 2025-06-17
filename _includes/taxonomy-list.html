@@ -36,6 +36,17 @@
     {%- if title_obj[lang] != blank -%}
       <p class="text-sm text-gray-600">{{ title_obj[lang] }}</p>
     {%- endif -%}
+    {%- if ui.description[type][lang] != blank -%}
+      <p class="text-sm text-gray-500">{{ ui.description[type][lang] }}</p>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if merged_items.size == 0 -%}
+    <p class="text-sm text-red-500 mt-4">{{ ui.empty_message[lang] }}</p>
+  {%- endif -%}
+
+  {%- if schema == nil or schema.size == 0 -%}
+    <p class="text-red-600 font-bold">{{ ui.error_messages.schema_invalid[lang] }}</p>
   {%- endif -%}
 
   {% include taxonomy_list_generator.html
