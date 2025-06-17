@@ -1,0 +1,47 @@
+featured:
+  ja: 注目
+  en: Featured
+
+beta:
+  ja: ベータ
+  en: Beta
+
+deprecated:
+  ja: 廃止予定
+  en: Deprecated
+
+internal:
+  ja: 内部
+  en: Internal
+
+public:
+  ja: 公開
+  en: Public
+
+icon_tooltip:
+  ja: アイコン表示（投稿の性質を表します）
+  en: Icon representing this post
+
+featured_tooltip:
+  ja: 注目されている投稿
+  en: This post is marked as featured
+
+beta_tooltip:
+  ja: 試験的または不安定な投稿
+  en: This post is marked as experimental or in beta
+
+deprecated_tooltip:
+  ja: 非推奨または廃止予定の投稿
+  en: This post is deprecated or to be removed
+
+public_tooltip:
+  ja: 一般に公開されています
+  en: Publicly visible
+
+internal_tooltip:
+  ja: 内部利用に限定されています
+  en: Intended for internal use only
+
+hidden_reason_tooltip:
+  ja: 非表示理由
+  en: Reason for being hidden

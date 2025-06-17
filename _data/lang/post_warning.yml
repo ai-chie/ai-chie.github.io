@@ -1,0 +1,19 @@
+title_missing:
+  ja: タイトルが設定されていません
+  en: Title is missing
+
+lang_missing:
+  ja: 言語コード（lang）が設定されていません
+  en: Language code (lang) is missing
+
+id_malformed:
+  ja: IDの形式が正しくありません（timestamp+UUID+lang形式を推奨）
+  en: ID format is invalid (should follow timestamp+UUID+lang)
+
+output_device_empty:
+  ja: 出力対象デバイス（output_device）が未指定です
+  en: Output device list (output_device) is empty
+
+audience_invalid:
+  ja: audience の値が不正です（internal または external のみ許可）
+  en: Invalid audience value (must be 'internal' or 'external')

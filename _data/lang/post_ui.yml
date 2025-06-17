@@ -1,0 +1,31 @@
+search_placeholder:
+  ja: 絞り込み（キーワードで検索）
+  en: Filter by keyword
+
+sort_options:
+  priority:
+    ja: 優先度順
+    en: By Priority
+  title:
+    ja: タイトル順
+    en: By Title
+  date:
+    ja: 日付順
+    en: By Date
+
+audience_labels:
+  external:
+    ja: 外部公開
+    en: Public
+  internal:
+    ja: 内部向け
+    en: Internal
+
+empty_message:
+  ja: 該当する投稿は見つかりませんでした。
+  en: No matching posts found.
+
+error_messages:
+  data_load_failed:
+    ja: 投稿データの読み込みに失敗しました。
+    en: Failed to load post data.
