@@ -20,9 +20,9 @@
 %}
 
 {%- if render_format == 'html' -%}
-<div>
-  <input type="text" id="filter" placeholder="{{ ui.search_placeholder[lang] }}">
-  <select id="sort">
+<div class="mb-4">
+  <input type="text" id="filter" placeholder="{{ ui.search_placeholder[lang] }}" class="border px-2 py-1 mr-2">
+  <select id="sort" class="border px-2 py-1">
     <option value="count">{{ ui.sort_options.count[lang] }}</option>
     <option value="name">{{ ui.sort_options.name[lang] }}</option>
   </select>
@@ -31,7 +31,7 @@
 
 <section>
   {%- if render_format == 'html' -%}
-    <h3>{{ ui.title[type][lang] }}</h3>
+    <h3 class="text-lg font-bold">{{ ui.title[type][lang] }}</h3>
     {%- assign title_obj = schema.title | default: {} -%}
     {%- if title_obj[lang] != blank -%}
       <p class="text-sm text-gray-600">{{ title_obj[lang] }}</p>
