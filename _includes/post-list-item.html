@@ -1,18 +1,22 @@
 {% assign post = include.post | default: page %}
-{% assign render_type = include.render_type | default: 'text' %} {# 'html' または 'text' #}
+{% assign render_type = include.render_type | default: 'text' %}
 {% include post-attribute-check.html post=post %}
 
-{% unless post_attrs.hidden or post_attrs.draft %}
+{% unless post_attrs.hidden or post_attrs.draft or post_attrs.private or post_attrs.admin_only or post_attrs.audience != "external" %}
   {% if render_type == 'text' %}
     <li>
-      <a href="{{ post.url }}">{{ post.title }}</a>
-      {# AI向けには不要なバッジや追加情報はここには含めない #}
+      <a href="{{ post.url }}" title="{{ post.tooltip | escape }}">{{ post.icon }} {{ post.title }}</a>
     </li>
   {% else %}
     <li class="mb-4">
-      <a href="{{ post.url }}" class="font-semibold text-blue-600 hover:underline">{{ post.title }}</a>
+      <a href="{{ post.url }}"
+         class="font-semibold hover:underline"
+         style="color: {{ post.color | default: '#333' }};"
+         title="{{ post.tooltip | escape }}">
+        {{ post.icon }} {{ post.title }}
+      </a>
 
-      <div class="text-xs mt-1 space-x-1">
+      <div class="text-xs mt-1 space-x-1 text-gray-600">
         {% if post_attrs.featured %}
           <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 rounded">★ 注目</span>
         {% endif %}
@@ -22,10 +26,11 @@
         {% if post_attrs.deprecated %}
           <span class="inline-block px-2 py-1 bg-red-100 text-red-700 rounded">⚠ 廃止予定</span>
         {% endif %}
-        {% if post_attrs.audience == 'internal' %}
-          <span class="inline-block px-2 py-1 bg-gray-100 text-gray-600 rounded">🔒 Internal</span>
-        {% elsif post_attrs.audience == 'external' %}
-          <span class="inline-block px-2 py-1 bg-green-100 text-green-600 rounded">🌐 Public</span>
+        {% if post.created_timestamp %}
+          <span>🗓 {{ post.created_timestamp }}</span>
+        {% endif %}
+        {% if post.modified_timestamp %}
+          <span>🔄 {{ post.modified_timestamp }}</span>
         {% endif %}
       </div>
     </li>

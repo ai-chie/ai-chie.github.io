@@ -3,7 +3,7 @@
 
 {%- assign post_attrs = {} -%}
 
-{%- assign attr_list = "hidden,draft,featured,deprecated,beta,audience,private,admin_only" | split: "," -%}
+{%- assign attr_list = "hidden,draft,featured,deprecated,beta,audience,private,admin_only,priority,color,icon,tooltip,created_timestamp,modified_timestamp" | split: "," -%}
 
 {%- for attr in attr_list -%}
   {%- assign value = post_obj[attr] -%}
@@ -12,21 +12,3 @@
   {%- endif -%}
   {%- assign post_attrs = post_attrs | merge: {{ attr | jsonify }}: value -%}
 {%- endfor -%}
-
-<!--
-
-上記のmap版にしたため、使わなくなったコード
-
-{%- assign post_schema = site.data.post_schema -%}
-
-{%- assign post_obj = include.post | default: page -%}
-
-{%- assign post_hidden        = post_obj.post_hidden        | default: post_schema.post_hidden.default -%}
-{%- assign post_draft         = post_obj.post_draft         | default: post_schema.post_draft.default -%}
-{%- assign post_featured      = post_obj.post_featured      | default: post_schema.post_featured.default -%}
-{%- assign post_deprecated    = post_obj.post_deprecated    | default: post_schema.post_deprecated.default -%}
-{%- assign post_beta          = post_obj.post_beta          | default: post_schema.post_beta.default -%}
-{%- assign post_audience      = post_obj.post_audience      | default: post_schema.post_audience.default -%}
-{%- assign post_private       = post_obj.post_private       | default: post_schema.post_private.default -%}
-{%- assign post_admin_only    = post_obj.post_admin_only    | default: post_schema.post_admin_only.default -%}
--->

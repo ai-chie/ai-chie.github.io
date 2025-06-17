@@ -1,20 +1,20 @@
 {% assign device = include.device | default: post.device | page.device | default: 'text' %}
-{% assign render_type = include.render_type | default: 'text' %} {# 'html' または 'text' #}
-{%- assign post_obj_1 = include.post | default: page -%}
+{% assign render_type = include.render_type | default: 'text' %}
 
-{# render_type を device の値に応じて設定 #}
-{% assign render_type = 'html' %} {# デフォルトをhtmlに設定 #}
+{# render_type を device によって上書き #}
+{% assign render_type = 'html' %}
 {% if device == 'text' %}
   {% assign render_type = 'text' %}
 {% endif %}
 
+{% assign post_obj_1 = include.post | default: page %}
+{% assign sorted_posts = post_obj_1 | sort: "priority" %}
+
 <ul class="space-y-4">
-  {% for post in post_obj_1 %}
+  {% for post in sorted_posts %}
     {% include post-attribute-check.html post=post %}
-    {% unless post_attrs.hidden or post_attrs.draft %}
-      {# 変更点: post-list-item-text.html の include を削除し、render_type を渡す #}
+    {% unless post_attrs.hidden or post_attrs.draft or post_attrs.private or post_attrs.admin_only or post_attrs.audience != "external" %}
       {% include post-list-item.html post=post render_type=render_type %}
     {% endunless %}
   {% endfor %}
 </ul>
-
