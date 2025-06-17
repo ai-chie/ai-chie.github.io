@@ -13,12 +13,19 @@
     {%- assign post_schema = site.data.post.post_schema | default: {} -%}
 
     {# 子レイアウトやページがhead要素の内容を追加するためのフックポイント #}
+    {%- if page.device == 'text' -%}
+      {%- include head-minimal.html -%}
+    {%- else -%}
+      {%- {% include head-meta.html %} -%}
+    {% endif %}
+    
     {% if layout.head_content %}
       {{ layout.head_content }}
     {% endif %}
     {% if page.head_content %}
       {{ page.head_content }}
     {% endif %}
+    
 
     {# 全てのページに共通する、本当に最小限のCSS/JSリンク（例: CSSリセットなど）をここに配置することも可能です #}
     {# <link rel="stylesheet" href="/assets/css/reset.css"> #}
