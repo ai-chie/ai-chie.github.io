@@ -1,39 +1,31 @@
-# _data/lang/taxonomy_ui.yml
 title:
   categories:
     ja: カテゴリ一覧
-    en: Categories
+    en: Category List
   tags:
     ja: タグ一覧
-    en: Tags
+    en: Tag List
+
 search_placeholder:
-  ja: カテゴリを検索
-  en: Search categories
+  ja: 絞り込み（キーワードで検索）
+  en: Filter by keyword
+
 sort_options:
   count:
     ja: 件数順
-    en: By count
+    en: By Count
   name:
     ja: 名前順
-    en: By name
-badges:
-  featured:
-    ja: 注目
-    en: Featured
-  beta:
-    ja: Beta
-    en: Beta
-  deprecated:
-    ja: 廃止予定
-    en: Deprecated
-audience_labels:
-  internal:
-    ja: 社内向け
-    en: Internal
-  external:
-    ja: 公開
-    en: Public
+    en: By Name
+
 count_suffix:
   ja: 件
-  en: items
-  
+  en: posts
+
+audience_labels:
+  external:
+    ja: 外部公開
+    en: Public
+  internal:
+    ja: 内部向け
+    en: Internal

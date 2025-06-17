@@ -1,11 +1,13 @@
 # _data/lang/taxonomy_warning.yml
 name_missing:
-  ja: 名前がありません
-  en: Name is missing
+  ja: "名前が設定されていません"
+  en: "Name is missing"
 slug_missing:
-  ja: スラッグがありません
-  en: Slug is missing
+  ja: "slugが設定されていません"
+  en: "Slug is missing"
 slug_duplicate:
-  ja: スラッグが重複しています
-  en: Slug is duplicated
-  
+  ja: "slugが重複しています"
+  en: "Slug is duplicated"
+alias_conflict:
+  ja: "別名が他のslugまたは別名と重複しています"
+  en: "Alias conflicts with another slug or alias"
