@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {% assign text_pages = site.pages | where_exp: "p", "p.url contains '/text/'" %}
+  {% for page in text_pages %}
+    <url>
+      <loc>{{ site.url }}{{ page.url | xml_escape }}</loc>
+      <lastmod>{{ page.date | default: site.time | date_to_xmlschema }}</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+    </url>
+  {% endfor %}
+</urlset>
