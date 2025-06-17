@@ -1,0 +1,28 @@
+{%- comment -%}
+このテンプレートは、postの一覧を受け取り、
+post_schemaに基づき default 値を補完した post_attrs を含むオブジェクトに整形して、
+merged_posts という配列で出力します。
+
+- 入力: include.posts（site.postsなど）
+- 出力: merged_posts（post + post_attrs を持つハッシュ配列）
+{%- endcomment -%}
+
+{%- assign schema = site.data.post.post_schema -%}
+{%- assign posts = include.posts -%}
+{%- assign merged_posts = "" | split: "" -%}
+
+{%- for post in posts -%}
+  {%- assign post_attrs = {} -%}
+  {%- assign attr_list = "hidden,draft,featured,deprecated,beta,audience,private,admin_only,priority,color,icon,tooltip,created_timestamp,modified_timestamp" | split: "," -%}
+
+  {%- for attr in attr_list -%}
+    {%- assign value = post[attr] -%}
+    {%- if value == nil -%}
+      {%- assign value = schema[attr].default -%}
+    {%- endif -%}
+    {%- assign post_attrs = post_attrs | merge: {{ attr | jsonify }}: value -%}
+  {%- endfor -%}
+
+  {%- assign merged_post = post | merge: { "post_attrs": post_attrs } -%}
+  {%- assign merged_posts = merged_posts | push: merged_post -%}
+{%- endfor -%}

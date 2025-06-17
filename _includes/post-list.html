@@ -1,20 +1,19 @@
-{% assign device = include.device | default: post.device | page.device | default: 'text' %}
-{% assign render_type = include.render_type | default: 'text' %}
+{%- assign device = include.device | default: page.device | default: 'text' -%}
+{%- assign lang = include.lang | default: page.lang | default: 'ja' -%}
+{%- assign posts = include.posts | default: site.posts -%}
+{%- assign schema = site.data.post.post_schema -%}
 
-{# render_type を device によって上書き #}
-{% assign render_type = 'html' %}
-{% if device == 'text' %}
-  {% assign render_type = 'text' %}
-{% endif %}
-
-{% assign post_obj_1 = include.post | default: page %}
-{% assign sorted_posts = post_obj_1 | sort: "priority" %}
+{% include post_data_preparer.html
+  posts=posts
+  schema=schema
+  lang=lang
+%}
 
 <ul class="space-y-4">
-  {% for post in sorted_posts %}
-    {% include post-attribute-check.html post=post %}
-    {% unless post_attrs.hidden or post_attrs.draft or post_attrs.private or post_attrs.admin_only or post_attrs.audience != "external" %}
-      {% include post-list-item.html post=post render_type=render_type %}
-    {% endunless %}
-  {% endfor %}
+  {% include post_list_generator.html
+    merged_posts=merged_posts
+    lang=lang
+    device=device
+    schema=schema
+  %}
 </ul>
