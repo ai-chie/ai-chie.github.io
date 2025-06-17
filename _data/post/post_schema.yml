@@ -126,7 +126,8 @@ color:
   required: false
   default: "#cccccc"
   unused: false
-  description: UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード。
+  enum: ["#cccccc", "#3366cc", "#cc3333", "#339933", "#ff9933", "#663399"] # enum: [blue, green, red, yellow, indigo, purple, pink, gray]
+  description: UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード。投稿で使用するテーマカラー（Tailwind CSS対応）。
 
 icon:
   type: string
