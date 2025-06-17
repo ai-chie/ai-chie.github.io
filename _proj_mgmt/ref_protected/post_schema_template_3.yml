@@ -1,0 +1,350 @@
+# --------------------------------------------------
+# 投稿（記事）に設定できる属性一覧とその仕様
+# タグ・カテゴリと競合した場合、記事側の設定を優先
+# --------------------------------------------------
+
+id:
+  type: string
+  required: true
+  default: ''
+  unused: false
+  description: timestamp(yyyymmddhhmm + uuid + lang)（例：202506131646+0900_uuid_ja）
+  
+title:
+  type: string
+  required: false
+  default: ''
+  unused: false
+  description: 記事のタイトル。SEOや一覧表示、ページタイトルに使用される。
+  
+description:
+  type: string
+  required: false
+  default: ''
+  unused: false
+  description: 記事の要約や説明文。検索結果やOGP、meta descriptionに使用される。
+  
+authors:
+  type: array
+  items:
+    type: string
+  required: false
+  default: []
+  unused: false
+  description: 投稿の執筆者。複数可。
+  
+categories:
+  type: array
+  items:
+    type: string
+  required: false
+  default: []
+  unused: false
+  description: 所属カテゴリ。taxonomyと連携し分類に使用。
+  
+tags:
+  type: array
+  items:
+    type: string
+  required: false
+  default: []
+  unused: false
+  description: 関連タグ一覧。taxonomyと連携しフィルタやUI出力に使用。
+  
+images:
+  type: array
+  items:
+    type: string
+  required: false
+  default: []
+  unused: false
+  description: 関連画像のURLやパス一覧。OGPや本文表示に利用。
+  
+created_timestamp:
+  type: string
+  required: false
+  default: ''
+  unused: false
+  description: timestamp(yyyymmddhhmm)
+  
+modified_timestamp:
+  type: string
+  required: false
+  default: ''
+  unused: false
+  description: timestamp(yyyymmddhhmm)
+  
+related_posts_lang:
+  type: array
+  items:
+    type: string
+  required: false
+  default: []
+  unused: false
+  description: 紐づく他言語の記事のID。
+  
+audience:
+  type: enum
+  required: false
+  default: external
+  values:
+    - internal
+    - external
+  unused: false
+  description:  対象読者の区分（🌐=external, 🔒=internal）。internal = 内部向け / external = 外部公開向け。
+    
+priority:
+  type: integer
+  required: false
+  default: 99
+  unused: false
+  description: 並び順制御用の数値（1〜999）。小さいほど上位に表示される。
+  
+featured:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 注目トピックとして優先的に表示。強調表示（★アイコン等）。一部テンプレートやバッジ表示で強調される。
+    
+beta:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 実験的またはベータ版。不安定なコンテンツに視覚的ラベルを付ける用途で使用される。（🧪などのアイコン表示）。
+
+deprecated:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 非推奨・廃止予定（⚠アイコン付きで警告）。バッジ表示やスタイル上の警告に利用される。
+
+color:
+  type: string
+  required: false
+  default: "#cccccc"
+  unused: false
+  enum: ["#cccccc", "#3366cc", "#cc3333", "#339933", "#ff9933", "#663399"] # enum: [blue, green, red, yellow, indigo, purple, pink, gray]
+  description: UI表示用の色。タグの装飾やUIでの視認性向上に使う色コード。投稿で使用するテーマカラー（Tailwind CSS対応）。
+
+icon:
+  type: string
+  required: false
+  default: ''
+  unused: false
+  description: 表示用アイコン（FontAwesome、emoji、クラスなどを想定）。
+    
+tooltip:
+  type: string
+  required: false
+  default: ''
+  unused: false
+  description: ホバー時に表示する補足情報。バッジやアイコンなどに対応。投稿ファイルは言語ごとに分かれているため、多言語objectではなくstringで記述。
+    
+private:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 内部資料や限定公開向けなど。基本的に外部公開しない。
+    
+admin_only:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: 管理者専用。一般閲覧者には非表示。
+    
+hidden:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: |
+    完全に表示対象外とする（一覧・記事ページ・関連リンクなどすべてに非表示）。trueならページや一覧に出力しない。
+    draft と異なり、準備中というより「見せたくない」明示的非表示。
+    URL 直打ちでのアクセスは可能。
+
+hidden_reason:
+  type: string
+  required: false
+  default: ''
+  unused: false
+  description: 非表示の理由（内部記録やデバッグ、UIへの表示も検討可）。
+
+draft:
+  type: boolean
+  required: false
+  default: false
+  unused: false
+  description: |
+    下書き状態。通常は表示されず、ビルド対象にも含めない。
+    Jekyll の `draft: true` 機能が使えない場合も想定し、Liquid による制御も行う。
+
+output_device:
+  type: array
+  values: [pc, mobile, text]
+  required: false
+  default: [pc, mobile, text]
+  unused: false
+  description: |
+    スクリプトでの出力制御用。リストにある{device}構成に自動出力。（_pages/{device}/{lang}/*.md）。
+    スクリプトで出力する*.mdのFrontmatter「device:」に設定。
+    （※この値はスクリプト内部での判定用であり、Front Matter にはコピーされない）
+
+output_layout_setting:
+  type: object
+  required: false
+  default:
+    pc: post
+    mobile: mobile-post
+    text: text-post
+  unused: false
+  description: |
+    スクリプトで出力する*.mdのFrontmatter「layout:」に設定。
+    （※この値はスクリプト内部での判定用であり、Front Matter にはコピーされない）
+  
+output_permalink_setting:
+  type: object
+  required: false
+  default:
+    pc: /{device}/{lang}/
+    mobile: /{device}/{lang}/
+    text: /{device}/{lang}/
+  unused: false
+  description: |
+    スクリプトで出力する*.mdのFrontmatter「permalink:」に設定。
+    （※この値はスクリプト内部での判定用であり、Front Matter にはコピーされない）
+  
+# output_pc:
+#   type: boolean
+#   required: false
+#   default: true
+#   unused: false
+#   description: スクリプトでの出力制御用。trueで該当する{device}構成に自動出力。（_pages/{device}/{lang}/*.md）。Frontmatterで制御。
+
+# layout_pc:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description: スクリプトで出力する*.mdのFrontmatter「layout:」に設定。
+
+# permalink_pc:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description: スクリプトで出力する*.mdのFrontmatter「permalink:」に設定。
+  
+# output_mobile:
+#   type: boolean
+#   required: false
+#   default: true
+#   unused: false
+#   description:
+
+# layout_mobile:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
+
+# permalink_mobile:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
+  
+# output_text:
+#   type: boolean
+#   required: false
+#   default: true
+#   unused: false
+#   description:
+
+# layout_text:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
+
+# permalink_text:
+#   type: string
+#   required: false
+#   default: ""
+#   unused: false
+#   description:
+
+lang:
+  type: string
+  required: true
+  default: 'ja'
+  unused: false
+  description: 記事の言語。ja、enなど。
+  calculated: false
+  values: # 出力展開先の投稿を削除する際の対象先の決定に使用されている。
+  - ja
+  - en
+
+# ----------
+# *.mdに追加するFrontmatter
+# ----------
+
+device:
+  type: string
+  required: true
+  default: null
+  unused: false
+  description: |
+    スクリプトで出力する*.mdのFrontmatterに設定。「output_device:」の値。例：{pc/mobile/text}。
+    （output制御によりスクリプトで動的設定され、Front Matter に出力される）
+  calculated: true
+  values:
+  - pc
+  - mobile
+  - text
+  
+layout:
+  type: string
+  required: false
+  default: null
+  unused: false
+  description: |
+    スクリプトで出力する*.mdのFrontmatterに設定。「output_layout_setting:」の値。
+    （output制御によりスクリプトで動的設定され、Front Matter に出力される）
+  calculated: true
+  
+permalink:
+  type: string
+  required: false
+  default: null
+  unused: false
+  description: |
+    スクリプトで出力する*.mdのFrontmatterに設定。「output_layout_permalink:」の値。
+    （output制御によりスクリプトで動的設定され、Front Matter に出力される）
+  calculated: true
+
+# ----------
+# Jekyll
+# ----------
+# layout
+# title
+# date #undifined
+# author #undifined
+# description
+# categories
+# tags
+# image #undifined
+# permalink
+
+# ----------
+# Other
+# ----------
+# types
+# ----------
