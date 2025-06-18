@@ -1,0 +1,30 @@
+---
+layout: base
+device: text
+lang: ja
+title: "AI/クローラー用軽量ページ"
+description: "AIが読みやすいように最適化されたプレーンHTML構成です"
+type: [categories]
+permalink: /text/ja/index.html
+---
+
+{# ここからがレイアウトの {{ content }} に入る部分 #}
+
+<main>
+    
+    <section>
+        {% include contents/welcome.ja.md %}
+    </section>
+
+    {% include taxonomy-list.html
+    device=device
+    lang=lang
+    type=type
+    ui=taxonomy_ui
+    warnings_data=taxonomy_warnings_data
+    labels=taxonomy_labels
+    schema=taxonomy_schema
+    %}
+
+
+</main>
