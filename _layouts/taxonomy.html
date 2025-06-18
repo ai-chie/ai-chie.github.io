@@ -1,8 +1,14 @@
 ---
 layout: base {# base.html を継承する #}
-title: "AI/クローラー用軽量ページ"
-description: "AIが読みやすいように最適化されたプレーンHTML構成です"
 ---
 
 {# ここからがレイアウトの {{ content }} に入る部分 #}
 
+    {% include post-list.html
+    device=device
+    lang=lang
+    ui=post_ui
+    warnings_data=post_warnings_data
+    schema=post_schema
+    posts=site.pages
+    %}

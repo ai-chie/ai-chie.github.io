@@ -2,12 +2,10 @@
 layout: base {# base.html を継承する #}
 title: "AI/クローラー用軽量ページ"
 description: "AIが読みやすいように最適化されたプレーンHTML構成です"
+types: [categories, tags]
 ---
 
 {# ここからがレイアウトの {{ content }} に入る部分 #}
-
-{%- assign device = page.device | default: 'text' -%}
-{%- assign lang = page.lang | default: 'ja' -%}
 
 {# page.types がリストであることを想定し、デフォルト値を空のリストに設定 #}
 {%- assign types_list = page.types | default: 'categories' -%}
@@ -29,6 +27,9 @@ description: "AIが読みやすいように最適化されたプレーンHTML構
             device=device
             lang=lang
             type=type_item  {# リストの各要素を type として渡す #}
+            ui=taxonomy_ui
+            warnings_data=taxonomy_warnings_data
+            schema=taxonomy_schema
         %}
     {% endfor %}
     

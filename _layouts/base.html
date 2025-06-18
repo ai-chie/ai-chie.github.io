@@ -7,16 +7,27 @@
 
     {# サイト全体で共通して使用する _data ファイルの読み込み #}
     {# ファイルが存在しない場合に備えて default: {} を設定し、Liquidエラーを防ぐ #}
+    
     {%- assign taxonomy_ui = site.data.lang.taxonomy_ui | default: {} -%}
     {%- assign taxonomy_warnings_data = site.data.lang.taxonomy_warning | default: {} -%}
     {%- assign taxonomy_schema = site.data.taxonomy.taxonomy_schema | default: {} -%}
+    
+    {%- assign post_ui = site.data.lang.post_ui | default: {} -%}
+    {%- assign post_warnings_data = site.data.lang.post_warning | default: {} -%}
     {%- assign post_schema = site.data.post.post_schema | default: {} -%}
+    
+    {%- assign device = page.device | default: 'text' -%}
+    {%- assign lang = page.lang | default: 'ja' -%}
+    {%- assign type = page.type | default: 'categories' -%}
+    
+    {%- assign title = page.title | default: '' -%}
+    {%- assign description = page.description | default: '' -%} 
 
     {# 子レイアウトやページがhead要素の内容を追加するためのフックポイント #}
-    {%- if page.device == 'text' -%}
+    {%- if device == 'text' -%}
       {%- include head-minimal.html -%}
     {%- else -%}
-      {%- {% include head-meta.html %} -%}
+      {%- include head-meta.html -%}
     {% endif %}
     
     {% if layout.head_content %}

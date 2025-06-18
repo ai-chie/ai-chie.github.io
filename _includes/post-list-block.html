@@ -2,7 +2,8 @@
 {% assign render_type = include.render_type | default: 'text' %}
 {% assign lang = include.lang | default: page.lang | default: 'ja' %}
 {% assign audience = post.audience | default: 'external' %}
-{% assign audience_label = site.data.lang.post_ui.audience_labels[audience][lang] %}
+{% assign ui = include.ui %}
+{% assign audience_label = ui.audience_labels[audience][lang] %}
 
 {% unless post.post_attrs.hidden or post.post_attrs.draft or post.post_attrs.private or post.post_attrs.admin_only or post.post_attrs.audience != "external" %}
   {% if render_type == 'text' %}

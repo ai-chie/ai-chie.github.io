@@ -1,7 +1,9 @@
 {%- assign device = include.device | default: page.device | default: 'text' -%}
 {%- assign lang = include.lang | default: page.lang | default: 'ja' -%}
-{%- assign posts = include.posts | default: site.posts -%}
-{%- assign schema = site.data.post.post_schema -%}
+{%- assign ui = include.post_ui | default: {} -%}
+{%- assign warnings_data = include.post_warnings_data | default: {} -%}
+{%- assign schema = include.post_schema | default: {} -%}
+{%- assign posts = include.posts | default: site.pages | default: site.posts -%}
 
 {% include post_data_preparer.html
   posts=posts
