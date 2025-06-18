@@ -14,6 +14,7 @@
 {%- assign merged_items = include.merged_items -%}
 {%- assign base_path = include.base_path -%}
 {%- assign ui = include.ui -%}
+{%- assign labels = include.labels -%}
 {%- assign lang = include.lang -%}
 {%- assign render_type = include.render_type | default: 'html' -%}
 {%- assign schema = include.schema -%}
@@ -25,6 +26,7 @@
       base_path=base_path
       counts=item._count  {# _countとしてマージしたカウントを渡す #}
       ui=ui
+      labels=labels
       warning=item._warning {# _warningとしてマージした警告メッセージを渡す #}
       lang=lang
       render_type=render_type

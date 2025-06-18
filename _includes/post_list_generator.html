@@ -1,6 +1,8 @@
 {%- assign merged_posts = include.merged_posts -%}
 {%- assign lang = include.lang -%}
 {%- assign device = include.device | default: 'text' -%}
+{%- assign ui = include.ui -%}
+{%- assign labels = include.labels -%}
 {%- assign schema = include.schema -%}
 
 {%- assign render_type = 'html' -%}
@@ -14,6 +16,8 @@
       post=post
       render_type=render_type
       lang=lang
+      ui=ui
+      labels=labels
     %}
   {% endunless %}
 {%- endfor -%}

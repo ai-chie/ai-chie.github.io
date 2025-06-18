@@ -10,10 +10,12 @@
     
     {%- assign taxonomy_ui = site.data.lang.taxonomy_ui | default: {} -%}
     {%- assign taxonomy_warnings_data = site.data.lang.taxonomy_warning | default: {} -%}
+    {%- assign taxonomy_labels = site.data.lang.taxonomy_badge -%}
     {%- assign taxonomy_schema = site.data.taxonomy.taxonomy_schema | default: {} -%}
     
     {%- assign post_ui = site.data.lang.post_ui | default: {} -%}
     {%- assign post_warnings_data = site.data.lang.post_warning | default: {} -%}
+    {%- assign post_labels = site.data.lang.post_badge -%}
     {%- assign post_schema = site.data.post.post_schema | default: {} -%}
     
     {%- assign device = page.device | default: 'text' -%}

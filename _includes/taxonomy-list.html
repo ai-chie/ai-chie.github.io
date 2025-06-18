@@ -1,9 +1,10 @@
 {%- assign device = include.device | default: page.device | default: 'text' -%}
 {%- assign lang = include.lang | default: page.lang | default: 'ja' -%}
 {%- assign type = include.type | default: 'categories' -%}
-{%- assign ui = include.taxonomy_ui | default: {} -%}
-{%- assign warnings_data = include.taxonomy_warnings_data | default: {} -%}
-{%- assign schema = include.taxonomy_schema | default: {} -%}
+{%- assign ui = include.ui | default: {} -%}
+{%- assign warnings_data = include.warnings_data | default: {} -%}
+{%- assign labels = include.labels | default: {} -%}
+{%- assign schema = include.schema | default: {} -%}
 
 {%- assign render_format = 'html' -%}
 {%- if device == 'text' -%}
@@ -49,6 +50,7 @@
     merged_items=merged_items
     base_path=base_path
     ui=ui
+    labels=labels
     lang=lang
     render_type=render_format
     schema=schema

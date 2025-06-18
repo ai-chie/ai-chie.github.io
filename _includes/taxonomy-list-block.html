@@ -3,6 +3,7 @@
 {% assign base_path = include.base_path %}
 {% assign counts_param = include.counts %}
 {% assign ui = include.ui %}
+{% assign labels = include.labels %}
 {% assign warning = include.warning | default: "" %}
 {% assign lang = include.lang %}
 {% assign render_type = include.render_type | default: 'html' %}
@@ -49,6 +50,7 @@
         hiddenReason=hidden_reason
         lang=lang
         schema=schema
+        labels=labels
       %}
 
       <span>({{ count }}{{ ui.count_suffix[lang] }})</span>

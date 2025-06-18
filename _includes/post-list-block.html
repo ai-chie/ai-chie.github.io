@@ -3,6 +3,7 @@
 {% assign lang = include.lang | default: page.lang | default: 'ja' %}
 {% assign audience = post.audience | default: 'external' %}
 {% assign ui = include.ui %}
+{% assign labels = include.labels %}
 {% assign audience_label = ui.audience_labels[audience][lang] %}
 
 {% unless post.post_attrs.hidden or post.post_attrs.draft or post.post_attrs.private or post.post_attrs.admin_only or post.post_attrs.audience != "external" %}
@@ -48,6 +49,7 @@
           tooltip=post.tooltip
           icon=post.icon
           lang=lang
+          labels=labels
           schema=site.data.post.post_schema
         %}
 
