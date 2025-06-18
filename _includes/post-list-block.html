@@ -5,6 +5,7 @@
 {% assign ui = include.ui %}
 {% assign labels = include.labels %}
 {% assign audience_label = ui.audience_labels[audience][lang] %}
+{% assign schema = include.schema %}
 
 {% unless post.post_attrs.hidden or post.post_attrs.draft or post.post_attrs.private or post.post_attrs.admin_only or post.post_attrs.audience != "external" %}
   {% if render_type == 'text' %}
@@ -50,7 +51,7 @@
           icon=post.icon
           lang=lang
           labels=labels
-          schema=site.data.post.post_schema
+          schema=schema
         %}
 
         {% if post.created_timestamp %}
