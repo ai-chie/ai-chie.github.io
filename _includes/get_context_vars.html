@@ -22,7 +22,7 @@
 {%- assign posts = _posts -%}                 # post only
 {%- assign merged_items = _merged_items -%}
 
-{%- assign render_format = 'text' -%}
+{%- assign render_format = 'bot' -%}
 {%- unless device == 'text' -%}
-  {%- assign render_format = 'html' -%}
-{%- endif -%}
+  {%- assign render_format = 'human' -%}
+{%- endunless -%}
