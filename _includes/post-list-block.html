@@ -11,7 +11,6 @@
 %}
 
 {% assign post = include.post | default: page %}
-{% assign render_format = include.render_format | default: 'text' %}
 {% assign audience = post.audience | default: 'external' %}
 {% assign audience_label = ui.audience_labels[audience][lang] %}
 

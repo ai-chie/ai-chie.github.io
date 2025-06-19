@@ -8,22 +8,21 @@
 {%- assign _warnings_data = include.warnings_data | default: {} -%}
 {%- assign _labels = include.labels | default: {} -%}
 {%- assign _schema = include.schema | default: {} -%}
-
 {%- assign _type = include.type | default: 'categories' -%}
-
 {%- assign _posts = include.posts | default: site.pages | default: site.posts -%}
-
 {%- assign _merged_items = include.merged_items | default: "" | split: "" -%}
 
 {%- assign device = _device -%}
 {%- assign lang = _lang -%}
 {%- assign ui = _ui -%}
-{%- assign warnings_data = _warnings_data -%}
+{%- assign warnings_data = _warnings_data -%} # 現在はwarnings_dataはtaxonomyでしか使用されていない
 {%- assign labels = _labels -%}
 {%- assign schema = _schema -%}
-
-{%- assign type = _type -%}
-
-{%- assign posts = _posts -%}
-
+{%- assign type = _type -%}                   # taxonomy only
+{%- assign posts = _posts -%}                 # post only
 {%- assign merged_items = _merged_items -%}
+
+{%- assign render_format = 'text' -%}
+{%- unless device == 'text' -%}
+  {%- assign render_format = 'html' -%}
+{%- endif -%}

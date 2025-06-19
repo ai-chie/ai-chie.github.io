@@ -10,11 +10,6 @@
      merged_items=include.merged_items
 %}
 
-{%- assign render_format = 'html' -%}
-{%- if device == 'text' -%}
-  {%- assign render_format = 'text' -%}
-{%- endif -%}
-
 {%- assign base_path = "/" | append: device | append: lang | append: "/" | append: type -%}
 
 {% include taxonomy_data_preparer.html
@@ -56,7 +51,6 @@
     ui=ui
     labels=labels
     lang=lang
-    render_format=render_format
     schema=schema
   %}
 </section>
