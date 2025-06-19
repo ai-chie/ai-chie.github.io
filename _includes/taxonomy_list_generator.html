@@ -22,13 +22,10 @@
      posts=include.posts
 %}
 
-{%- assign base_path = include.base_path -%}
-
 <ul class="space-y-1">
   {%- for item in merged_items %}
     {% include taxonomy-list-block.html
       item=item
-      base_path=base_path
       counts=item._count  {# _countとしてマージしたカウントを渡す #}
       ui=ui
       labels=labels

@@ -1,5 +1,16 @@
 {% comment %}
-このヘルパーは、各種変数をincludeとpageから取得し、デフォルト値を設定します。
+==================================================
+variables assigned by includes, page, site, etc
+
+device = pc || mobile || text
+lang = ja || en || etc
+ui = taxonomy_ui || post_ui
+warnings_data = taxonomy_warning || post_warning       # taxonomy only (as of now)
+labels = taxonomy_badge || post_badge
+schema = taxonomy_schema || post_schema
+type = categories || tags                              # taxonomy only
+posts = site.pages || site.posts                       # post only
+==================================================
 {% endcomment %}
 
 {%- assign _device = include.device | default: page.device | default: 'text' -%}
@@ -14,16 +25,38 @@
 {%- assign device = _device -%}
 {%- assign lang = _lang -%}
 {%- assign ui = _ui -%}
-{%- assign warnings_data = _warnings_data -%} # 現在はwarnings_dataはtaxonomyでしか使用されていない
+{%- assign warnings_data = _warnings_data -%}
 {%- assign labels = _labels -%}
 {%- assign schema = _schema -%}
-{%- assign type = _type -%}                   # taxonomy only
-{%- assign posts = _posts -%}                 # post only
+{%- assign type = _type -%}
+{%- assign posts = _posts -%}
 
+{% comment %}
+==================================================
+variables local to templates
+==================================================
+{% endcomment %}
+
+{% comment %}
+==================================================
+variables local to templates
+values change in templates
+==================================================
+{% endcomment %}
 
 {%- assign merged_items = include.merged_items | default: "" | split: "" -%}
+
+{% comment %}
+==================================================
+variables local to templates
+values not change in templates(constants)
+==================================================
+{% endcomment %}
 
 {%- assign render_format = 'bot' -%}
 {%- unless device == 'text' -%}
   {%- assign render_format = 'human' -%}
 {%- endunless -%}
+
+{%- assign base_path = "/" | append: device | append: lang | append: "/" | append: type -%}
+

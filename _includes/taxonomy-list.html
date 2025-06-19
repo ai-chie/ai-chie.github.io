@@ -9,8 +9,6 @@
      posts=include.posts
 %}
 
-{%- assign base_path = "/" | append: device | append: lang | append: "/" | append: type -%}
-
 {% include taxonomy_data_preparer.html
   type=type
   lang=lang
@@ -46,7 +44,6 @@
 
   {% include taxonomy_list_generator.html
     merged_items=merged_items
-    base_path=base_path
     ui=ui
     labels=labels
     lang=lang
