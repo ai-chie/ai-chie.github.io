@@ -1,0 +1,84 @@
+{% include get_context_vars.html
+     device=include.device
+     lang=include.lang
+     ui=include.ui
+     warnings_data=include.warnings_data
+     labels=include.labels
+     schema=include.schema
+     type=include.type
+     posts=include.posts
+     merged_items=include.merged_items
+     base_path=include.base_path
+%}
+
+{% assign item = include.item | default: page %}
+{% assign counts_param = include.counts %}
+{% assign warning = include.warning | default: '' %}
+
+{%- assign attrs = item.post_attrs | default: item -%}
+{%- assign name = item.title | default: item.name[lang] | default: 'unknown' -%}
+{%- assign slug = item.slug | default: '' -%}
+{%- assign url = item.url | default: item.link | default: (base_path | append: '/' | append: slug | append: '/') -%}
+{%- assign audience = attrs.audience | default: schema.audience.default -%}
+{%- assign hidden = attrs.hidden | default: schema.hidden.default -%}
+{%- assign draft = attrs.draft | default: schema.draft.default -%}
+{%- assign private = attrs.private | default: schema.private.default -%}
+{%- assign admin_only = attrs.admin_only | default: schema.admin_only.default -%}
+{%- assign color = item.color | default: schema.color.default -%}
+{%- assign tooltip = item.tooltip | default: item.tooltip[lang] | default: '' -%}
+{%- assign icon = item.icon | default: '' -%}
+{%- assign hidden_reason = item.hidden_reason | default: '' -%}
+{%- assign description = item.description | default: item.description[lang] | default: '' -%}
+{%- assign priority = item.priority | default: schema.priority.default -%}
+{%- assign count = counts_param | default: item._count | default: '' -%}
+{%- assign audience_label = ui.audience_labels[audience][lang] -%}
+{%- assign created_timestamp = item.created_timestamp -%}
+{%- assign modified_timestamp = item.modified_timestamp -%}
+
+{% unless slug == '' or admin_only or hidden or draft or private or audience != 'external' %}
+  {% if render_format == 'bot' %}
+    <li>
+      <a href="{{ url }}"{% if tooltip != '' %} title="{{ tooltip | escape }}"{% endif %}>
+        {% if icon contains 'fa-' or icon contains 'icon-' %}
+          <span class="{{ icon }}"></span>
+        {% else %}
+          {{ icon }}
+        {% endif %}
+        {{ name }}{% if count != '' %} ({{ count }}{{ ui.count_suffix[lang] }}){% endif %}{% if warning != '' %} {{ warning }}{% endif %}
+      </a>
+    </li>
+  {% else %}
+    <li class="mb-4">
+      <a href="{{ url }}" class="font-semibold hover:underline" style="color: {{ color | default: '#333' }};"{% if tooltip != '' %} title="{{ tooltip | escape }}"{% endif %}>
+        {% if icon contains 'fa-' or icon contains 'icon-' %}
+          <span class="{{ icon }}"></span>
+        {% else %}
+          {{ icon }}
+        {% endif %}
+        {{ name }}{% if count != '' %} ({{ count }}{{ ui.count_suffix[lang] }}){% endif %}
+      </a>
+      {% if description != '' %}
+        <div class="text-sm text-gray-500 mt-1">{{ description }}</div>
+      {% endif %}
+      <div class="text-xs mt-1 space-x-1 text-gray-600">
+        {% if audience_label %}
+          <span>{{ audience_label }}</span>
+        {% endif %}
+        {% include badge.html
+          featured=attrs.featured
+          beta=attrs.beta
+          deprecated=attrs.deprecated
+          audience=audience
+          tooltip=tooltip
+          icon=icon
+          hiddenReason=hidden_reason
+          lang=lang
+          labels=labels
+          schema=schema
+        %}
+        {% if created_timestamp %}<span>🗓 {{ created_timestamp }}</span>{% endif %}
+        {% if modified_timestamp %}<span>🔄 {{ modified_timestamp }}</span>{% endif %}
+      </div>
+    </li>
+  {% endif %}
+{% endunless %}

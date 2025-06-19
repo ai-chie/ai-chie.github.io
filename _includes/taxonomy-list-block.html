@@ -1,85 +1,12 @@
-{% include get_context_vars.html
-     device=include.device
-     lang=include.lang
-     ui=include.ui
-     warnings_data=include.warnings_data
-     labels=include.labels
-     schema=include.schema
-     type=include.type
-     posts=include.posts
-     merged_items=include.merged_items
+{% include item-list-block.html
+  item=include.item
+  counts=include.counts
+  warning=include.warning
+  lang=include.lang
+  ui=include.ui
+  labels=include.labels
+  schema=include.schema
+  device=include.device
+  type=include.type
+  base_path=include.base_path
 %}
-
-{% assign item = include.item %}
-{% assign counts_param = include.counts %}
-
-{% assign name           = item.name[lang] | default: 'unknown' %}
-{% assign slug           = item.slug | default: '' %}
-{% assign audience       = item.audience | default: schema.audience.default %}
-{% assign admin_only     = item.admin_only | default: schema.admin_only.default %}
-{% assign hidden         = item.hidden | default: schema.hidden.default %}
-{% assign draft          = item.draft | default: schema.draft.default %}
-{% assign private        = item.private | default: schema.private.default %}
-{% assign color          = item.color | default: schema.color.default %}
-{% assign tooltip        = item.tooltip[lang] | default: '' %}
-{% assign icon           = item.icon | default: '' %}
-{% assign hidden_reason  = item.hidden_reason | default: '' %}
-{% assign description    = item.description[lang] | default: "" %}
-{% assign priority       = item.priority | default: schema.priority.default %}
-{% assign count = counts_param | default: 0 %}
-{% assign audience_label = ui.audience_labels[audience][lang] %}
-
-{% if slug == '' or admin_only or hidden or draft or private or audience != 'external' %}
-{% else %}
-  {% if render_format == 'human' %}
-    <li class="flex items-center space-x-2">
-      <a href="{{ item.link | default: (base_path | append: '/' | append: slug | append: '/') }}"
-         class="inline-block px-2 py-1 rounded text-white"
-         style="background-color: {{ color }}"
-         {% if tooltip != '' %}title="{{ tooltip }}"{% endif %}>
-        {% if icon contains 'fa-' or icon contains 'icon-' %}
-          <span class="{{ icon }}"></span>
-        {% else %}
-          {{ icon }}
-        {% endif %}
-        {{ name }}
-      </a>
-
-      {% include taxonomy-badge.html
-        featured=item.featured
-        beta=item.beta
-        deprecated=item.deprecated
-        audience=audience
-        tooltip=tooltip
-        icon=icon
-        hiddenReason=hidden_reason
-        lang=lang
-        schema=schema
-        labels=labels
-      %}
-
-      <span>({{ count }}{{ ui.count_suffix[lang] }})</span>
-      <span>{{ audience_label }}</span>
-      {% if description != "" %}
-        <br><small>{{ description }}</small>
-      {% endif %}
-      {% if warning != "" %}
-        <span style="color: red; font-weight: bold;">{{ warning }}</span>
-      {% endif %}
-    </li>
-  {% elsif render_format == 'bot' %}
-    <li>
-      <a href="{{ item.link | default: (base_path | append: '/' | append: slug | append: '/') }}"
-         {% if tooltip != '' %}title="{{ tooltip }}"{% endif %}>
-        {% if icon contains 'fa-' or icon contains 'icon-' %}
-          <span class="{{ icon }}"></span>
-        {% else %}
-          {{ icon }}
-        {% endif %}
-        {{ name }} ({{ count }}{{ ui.count_suffix[lang] }}) {% if warning != "" %}{{ warning }}{% endif %}
-      </a>
-    </li>
-  {% else %}
-    <li>{{ name }}</li>
-  {% endif %}
-{% endif %}

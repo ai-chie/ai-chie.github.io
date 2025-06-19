@@ -1,0 +1,32 @@
+<span class="inline-flex items-center space-x-1 text-xs">
+  {%- if include.featured -%}
+    <span class="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded" title="{{ include.labels.featured_tooltip[include.lang] }}">★ {{ include.labels.featured[include.lang] }}</span>
+  {%- endif -%}
+  {%- if include.beta -%}
+    <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded" title="{{ include.labels.beta_tooltip[include.lang] }}">🧪 {{ include.labels.beta[include.lang] }}</span>
+  {%- endif -%}
+  {%- if include.deprecated -%}
+    <span class="px-2 py-0.5 bg-red-100 text-red-700 rounded" title="{{ include.labels.deprecated_tooltip[include.lang] }}">⚠ {{ include.labels.deprecated[include.lang] }}</span>
+  {%- endif -%}
+  {%- assign audience = include.audience | default: include.schema.audience.default -%}
+  {%- if audience == 'internal' -%}
+    <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded" title="{{ include.labels.internal_tooltip[include.lang] }}">🔒 {{ include.labels.internal[include.lang] }}</span>
+  {%- elsif audience == 'external' -%}
+    <span class="px-2 py-0.5 bg-green-100 text-green-600 rounded" title="{{ include.labels.public_tooltip[include.lang] }}">🌐 {{ include.labels.public[include.lang] }}</span>
+  {%- endif -%}
+  {%- if include.tooltip -%}
+    <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded" title="{{ include.tooltip }}">🛈</span>
+  {%- endif -%}
+  {%- if include.icon -%}
+    <span class="px-2 py-0.5" title="{{ include.labels.icon_tooltip[include.lang] }}">
+      {% if include.icon contains 'fa-' or include.icon contains 'icon-' %}
+        <span class="{{ include.icon }}"></span>
+      {% else %}
+        {{ include.icon }}
+      {% endif %}
+    </span>
+  {%- endif -%}
+  {%- if include.hiddenReason -%}
+    <span class="px-2 py-0.5 text-red-500" title="{{ include.labels.hidden_reason_tooltip[include.lang] }}">🛈 {{ include.hiddenReason }}</span>
+  {%- endif -%}
+</span>

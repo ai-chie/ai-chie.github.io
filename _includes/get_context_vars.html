@@ -43,4 +43,4 @@ values not change in templates (constants)
   {%- assign render_format = 'human' -%}
 {%- endunless -%}
 
-{%- assign base_path = "/" | append: device | append: lang | append: "/" | append: type -%}
+{%- assign base_path = include.base_path | default: "/" | append: device | append: lang | append: "/" | append: type -%}

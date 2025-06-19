@@ -11,13 +11,11 @@
 %}
 
 {%- for post in merged_items -%}
-  {% unless post.post_attrs.hidden or post.post_attrs.draft or post.post_attrs.private or post.post_attrs.admin_only or post.post_attrs.audience != "external" %}
-    {% include post-list-block.html
-      post=post
-      lang=lang
-      ui=ui
-      labels=labels
-      schema=schema
-    %}
-  {% endunless %}
+  {% include item-list-block.html
+    item=post
+    lang=lang
+    ui=ui
+    labels=labels
+    schema=schema
+  %}
 {%- endfor -%}
