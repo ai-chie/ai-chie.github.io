@@ -23,6 +23,7 @@ HTML出力は行わず、Liquid変数を設定するのみです。
      schema=include.schema
      type=include.type
      posts=include.posts
+     merged_items=include.merged_items
 %}
 
 {%- assign data = site.data.taxonomy[type] | default: "" | split: "" -%}
