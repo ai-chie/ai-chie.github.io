@@ -1,11 +1,19 @@
+{% include get_context_vars.html
+     device=include.device
+     lang=include.lang
+     ui=include.ui
+     warnings_data=include.warnings_data
+     labels=include.labels
+     schema=include.schema
+     type=include.type
+     posts=include.posts
+     merged_items=include.merged_items
+%}
+
 {% assign post = include.post | default: page %}
 {% assign render_type = include.render_type | default: 'text' %}
-{% assign lang = include.lang | default: page.lang | default: 'ja' %}
 {% assign audience = post.audience | default: 'external' %}
-{% assign ui = include.ui %}
-{% assign labels = include.labels %}
 {% assign audience_label = ui.audience_labels[audience][lang] %}
-{% assign schema = include.schema %}
 
 {% unless post.post_attrs.hidden or post.post_attrs.draft or post.post_attrs.private or post.post_attrs.admin_only or post.post_attrs.audience != "external" %}
   {% if render_type == 'text' %}

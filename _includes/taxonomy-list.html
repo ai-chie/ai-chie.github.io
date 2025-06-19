@@ -1,10 +1,14 @@
-{%- assign device = include.device | default: page.device | default: 'text' -%}
-{%- assign lang = include.lang | default: page.lang | default: 'ja' -%}
-{%- assign type = include.type | default: 'categories' -%}
-{%- assign ui = include.ui | default: {} -%}
-{%- assign warnings_data = include.warnings_data | default: {} -%}
-{%- assign labels = include.labels | default: {} -%}
-{%- assign schema = include.schema | default: {} -%}
+{% include get_context_vars.html
+     device=include.device
+     lang=include.lang
+     ui=include.ui
+     warnings_data=include.warnings_data
+     labels=include.labels
+     schema=include.schema
+     type=include.type
+     posts=include.posts
+     merged_items=include.merged_items
+%}
 
 {%- assign render_format = 'html' -%}
 {%- if device == 'text' -%}

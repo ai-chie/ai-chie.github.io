@@ -11,13 +11,20 @@
 - schema: site.data.taxonomy.taxonomy_schema (必須)
 {%- endcomment -%}
 
-{%- assign merged_items = include.merged_items -%}
+{% include get_context_vars.html
+     device=include.device
+     lang=include.lang
+     ui=include.ui
+     warnings_data=include.warnings_data
+     labels=include.labels
+     schema=include.schema
+     type=include.type
+     posts=include.posts
+     merged_items=include.merged_items
+%}
+
 {%- assign base_path = include.base_path -%}
-{%- assign ui = include.ui -%}
-{%- assign labels = include.labels -%}
-{%- assign lang = include.lang -%}
 {%- assign render_type = include.render_type | default: 'html' -%}
-{%- assign schema = include.schema -%}
 
 <ul class="space-y-1">
   {%- for item in merged_items %}

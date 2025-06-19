@@ -14,13 +14,19 @@ HTML出力は行わず、Liquid変数を設定するのみです。
 - schema: site.data.taxonomy.taxonomy_schema (必須)
 {%- endcomment -%}
 
-{%- assign type = include.type -%}
-{%- assign lang = include.lang -%}
-{%- assign warnings_data = include.warnings_data -%}
-{%- assign schema = include.schema -%}
+{% include get_context_vars.html
+     device=include.device
+     lang=include.lang
+     ui=include.ui
+     warnings_data=include.warnings_data
+     labels=include.labels
+     schema=include.schema
+     type=include.type
+     posts=include.posts
+     merged_items=include.merged_items
+%}
 
 {%- assign data = site.data.taxonomy[type] | default: "" | split: "" -%}
-{%- assign merged_items = "" | split: "" -%}
 
 {%- if data.size > 0 -%}
   {%- if type == 'categories' -%}

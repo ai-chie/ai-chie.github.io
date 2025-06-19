@@ -1,16 +1,21 @@
-{%- assign merged_posts = include.merged_posts -%}
-{%- assign lang = include.lang -%}
-{%- assign device = include.device | default: 'text' -%}
-{%- assign ui = include.ui -%}
-{%- assign labels = include.labels -%}
-{%- assign schema = include.schema -%}
+{% include get_context_vars.html
+     device=include.device
+     lang=include.lang
+     ui=include.ui
+     warnings_data=include.warnings_data
+     labels=include.labels
+     schema=include.schema
+     type=include.type
+     posts=include.posts
+     merged_items=include.merged_items
+%}
 
 {%- assign render_type = 'html' -%}
 {%- if device == 'text' -%}
   {%- assign render_type = 'text' -%}
 {%- endif -%}
 
-{%- for post in merged_posts -%}
+{%- for post in merged_items -%}
   {% unless post.post_attrs.hidden or post.post_attrs.draft or post.post_attrs.private or post.post_attrs.admin_only or post.post_attrs.audience != "external" %}
     {% include post-list-block.html
       post=post

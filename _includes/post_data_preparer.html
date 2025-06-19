@@ -7,10 +7,17 @@ merged_posts という配列で出力します。
 - 出力: merged_posts（post + post_attrs を持つハッシュ配列）
 {%- endcomment -%}
 
-{%- assign schema = include.schema -%}
-{%- assign posts = include.posts -%}
-{%- assign lang = include.lang | default: 'ja' -%}
-{%- assign merged_posts = "" | split: "" -%}
+{% include get_context_vars.html
+     device=include.device
+     lang=include.lang
+     ui=include.ui
+     warnings_data=include.warnings_data
+     labels=include.labels
+     schema=include.schema
+     type=include.type
+     posts=include.posts
+     merged_items=include.merged_items
+%}
 
 {%- for post in posts -%}
   {%- assign post_attrs = {} -%}
@@ -24,7 +31,6 @@ merged_posts という配列で出力します。
     {%- assign post_attrs = post_attrs | merge: {{ attr | jsonify }}: value -%}
   {%- endfor -%}
 
-  {%- assign merged_post = post | merge: { "post_attrs": post_attrs } -%}
-  {%- assign merged_posts = merged_posts | push: merged_post -%}
+  {%- assign merged_item = post | merge: { "post_attrs": post_attrs } -%}
+  {%- assign merged_items = merged_items | push: merged_item -%}
 {%- endfor -%}
-

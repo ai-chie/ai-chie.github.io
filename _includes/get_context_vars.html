@@ -1,0 +1,29 @@
+{% comment %}
+このヘルパーは、各種変数をincludeとpageから取得し、デフォルト値を設定します。
+{% endcomment %}
+
+{%- assign _device = include.device | default: page.device | default: 'text' -%}
+{%- assign _lang = include.lang | default: page.lang | default: 'ja' -%}
+{%- assign _ui = include.ui | default: {} -%}
+{%- assign _warnings_data = include.warnings_data | default: {} -%}
+{%- assign _labels = include.labels | default: {} -%}
+{%- assign _schema = include.schema | default: {} -%}
+
+{%- assign _type = include.type | default: 'categories' -%}
+
+{%- assign _posts = include.posts | default: site.pages | default: site.posts -%}
+
+{%- assign _merged_items = include.merged_items | default: "" | split: "" -%}
+
+{%- assign device = _device -%}
+{%- assign lang = _lang -%}
+{%- assign ui = _ui -%}
+{%- assign warnings_data = _warnings_data -%}
+{%- assign labels = _labels -%}
+{%- assign schema = _schema -%}
+
+{%- assign type = _type -%}
+
+{%- assign posts = _posts -%}
+
+{%- assign merged_items = _merged_items -%}
