@@ -19,7 +19,7 @@ posts = site.pages || site.posts                       # post only
 {%- assign warnings_data = include.warnings_data | default: {} -%}
 {%- assign labels = include.labels | default: {} -%}
 {%- assign schema = include.schema | default: {} -%}
-{%- assign type = include.type | default: 'categories' -%}
+{%- assign type = include.type | default: page.type | default: 'categories' -%}
 {%- assign posts = include.posts | default: site.pages | default: site.posts -%}
 
 {% comment %}
@@ -44,4 +44,3 @@ values not change in templates (constants)
 {%- endunless -%}
 
 {%- assign base_path = "/" | append: device | append: lang | append: "/" | append: type -%}
-
