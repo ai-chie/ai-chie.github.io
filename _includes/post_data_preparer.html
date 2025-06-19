@@ -1,12 +1,3 @@
-{%- comment -%}
-このテンプレートは、postの一覧を受け取り、
-post_schemaに基づき default 値を補完した post_attrs を含むオブジェクトに整形して、
-merged_posts という配列で出力します。
-
-- 入力: include.posts（site.postsなど）
-- 出力: merged_posts（post + post_attrs を持つハッシュ配列）
-{%- endcomment -%}
-
 {% include get_context_vars.html
      device=include.device
      lang=include.lang

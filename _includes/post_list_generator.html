@@ -10,16 +10,16 @@
      merged_items=include.merged_items
 %}
 
-{%- assign render_type = 'html' -%}
+{%- assign render_format = 'html' -%}
 {%- if device == 'text' -%}
-  {%- assign render_type = 'text' -%}
+  {%- assign render_format = 'text' -%}
 {%- endif -%}
 
 {%- for post in merged_items -%}
   {% unless post.post_attrs.hidden or post.post_attrs.draft or post.post_attrs.private or post.post_attrs.admin_only or post.post_attrs.audience != "external" %}
     {% include post-list-block.html
       post=post
-      render_type=render_type
+      render_format=render_format
       lang=lang
       ui=ui
       labels=labels

@@ -11,12 +11,12 @@
 %}
 
 {% assign post = include.post | default: page %}
-{% assign render_type = include.render_type | default: 'text' %}
+{% assign render_format = include.render_format | default: 'text' %}
 {% assign audience = post.audience | default: 'external' %}
 {% assign audience_label = ui.audience_labels[audience][lang] %}
 
 {% unless post.post_attrs.hidden or post.post_attrs.draft or post.post_attrs.private or post.post_attrs.admin_only or post.post_attrs.audience != "external" %}
-  {% if render_type == 'text' %}
+  {% if render_format == 'text' %}
     <li>
       <a href="{{ post.url }}" title="{{ post.tooltip | escape }}">
         {% if post.icon contains 'fa-' or post.icon contains 'icon-' %}

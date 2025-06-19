@@ -7,7 +7,7 @@
 - base_path: 各タクソノミーへのリンクのベースパス (例: '/ja/categories') (必須)
 - ui: UIテキストデータ (site.data.lang.taxonomy_uiなど) (必須)
 - lang: 現在の言語 (必須)
-- render_type: 'html' または 'text' (オプション、デフォルトは 'html')
+- render_format: 'html' または 'text' (オプション、デフォルトは 'html')
 - schema: site.data.taxonomy.taxonomy_schema (必須)
 {%- endcomment -%}
 
@@ -24,7 +24,7 @@
 %}
 
 {%- assign base_path = include.base_path -%}
-{%- assign render_type = include.render_type | default: 'html' -%}
+{%- assign render_format = include.render_format | default: 'html' -%}
 
 <ul class="space-y-1">
   {%- for item in merged_items %}
@@ -36,7 +36,7 @@
       labels=labels
       warning=item._warning {# _warningとしてマージした警告メッセージを渡す #}
       lang=lang
-      render_type=render_type
+      render_format=render_format
       schema=schema {# schemaも渡す #}
     %}
   {%- endfor %}
