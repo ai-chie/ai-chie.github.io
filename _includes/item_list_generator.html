@@ -15,14 +15,14 @@
 
 {% for item in merged_items %}
   {% include item-list-block.html
-    item=item
-    counts=item._count
-    warning=item._warning
-    lang=lang
-    ui=ui
-    labels=labels    
-    schema=schema
-    render_format=render_format
-    base_path=base_path
+       item=item
+       counts=item._count
+       warning=item._warning
+       lang=lang
+       ui=ui
+       labels=labels    
+       schema=schema
+       render_format=render_format
+       base_path=base_path
   %}
 {% endfor %}

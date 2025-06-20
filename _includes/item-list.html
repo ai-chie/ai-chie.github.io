@@ -14,13 +14,13 @@
 %}
 
 {% include item_data_preparer.html
-  lang=lang
-  warnings_data=warnings_data
-  schema=schema
-  type=type
-  posts=posts
-  list_type=list_type
-  merged_items=merged_items  
+     lang=lang
+     warnings_data=warnings_data
+     schema=schema
+     type=type
+     posts=posts
+     list_type=list_type
+     merged_items=merged_items  
 %}
 
 {% assign list_suffix = type | default: list_type | slugify %}
@@ -55,19 +55,19 @@
   {%- if merged_items.size == 0 -%}
     <p class="text-sm text-red-500 mt-4">{{ ui.empty_message[lang] }}</p>
   {%- endif -%}
-
   {%- if schema == nil or schema.size == 0 -%}
     <p class="text-red-600 font-bold">{{ ui.error_messages.schema_invalid[lang] }}</p>
   {%- endif -%}
+
   <ul class="space-y-4">
       {% include item_list_generator.html
-      lang=lang
-      ui=ui
-      labels=labels
-      schema=schema
-      merged_items=merged_items
-      render_format=render_format
-      base_path=base_path
+           lang=lang
+           ui=ui
+           labels=labels
+           schema=schema
+           merged_items=merged_items
+           render_format=render_format
+           base_path=base_path
       %}
   </ul>
 </section>

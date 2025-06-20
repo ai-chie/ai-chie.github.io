@@ -67,16 +67,16 @@
           <span>{{ audience_label }}</span>
         {% endif %}
         {% include badge.html
-          featured=attrs.featured
-          beta=attrs.beta
-          deprecated=attrs.deprecated
-          audience=audience
-          tooltip=tooltip
-          icon=icon
-          hiddenReason=hidden_reason
-          lang=lang
-          labels=labels
-          schema=schema
+             featured=attrs.featured
+             beta=attrs.beta
+             deprecated=attrs.deprecated
+             audience=audience
+             tooltip=tooltip
+             icon=icon
+             hiddenReason=hidden_reason
+             lang=lang
+             labels=labels
+             schema=schema
         %}
         {% if created_timestamp %}<span>🗓 {{ created_timestamp }}</span>{% endif %}
         {% if modified_timestamp %}<span>🔄 {{ modified_timestamp }}</span>{% endif %}
