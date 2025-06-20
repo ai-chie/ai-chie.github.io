@@ -42,9 +42,13 @@
 
 <section data-item-list="{{ list_suffix }}">
   {%- if render_format == 'human' -%}
-    <h3 class="text-lg font-bold">{{ ui.title[type][lang] }}</h3>
-    {%- if ui.description[type][lang] != blank -%}
-      <p class="text-sm text-gray-500">{{ ui.description[type][lang] }}</p>
+    {%- assign heading = ui.title[type][lang] | default: '' -%}
+    {%- assign desc    = ui.description[type][lang] | default: '' -%}
+    {%- if heading != '' -%}
+      <h3 class="text-lg font-bold">{{ heading }}</h3>
+    {%- endif -%}
+    {%- if desc != '' -%}
+      <p class="text-sm text-gray-500">{{ desc }}</p>
     {%- endif -%}
   {%- endif -%}
 
