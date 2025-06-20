@@ -23,9 +23,10 @@
 %}
 
 {% if list_type == 'taxonomy' and render_format == 'human' %}
+{%- assign list_suffix = type | slugify -%}
 <div class="mb-4">
-  <input type="text" id="filter" placeholder="{{ ui.search_placeholder[lang] }}" class="border px-2 py-1 mr-2">
-  <select id="sort" class="border px-2 py-1">
+  <input type="text" id="filter-{{ list_suffix }}" placeholder="{{ ui.search_placeholder[lang] }}" class="border px-2 py-1 mr-2">
+  <select id="sort-{{ list_suffix }}" class="border px-2 py-1">
     <option value="count">{{ ui.sort_options.count[lang] }}</option>
     <option value="name">{{ ui.sort_options.name[lang] }}</option>
   </select>
@@ -33,7 +34,8 @@
 {% endif %}
 
 {% if list_type == 'taxonomy' %}
-<section>
+{%- assign list_suffix = type | slugify -%}
+<section data-taxonomy-list="{{ list_suffix }}">
   {%- if render_format == 'human' -%}
     <h3 class="text-lg font-bold">{{ ui.title[type][lang] }}</h3>
     {%- if ui.description[type][lang] != blank -%}
