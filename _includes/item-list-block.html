@@ -13,8 +13,6 @@
      base_path=include.base_path
 %}
 
-{%- assign base_path = include.base_path | default: base_path -%}
-
 {% assign item = include.item | default: page %}
 {% assign counts_param = include.counts %}
 {% assign warning = include.warning | default: '' %}
