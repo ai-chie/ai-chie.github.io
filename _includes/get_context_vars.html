@@ -21,6 +21,7 @@ posts = site.pages || site.posts                       # post only
 {%- assign schema = include.schema | default: {} -%}
 {%- assign type = include.type | default: page.type | default: 'categories' -%}
 {%- assign posts = include.posts | default: site.pages | default: site.posts -%}
+{%- assign list_type = include.list_type | default: 'post' -%}
 
 {% comment %}
 ==================================================
