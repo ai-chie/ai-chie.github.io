@@ -45,6 +45,8 @@
 </head>
 <body>
     {{ content }} {# 子レイアウトの内容がここに挿入されます #}
-    <script src="/assets/js/taxonomy-list.js"></script>
+    {%- unless device == 'text' -%}
+      <script src="/assets/js/taxonomy-list.js"></script>
+    {% endunless %}
 </body>
 </html>
