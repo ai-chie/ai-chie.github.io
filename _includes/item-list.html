@@ -42,8 +42,15 @@
 
 <section data-item-list="{{ list_suffix }}">
   {%- if render_format == 'human' -%}
-    {%- assign heading = ui.title[type][lang] | default: '' -%}
-    {%- assign desc    = ui.description[type][lang] | default: '' -%}
+    {% if list_type == 'taxonomy' %}
+      {%- assign heading = ui.title[type][lang] | default: '' -%}
+      {%- assign desc    = ui.description[type][lang] | default: '' -%}
+    {%- endif -%}
+    {% if list_type == 'post' %}
+      {%- assign heading = page.title | default: '' -%}
+      {%- assign desc    = page.description | default: '' -%}
+    {%- endif -%}
+    
     {%- if heading != '' -%}
       <h3 class="text-lg font-bold">{{ heading }}</h3>
     {%- endif -%}
