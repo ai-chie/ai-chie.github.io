@@ -23,20 +23,24 @@
   merged_items=merged_items  
 %}
 
-{% if list_type == 'taxonomy' and render_format == 'human' %}
-{%- assign list_suffix = type | slugify -%}
+{% assign list_suffix = type | default: list_type | slugify %}
+{% if render_format == 'human' %}
 <div class="mb-4">
   <input type="text" id="filter-{{ list_suffix }}" placeholder="{{ ui.search_placeholder[lang] }}" class="border px-2 py-1 mr-2">
   <select id="sort-{{ list_suffix }}" class="border px-2 py-1">
-    <option value="count">{{ ui.sort_options.count[lang] }}</option>
-    <option value="name">{{ ui.sort_options.name[lang] }}</option>
+    {% if list_type == 'taxonomy' %}
+      <option value="count">{{ ui.sort_options.count[lang] }}</option>
+      <option value="name">{{ ui.sort_options.name[lang] }}</option>
+    {% else %}
+      <option value="priority">{{ ui.sort_options.priority[lang] }}</option>
+      <option value="title">{{ ui.sort_options.title[lang] }}</option>
+      <option value="date">{{ ui.sort_options.date[lang] }}</option>
+    {% endif %}
   </select>
 </div>
 {% endif %}
 
-{% if list_type == 'taxonomy' %}
-{%- assign list_suffix = type | slugify -%}
-<section data-taxonomy-list="{{ list_suffix }}">
+<section data-item-list="{{ list_suffix }}">
   {%- if render_format == 'human' -%}
     <h3 class="text-lg font-bold">{{ ui.title[type][lang] }}</h3>
     {%- if ui.description[type][lang] != blank -%}
@@ -63,16 +67,3 @@
       %}
   </ul>
 </section>
-{% else %}
-<ul class="space-y-4">
-  {% include item_list_generator.html
-    lang=lang
-    ui=ui
-    labels=labels
-    schema=schema
-    merged_items=merged_items
-    render_format=render_format
-    base_path=base_path
-  %}
-</ul>
-{% endif %}

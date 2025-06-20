@@ -38,8 +38,8 @@
 {%- assign modified_timestamp = item.modified_timestamp -%}
 
 {% unless slug == '' or admin_only or hidden or draft or private or audience != 'external' %}
-  {% if render_format == 'bot' %}
-    <li{% if count != '' %} data-count="{{ count }}"{% endif %}>
+  {% if render_format == 'bot' %}␊
+    <li{% if count != '' %} data-count="{{ count }}"{% endif %}{% if list_type == 'post' %}{% if priority != '' %} data-priority="{{ priority }}"{% endif %}{% if created_timestamp != '' %} data-date="{{ created_timestamp }}"{% endif %} data-title="{{ name | escape }}"{% endif %}>
       <a href="{{ url }}"{% if tooltip != '' %} title="{{ tooltip | escape }}"{% endif %}>
         {% if icon contains 'fa-' or icon contains 'icon-' %}
           <span class="{{ icon }}"></span>
@@ -50,7 +50,7 @@
       </a>
     </li>
   {% else %}
-    <li class="mb-4"{% if count != '' %} data-count="{{ count }}"{% endif %}>
+    <li class="mb-4"{% if count != '' %} data-count="{{ count }}"{% endif %}{% if list_type == 'post' %}{% if priority != '' %} data-priority="{{ priority }}"{% endif %}{% if created_timestamp != '' %} data-date="{{ created_timestamp }}"{% endif %} data-title="{{ name | escape }}"{% endif %}>
       <a href="{{ url }}" class="font-semibold hover:underline" style="color: {{ color | default: '#333' }};"{% if tooltip != '' %} title="{{ tooltip | escape }}"{% endif %}>
         {% if icon contains 'fa-' or icon contains 'icon-' %}
           <span class="{{ icon }}"></span>
