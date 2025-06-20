@@ -51,16 +51,17 @@
   {%- if schema == nil or schema.size == 0 -%}
     <p class="text-red-600 font-bold">{{ ui.error_messages.schema_invalid[lang] }}</p>
   {%- endif -%}
-
-  {% include item_list_generator.html
-    lang=lang
-    ui=ui
-    labels=labels
-    schema=schema
-    merged_items=merged_items
-    render_format=render_format
-    base_path=base_path
-  %}
+  <ul class="space-y-4">
+      {% include item_list_generator.html
+      lang=lang
+      ui=ui
+      labels=labels
+      schema=schema
+      merged_items=merged_items
+      render_format=render_format
+      base_path=base_path
+      %}
+  </ul>
 </section>
 {% else %}
 <ul class="space-y-4">

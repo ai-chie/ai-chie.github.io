@@ -1,11 +1,11 @@
 ---
-layout: default {# default.html レイアウトを継承 #}
+layout: default{% comment %} default.html レイアウトを継承 {% endcomment %}
 # この投稿レイアウトを使用するページのfront matterで上書きされる
 # title: "投稿タイトル"
 # description: "投稿の概要"
 ---
 
-<article class="post-content"> {# 記事のメインコンテンツ #}
+<article class="post-content"> {% comment %} 記事のメインコンテンツ {% endcomment %}
   <header>
     {% if page.title %}
       <h1 class="post-title">{{ page.title }}</h1>
@@ -14,7 +14,7 @@ layout: default {# default.html レイアウトを継承 #}
     <div class="post-meta">
       {% if page.date %}
         <time datetime="{{ page.date | date_to_xmlschema }}" class="post-date">
-          {{ page.date | date: site.date_format | default: "%Y年%m月%d日" }} {# site.date_format を設定していればそれが使われる #}
+          {{ page.date | date: site.date_format | default: "%Y年%m月%d日" }} {% comment %} site.date_format を設定していればそれが使われる {% endcomment %}
         </time>
       {% endif %}
 
@@ -49,10 +49,10 @@ layout: default {# default.html レイアウトを継承 #}
   </header>
 
   <div class="post-body">
-    {{ content }} {# Markdownで記述された投稿本文がここに展開される #}
+    {{ content }} {% comment %} Markdownで記述された投稿本文がここに展開される {% endcomment %}
   </div>
 
-  {# 関連記事やコメントセクションなど、投稿固有のフッターコンテンツがあればここに追加 #}
+  {% comment %} 関連記事やコメントセクションなど、投稿固有のフッターコンテンツがあればここに追加 {% endcomment %}
   {% comment %}
   <section class="related-posts">
     <h2>関連記事</h2>
@@ -63,7 +63,7 @@ layout: default {# default.html レイアウトを継承 #}
   {% comment %}
   <section class="comments">
     <h2>コメント</h2>
-    {# Disqusなどのコメントシステムをここに統合 #}
+    <!-- Disqusなどのコメントシステムをここに統合 -->
   </section>
   {% endcomment %}
 

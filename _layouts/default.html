@@ -1,23 +1,23 @@
 ---
-layout: base {# base.html を継承する #}
+layout: base{% comment %} base.html を継承する {% endcomment %}
 ---
 
 <header>
-    {% include header.html %} {# 例: 共通ヘッダー部品 #}
+    {% include header.html %} {% comment %} 例: 共通ヘッダー部品 {% endcomment %}
 </header>
 
 <nav>
-    {% include navigation.html %} {# 例: 共通ナビゲーション部品 #}
+    {% include navigation.html %} {% comment %} 例: 共通ナビゲーション部品 {% endcomment %}
 </nav>
 
 <main>
-    {# ページの内容がここに挿入されます。個別の記事はここで <article> を持つように調整する #}
-    {{ content }} {# ページコンテンツがここに挿入されます #}
+    {% comment %} ページの内容がここに挿入されます。個別の記事はここで <article> を持つように調整する {% endcomment %}
+    {{ content }} {% comment %} ページコンテンツがここに挿入されます {% endcomment %}
 </main>
 
 <footer>
-    {% include footer.html %} {# 例: 共通フッター部品 #}
+    {% include footer.html %} {% comment %} 例: 共通フッター部品 {% endcomment %}
 </footer>
 
-{# 人間向けページに必要なJavaScriptなどをここで読み込む #}
+{% comment %} 人間向けページに必要なJavaScriptなどをここで読み込む {% endcomment %}
 <script src="/assets/js/interactive.js"></script>

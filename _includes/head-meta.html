@@ -1,6 +1,6 @@
-{# _includes/head-meta.html #}
-{# 人間向けのhead要素。base.htmlでmeta charset, viewport, titleは定義済みのため、重複部分は削除。 #}
-{# {% seo %}タグが多くのメタデータを生成するため、重複を避ける #}
+{% comment %} _includes/head-meta.html {% endcomment %}
+{% comment %} 人間向けのhead要素。base.htmlでmeta charset, viewport, titleは定義済みのため、重複部分は削除。 {% endcomment %}
+{% comment %} {% seo %}タグが多くのメタデータを生成するため、重複を避ける {% endcomment %}
 
 {%- if page.lang %}
   <meta name="language" content="{{ page.lang }}">
@@ -8,13 +8,13 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{# {% seo %}タグは、canonical url, description, og:title, og:description, og:url, robotsなどを自動生成します #}
+{% comment %} {% seo %}タグは、canonical url, description, og:title, og:description, og:url, robotsなどを自動生成します {% endcomment %}
 {% seo %}
 
-{# ここには、{% seo %}で生成されないが人間向けページに必要なhead要素のみを記述します #}
+{% comment %} ここには、{% seo %}で生成されないが人間向けページに必要なhead要素のみを記述します {% endcomment %}
 <link rel="stylesheet" href="/assets/css/main.css">
 <script src="/assets/js/analytics.js" async></script>
-{# 他のスタイルシート、ファビコンなどをここに記述 #}
+{% comment %} 他のスタイルシート、ファビコンなどをここに記述 {% endcomment %}
 
 {%- assign canonical_url = site.url | append: page.url %}
 <script type="application/ld+json">

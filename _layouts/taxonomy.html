@@ -1,9 +1,11 @@
 ---
-layout: base {# base.html を継承する #}
+layout: base{% comment %} base.html を継承する {% endcomment %}
 ---
 
-{# ここからがレイアウトの {{ content }} に入る部分 #}
-
+{% comment %} ここからがレイアウトの {{ content }} に入る部分 {% endcomment %}
+<main>
+    <section>
+    <!-- カテゴリ/タグ内の記事一覧 -->
     {% include item-list.html
     list_type='post'
     device=device
@@ -14,3 +16,5 @@ layout: base {# base.html を継承する #}
     schema=post_schema
     posts=site.pages
     %}
+    </section>
+</main>

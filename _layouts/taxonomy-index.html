@@ -1,38 +1,38 @@
 ---
-layout: base {# base.html を継承する #}
+layout: base{% comment %} base.html を継承する {% endcomment %}
 title: "AI/クローラー用軽量ページ"
 description: "AIが読みやすいように最適化されたプレーンHTML構成です"
 types: [categories, tags]
 ---
 
-{# ここからがレイアウトの {{ content }} に入る部分 #}
+{% comment %} ここからがレイアウトの {{ content }} に入る部分 {% endcomment %}
 
-{# page.types がリストであることを想定し、デフォルト値を空のリストに設定 #}
+{% comment %} page.types がリストであることを想定し、デフォルト値を空のリストに設定 {% endcomment %}
 {%- assign types_list = page.types | default: 'categories' -%}
 
-{# page.types が単一の文字列の場合にリストに変換する処理 #}
-{% if types_list contains ',' %} {# もしカンマ区切りで文字列が渡された場合（例: "tag1,tag2"） #}
-  {% assign types_list = types_list | split: ',' | compact %} {# カンマで分割し、空の要素を削除 #}
-{% elsif types_list | is_a:'string' %} {# 単一の文字列で、カンマを含まない場合（例: "category"） #}
-  {% assign types_list = types_list | split: ',' %} {# Liquidのsplitは単一の文字列でも配列に変換する #}
+{% comment %} page.types が単一の文字列の場合にリストに変換する処理 {% endcomment %}
+{% if types_list contains ',' %} {% comment %} もしカンマ区切りで文字列が渡された場合（例: "tag1,tag2"） {% endcomment %}
+  {% assign types_list = types_list | split: ',' | compact %} {% comment %} カンマで分割し、空の要素を削除 {% endcomment %}
+{% elsif types_list | is_a:'string' %} {% comment %} 単一の文字列で、カンマを含まない場合（例: "category"） {% endcomment %}
+  {% assign types_list = types_list | split: ',' %} {% comment %} Liquidのsplitは単一の文字列でも配列に変換する {% endcomment %}
 {% endif %}
 
 <main>
-    
+
     {{ content }}
 
     {% for type_item in types_list %}
-        <!-- {# <h2>{{ taxonomy_ui.title[type][lang] }}</h2> #} -->
+        <!-- <h2>{{ taxonomy_ui.title[type][lang] }}</h2> -->
         {% include item-list.html
             list_type='taxonomy'
             device=device
             lang=lang
-            type=type_item  {# リストの各要素を type として渡す #}
+            type=type_item  {% comment %} リストの各要素を type として渡す {% endcomment %}
             ui=taxonomy_ui
             warnings_data=taxonomy_warnings_data
             labels=taxonomy_labels
             schema=taxonomy_schema
         %}
     {% endfor %}
-    
+
 </main>

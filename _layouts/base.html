@@ -5,46 +5,46 @@
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>{{ page.title | default: site.title }}</title>
 
-    {# サイト全体で共通して使用する _data ファイルの読み込み #}
-    {# ファイルが存在しない場合に備えて default: {} を設定し、Liquidエラーを防ぐ #}
-    
+    {% comment %} サイト全体で共通して使用する _data ファイルの読み込み {% endcomment %}
+    {% comment %} ファイルが存在しない場合に備えて default: {} を設定し、Liquidエラーを防ぐ {% endcomment %}
+
     {%- assign taxonomy_ui = site.data.lang.taxonomy_ui | default: {} -%}
     {%- assign taxonomy_warnings_data = site.data.lang.taxonomy_warning | default: {} -%}
     {%- assign taxonomy_labels = site.data.lang.taxonomy_badge -%}
     {%- assign taxonomy_schema = site.data.taxonomy.taxonomy_schema | default: {} -%}
-    
+
     {%- assign post_ui = site.data.lang.post_ui | default: {} -%}
     {%- assign post_warnings_data = site.data.lang.post_warning | default: {} -%}
     {%- assign post_labels = site.data.lang.post_badge -%}
     {%- assign post_schema = site.data.post.post_schema | default: {} -%}
-    
+
     {%- assign device = page.device | default: 'text' -%}
     {%- assign lang = page.lang | default: 'ja' -%}
     {%- assign type = page.type | default: 'categories' -%}
-    
-    {%- assign title = page.title | default: '' -%}
-    {%- assign description = page.description | default: '' -%} 
 
-    {# 子レイアウトやページがhead要素の内容を追加するためのフックポイント #}
+    {%- assign title = page.title | default: '' -%}
+    {%- assign description = page.description | default: '' -%}
+
+    {% comment %} 子レイアウトやページがhead要素の内容を追加するためのフックポイント {% endcomment %}
     {%- if device == 'text' -%}
       {%- include head-minimal.html -%}
     {%- else -%}
       {%- include head-meta.html -%}
     {% endif %}
-    
+
     {% if layout.head_content %}
       {{ layout.head_content }}
     {% endif %}
     {% if page.head_content %}
       {{ page.head_content }}
     {% endif %}
-    
 
-    {# 全てのページに共通する、本当に最小限のCSS/JSリンク（例: CSSリセットなど）をここに配置することも可能です #}
-    {# <link rel="stylesheet" href="/assets/css/reset.css"> #}
+
+    {% comment %} 全てのページに共通する、本当に最小限のCSS/JSリンク（例: CSSリセットなど）をここに配置することも可能です {% endcomment %}
+    {% comment %} <link rel="stylesheet" href="/assets/css/reset.css"> {% endcomment %}
 </head>
 <body>
-    {{ content }} {# 子レイアウトの内容がここに挿入されます #}
+    {{ content }} {% comment %} 子レイアウトの内容がここに挿入されます {% endcomment %}
     {%- unless device == 'text' -%}
       <script src="/assets/js/taxonomy-list.js"></script>
     {% endunless %}
