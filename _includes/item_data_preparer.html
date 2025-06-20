@@ -1,16 +1,3 @@
-{% include get_context_vars.html
-     device=include.device
-     lang=include.lang
-     ui=include.ui
-     warnings_data=include.warnings_data
-     labels=include.labels
-     schema=include.schema
-     type=include.type
-     posts=include.posts
-     merged_items=include.merged_items
-     list_type=include.list_type
-%}
-
 {% assign list_type = include.list_type | default: 'post' %}
 {% assign merged_items = "" | split: "" %}
 
