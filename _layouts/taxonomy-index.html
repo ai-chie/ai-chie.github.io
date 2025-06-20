@@ -23,7 +23,8 @@ types: [categories, tags]
 
     {% for type_item in types_list %}
         <!-- {# <h2>{{ taxonomy_ui.title[type][lang] }}</h2> #} -->
-        {% include taxonomy-list.html
+        {% include item-list.html
+            list_type='taxonomy'
             device=device
             lang=lang
             type=type_item  {# リストの各要素を type として渡す #}

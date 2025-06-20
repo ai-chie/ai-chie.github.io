@@ -37,7 +37,7 @@
 
 {% unless slug == '' or admin_only or hidden or draft or private or audience != 'external' %}
   {% if render_format == 'bot' %}
-    <li>
+    <li{% if count != '' %} data-count="{{ count }}"{% endif %}>
       <a href="{{ url }}"{% if tooltip != '' %} title="{{ tooltip | escape }}"{% endif %}>
         {% if icon contains 'fa-' or icon contains 'icon-' %}
           <span class="{{ icon }}"></span>
@@ -48,7 +48,7 @@
       </a>
     </li>
   {% else %}
-    <li class="mb-4">
+    <li class="mb-4"{% if count != '' %} data-count="{{ count }}"{% endif %}>
       <a href="{{ url }}" class="font-semibold hover:underline" style="color: {{ color | default: '#333' }};"{% if tooltip != '' %} title="{{ tooltip | escape }}"{% endif %}>
         {% if icon contains 'fa-' or icon contains 'icon-' %}
           <span class="{{ icon }}"></span>

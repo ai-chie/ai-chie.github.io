@@ -4,7 +4,8 @@ layout: base {# base.html を継承する #}
 
 {# ここからがレイアウトの {{ content }} に入る部分 #}
 
-    {% include post-list.html
+    {% include item-list.html
+    list_type='post'
     device=device
     lang=lang
     ui=post_ui

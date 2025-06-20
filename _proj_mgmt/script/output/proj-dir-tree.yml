@@ -87,12 +87,10 @@ _includes:
   - [lang_switch.html, _includes/lang_switch.html]
   - [post-attribute-check.html, _includes/post-attribute-check.html]
   - [post-list-item.html, _includes/post-list-item.html]
-  - [post-list.html, _includes/post-list.html]
   - [taxonomy-badge.html, _includes/taxonomy-badge.html]
-  - [taxonomy-list-block.html, _includes/taxonomy-list-block.html]
-  - [taxonomy-list.html, _includes/taxonomy-list.html]
-  - [taxonomy_data_preparer.html, _includes/taxonomy_data_preparer.html]
-  - [taxonomy_list_generator.html, _includes/taxonomy_list_generator.html]
+  - [item-list.html, _includes/item-list.html]
+  - [item_data_preparer.html, _includes/item_data_preparer.html]
+  - [item_list_generator.html, _includes/item_list_generator.html]
 
 _layouts:
 
