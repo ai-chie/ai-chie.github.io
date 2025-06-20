@@ -24,14 +24,14 @@ types: [categories, tags]
     {% for type_item in types_list %}
         <!-- <h2>{{ taxonomy_ui.title[type][lang] }}</h2> -->
         {% include item-list.html
-            list_type='taxonomy'
-            device=device
-            lang=lang
-            type=type_item  {% comment %} リストの各要素を type として渡す {% endcomment %}
-            ui=taxonomy_ui
-            warnings_data=taxonomy_warnings_data
-            labels=taxonomy_labels
-            schema=taxonomy_schema
+             device=device
+             lang=lang
+             ui=taxonomy_ui
+             warnings_data=taxonomy_warnings_data
+             labels=taxonomy_labels
+             schema=taxonomy_schema
+             type=type_item  {% comment %} リストの各要素を type として渡す {% endcomment %}
+             list_type='taxonomy'             
         %}
     {% endfor %}
 

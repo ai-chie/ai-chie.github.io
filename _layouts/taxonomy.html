@@ -4,17 +4,17 @@ layout: base{% comment %} base.html を継承する {% endcomment %}
 
 {% comment %} ここからがレイアウトの {{ content }} に入る部分 {% endcomment %}
 <main>
-    <section>
+
     <!-- カテゴリ/タグ内の記事一覧 -->
     {% include item-list.html
-    list_type='post'
-    device=device
-    lang=lang
-    ui=post_ui
-    warnings_data=post_warnings_data
-    labels=post_labels
-    schema=post_schema
-    posts=site.pages
+         device=device
+         lang=lang
+         ui=post_ui
+         warnings_data=post_warnings_data
+         labels=post_labels
+         schema=post_schema
+         posts=site.pages
+         list_type='post'
     %}
-    </section>
+
 </main>
