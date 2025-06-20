@@ -7,19 +7,20 @@
      schema=include.schema
      type=include.type
      posts=include.posts
-     merged_items=include.merged_items
      list_type=include.list_type
+     merged_items=include.merged_items
+     render_format = include.render_format
+     base_path=include.base_path
 %}
 
-{% assign list_type = include.list_type | default: 'post' %}
-
 {% include item_data_preparer.html
-  list_type=list_type
-  posts=posts
-  type=type
   lang=lang
   warnings_data=warnings_data
   schema=schema
+  type=type
+  posts=posts
+  list_type=list_type
+  merged_items=merged_items  
 %}
 
 {% if list_type == 'taxonomy' and render_format == 'human' %}
@@ -52,24 +53,24 @@
   {%- endif -%}
 
   {% include item_list_generator.html
-    merged_items=merged_items
+    lang=lang
     ui=ui
     labels=labels
-    lang=lang
     schema=schema
-    list_type=list_type
+    merged_items=merged_items
+    render_format=render_format
     base_path=base_path
   %}
 </section>
 {% else %}
 <ul class="space-y-4">
   {% include item_list_generator.html
-    merged_items=merged_items
+    lang=lang
     ui=ui
     labels=labels
-    lang=lang
     schema=schema
-    list_type=list_type
+    merged_items=merged_items
+    render_format=render_format
     base_path=base_path
   %}
 </ul>

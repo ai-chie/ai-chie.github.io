@@ -1,12 +1,28 @@
+{% include get_context_vars.html
+     device=include.device
+     lang=include.lang
+     ui=include.ui
+     warnings_data=include.warnings_data
+     labels=include.labels
+     schema=include.schema
+     type=include.type
+     posts=include.posts
+     list_type=include.list_type
+     merged_items=include.merged_items
+     render_format = include.render_format
+     base_path=include.base_path
+%}
+
 {% for item in merged_items %}
   {% include item-list-block.html
     item=item
     counts=item._count
     warning=item._warning
-    ui=ui
-    labels=labels
     lang=lang
+    ui=ui
+    labels=labels    
     schema=schema
+    render_format=render_format
     base_path=base_path
   %}
 {% endfor %}

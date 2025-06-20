@@ -39,7 +39,7 @@ values not change in templates (constants)
 ==================================================
 {% endcomment %}
 
-{%- assign render_format = 'bot' -%}
+{%- assign render_format = include.render_format | default: 'bot' -%}
 {%- unless device == 'text' -%}
   {%- assign render_format = 'human' -%}
 {%- endunless -%}
