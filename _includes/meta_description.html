@@ -2,12 +2,16 @@
 meta description 補完テンプレート（defaults fallback付き）
 - page.description または site.description を使用
 - SEOとSNSの両方に有効
+- モジュール化済み（cfg → def）
+- 出力細分化: no_description に対応
 {%- endcomment -%}
 
-{%- assign meta_cfg = site.data.meta_config | default: {} -%}
-{%- assign defaults = meta_cfg.defaults | default: {} -%}
-{%- assign desc = page.description | default: defaults.description | default: site.description -%}
-
-{%- if desc %}
+{%- unless page.no_description -%}
+  {%- assign cfg = site.data.meta_config | default: {} -%}
+  {%- assign def = cfg.defaults | default: {} -%}
+  {%- assign desc = page.description | default: def.description | default: site.description -%}
+  {%- if desc %}
 <meta name="description" content="{{ desc | strip_newlines | escape }}" />
-{%- endif %}
+  {%- endif %}
+{%- endunless %}
+

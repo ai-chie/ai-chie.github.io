@@ -6,36 +6,43 @@ Open Graph および Twitter Card メタ情報（SNS共有向け）
 - 出力細分化: no_twitter, no_og_image に対応
 {%- endcomment -%}
 
-{%- assign meta_cfg = site.data.meta_config | default: {} -%}
-{%- assign defaults = meta_cfg.defaults | default: {} -%}
-{%- assign og_cfg = meta_cfg.open_graph | default: {} -%}
-{%- assign twitter_cfg = meta_cfg.twitter | default: {} -%}
+{%- assign cfg = site.data.meta_config | default: {} -%}
+{%- assign def = cfg.defaults | default: {} -%}
+{%- assign og = cfg.open_graph | default: {} -%}
+{%- assign tw = cfg.twitter | default: {} -%}
 
-{%- assign page_title = page.title | default: site.title -%}
-{%- assign page_description = page.description | default: defaults.description | default: site.description -%}
-{%- assign page_image = page.image | default: defaults.image | default: site.image -%}
-{%- assign page_url = page.url | absolute_url -%}
-{%- assign page_lang = page.lang | default: defaults.lang | default: "ja" -%}
-{%- assign og_locale = og_cfg.locale_map[page_lang] | default: "ja_JP" -%}
-{%- assign twitter_user = twitter_cfg.username | default: null -%}
+{%- assign title = page.title | default: site.title -%}
+{%- assign desc  = page.description | default: def.description | default: site.description -%}
+{%- assign img   = page.image | default: def.image | default: site.image -%}
+{%- assign url   = page.url | absolute_url -%}
+{%- assign lang  = page.lang | default: def.lang | default: "ja" -%}
+{%- assign locale = og.locale_map[lang] | default: "ja_JP" -%}
+{%- assign twitter_user = tw.username | default: null -%}
 
 <!-- Open Graph -->
 <meta property="og:type" content="article" />
-<meta property="og:title" content="{{ page_title | escape }}" />
-<meta property="og:description" content="{{ page_description | escape }}" />
-<meta property="og:url" content="{{ page_url }}" />
-<meta property="og:locale" content="{{ og_locale }}" />
-{%- if page_image %}
-<meta property="og:image" content="{{ page_image | absolute_url }}" />
-{%- endif %}
+<meta property="og:title" content="{{ title | escape }}" />
+<meta property="og:description" content="{{ desc | escape }}" />
+<meta property="og:url" content="{{ url }}" />
+<meta property="og:locale" content="{{ locale }}" />
+{%- unless page.no_og_image %}
+  {%- if img %}
+<meta property="og:image" content="{{ img | absolute_url }}" />
+  {%- endif %}
+{%- endunless %}
 
 <!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="{{ page_title | escape }}" />
-<meta name="twitter:description" content="{{ page_description | escape }}" />
-{%- if page_image %}
-<meta name="twitter:image" content="{{ page_image | absolute_url }}" />
-{%- endif %}
-{%- if twitter_user %}
-<meta name="twitter:site" content="{{ twitter_user }}">
-{%- endif %}
+{%- unless page.no_twitter %}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ title | escape }}" />
+  <meta name="twitter:description" content="{{ desc | escape }}" />
+  {%- unless page.no_og_image %}
+    {%- if img %}
+  <meta name="twitter:image" content="{{ img | absolute_url }}" />
+    {%- endif %}
+  {%- endunless %}
+  {%- if twitter_user %}
+  <meta name="twitter:site" content="{{ twitter_user }}">
+  {%- endif %}
+{%- endunless %}
+
