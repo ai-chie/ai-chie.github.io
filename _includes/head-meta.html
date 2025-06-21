@@ -16,7 +16,8 @@
 <script src="/assets/js/analytics.js" async></script>
 {% comment %} 他のスタイルシート、ファビコンなどをここに記述 {% endcomment %}
 
-{%- assign canonical_url = site.url | append: page.url %}
+{% include canonical.html %}
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -25,7 +26,7 @@
   "description": "{{ page.description | escape }}",
   "datePublished": "{{ page.date | date_to_xmlschema }}",
   "inLanguage": "{{ page.lang | default: 'ja' }}",
-  "url": "{{ canonical_url }}",
+  "url": "{{ page.url | absolute_url }}",
   "author": {
     "@type": "Organization",
     "name": "{{ site.author.name | default: site.title }}"

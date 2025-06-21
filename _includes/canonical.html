@@ -1,0 +1,25 @@
+{%- comment -%}
+_config.yml の canonical 設定に従って canonical URL を出力。
+- canonical.enabled: false の場合は非出力
+- canonical.base_device or per_lang.lang に統一
+- canonical_override を優先（許可されている場合）
+{%- endcomment -%}
+
+{%- assign canon_cfg = site.canonical | default: {} -%}
+{%- assign enabled = canon_cfg.enabled | default: true -%}
+{%- assign base_device = canon_cfg.base_device | default: "pc" -%}
+{%- assign override_allowed = canon_cfg.override_allowed | default: true -%}
+{%- assign per_lang = canon_cfg.per_lang | default: {} -%}
+{%- assign lang = page.lang | default: "ja" -%}
+
+{%- if enabled -%}
+  {%- if page.canonical_override and override_allowed -%}
+    <link rel="canonical" href="{{ page.canonical_override | absolute_url }}">
+  {%- else -%}
+    {%- assign prefix = per_lang[lang] | default: '/' | append: base_device | append: '/' | append: lang -%}
+    {%- assign current_url = page.url -%}
+    {%- assign canonical_url = current_url
+      | replace_first: '/text/' | replace_first: '/mobile/' | replace_first: '/pc/' | prepend: prefix -%}
+    <link rel="canonical" href="{{ canonical_url | absolute_url }}">
+  {%- endif -%}
+{%- endif -%}
