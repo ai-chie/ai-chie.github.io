@@ -17,12 +17,12 @@
   <meta name="robots" content="noindex, nofollow">
 {%- endunless -%}
 
-{% include meta_description_advanced.html %}
-{% include meta_favicon_advanced.html %}
-{% unless page.no_canonical %}{% include canonical_advanced.html %}{% endunless %}
-{% unless page.no_alternate %}{% include alternate_advanced.html %}{% endunless %}
-{% unless page.no_og %}{% include meta_open_graph_advanced.html %}{% endunless %}
-{% unless page.no_jsonld %}{% include meta_schema_jsonld_advanced.html %}{% endunless %}
+{% unless page.no_meta_description %}{% include meta_description.html %}{% endunless %}
+{% unless page.no_meta_favicon %}{% include meta_favicon.html %}{% endunless %}
+{% unless page.no_canonical %}{% include canonical.html %}{% endunless %}
+{% unless page.no_alternate %}{% include alternate.html %}{% endunless %}
+{% unless page.no_meta_og %}{% include meta_open_graph.html %}{% endunless %}
+{% unless page.no_meta_schema_jsonld %}{% include meta_schema_jsonld.html %}{% endunless %}
 
 
 {%- comment -%}
@@ -31,9 +31,9 @@ Front Matter制御項目一覧
 
 キー名              | 対象テンプレート                     | 動作
 noindex: true      | <meta name="robots">             | "noindex, nofollow" を出力
-no_canonical: true | canonical_advanced.html          | canonicalタグを出力しない
-no_alternate: true | alternate_advanced.html          | alternateタグを出力しない
-no_og: true        | meta_open_graph_advanced.html    | Open Graph / Twitter Card を省略
-no_jsonld: true    | meta_schema_jsonld_advanced.html | JSON-LD構造化データを省略
+no_canonical: true | canonical.html          | canonicalタグを出力しない
+no_alternate: true | alternate.html          | alternateタグを出力しない
+no_og: true        | meta_open_graph.html    | Open Graph / Twitter Card を省略
+no_jsonld: true    | meta_schema_jsonld.html | JSON-LD構造化データを省略
 
 {%- endcomment -%}
