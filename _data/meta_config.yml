@@ -1,10 +1,9 @@
-# _data/meta_config.yml
-
 defaults:
   description: "このサイトはAI・多言語・多端末に対応した情報発信を行うプロジェクトです。" # ← サイト全体の説明文
   image: "/assets/img/default-og-image.png" # ← SNSカードや構造化データのOG画像
   author: "AI-Chie Project" # ← schema.org用の著者名
   lang: "ja" # ← 未指定時の言語既定
+  theme_color: "#ffffff"
 
 robots:
   default: "index, follow"
@@ -28,6 +27,18 @@ alternate:
 
 open_graph:
   enabled: true # ← OGタグ有効化
+  locale_map:
+  ja: "ja_JP"
+  en: "en_US"
 
 json_ld:
   enabled: true # ← 構造化データ出力をON
+  
+twitter:
+  enabled: true
+  username: "@ai_chie"
+
+favicon:
+  enabled: true
+  path: "/assets/favicon/"
+  
