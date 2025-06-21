@@ -11,12 +11,13 @@ robots:
     - /search/
     - /404.html
 
+# canonical.htmlのロジック制御用
 canonical:
-  enabled: true
-  base_device: "pc"
-  override_allowed: true
-  fallback_to_base: true
-  per_lang: # ← 言語別canonical正規パス
+  enabled: true                # ← 全体ON/OFF。canonical出力を有効化
+  base_device: "pc"            # 正規URLとして使う device。canonicalを統一する対象の device（例: "pc"）
+  override_allowed: true       # Front Matterでの canonical_override を許可。page.canonical_override による上書きを許可
+  fallback_to_base: true       # per_lang にない言語は base_device/lang を使う
+  per_lang:                    # ← 言語別canonical正規パス。言語別canonicalルート（省略時は base_device 使用）
     ja: "/pc/ja"
     en: "/pc/en"
 
