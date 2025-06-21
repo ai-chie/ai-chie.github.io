@@ -1,0 +1,33 @@
+# _data/meta_config.yml
+
+defaults:
+  description: "このサイトはAI・多言語・多端末に対応した情報発信を行うプロジェクトです。" # ← サイト全体の説明文
+  image: "/assets/img/default-og-image.png" # ← SNSカードや構造化データのOG画像
+  author: "AI-Chie Project" # ← schema.org用の著者名
+  lang: "ja" # ← 未指定時の言語既定
+
+robots:
+  default: "index, follow"
+  exclude_paths: # ← noindexにしたいパスのリスト
+    - /search/
+    - /404.html
+
+canonical:
+  enabled: true
+  base_device: "pc"
+  override_allowed: true
+  fallback_to_base: true
+  per_lang: # ← 言語別canonical正規パス
+    ja: "/pc/ja"
+    en: "/pc/en"
+
+alternate:
+  enabled: true
+  supported_langs: ["ja", "en"]
+  base_device: "pc"
+
+open_graph:
+  enabled: true # ← OGタグ有効化
+
+json_ld:
+  enabled: true # ← 構造化データ出力をON
