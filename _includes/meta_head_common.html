@@ -1,5 +1,6 @@
 {%- comment -%}
 共通 head メタ情報出力ラッパー
+共通 head メタ情報一括出力テンプレート（拡張設定に完全対応）
 - canonical
 - alternate
 - robots
@@ -7,16 +8,18 @@
 - Open Graph / Twitter card
 {%- endcomment -%}
 
+{%- assign meta_cfg = site.data.meta_config | default: {} -%}
+{%- assign defaults = meta_cfg.defaults | default: {} -%}
+
 {%- unless page.noindex -%}
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="{{ meta_cfg.robots.default | default: 'index, follow' }}">
 {%- else -%}
   <meta name="robots" content="noindex, nofollow">
 {%- endunless -%}
 
-{% include canonical.html %}
-{% include alternate.html %}
-
-{% include meta_description.html %}
-{% include meta_favicon.html %}
-{% unless page.no_og %}{% include meta_open_graph.html %}{% endunless %}
-{% unless page.no_jsonld %}{% include meta_schema_jsonld.html %}{% endunless %}
+{% include meta_description_advanced.html %}
+{% include meta_favicon_advanced.html %}
+{% unless page.no_canonical %}{% include canonical_advanced.html %}{% endunless %}
+{% unless page.no_alternate %}{% include alternate_advanced.html %}{% endunless %}
+{% unless page.no_og %}{% include meta_open_graph_advanced.html %}{% endunless %}
+{% unless page.no_jsonld %}{% include meta_schema_jsonld_advanced.html %}{% endunless %}
