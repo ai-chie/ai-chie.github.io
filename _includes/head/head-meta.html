@@ -9,16 +9,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 {% comment %} {% seo %}タグは、canonical url, description, og:title, og:description, og:url, robotsなどを自動生成します {% endcomment %}
-{% seo %}
+{% comment %} {% seo %} {% endcomment %}
 
 {% comment %} ここには、{% seo %}で生成されないが人間向けページに必要なhead要素のみを記述します {% endcomment %}
 <link rel="stylesheet" href="/assets/css/main.css">
 <script src="/assets/js/analytics.js" async></script>
 {% comment %} 他のスタイルシート、ファビコンなどをここに記述 {% endcomment %}
 
-{% comment %} {% include head/head_tags/meta_head_common.html %} {% endcomment %}
-{% include head/head_tags/canonical.html %}
-{% include head/head_tags/alternate.html %}
+{% include head/head_tags/meta_head_common.html %}
 
 <script type="application/ld+json">
 {
