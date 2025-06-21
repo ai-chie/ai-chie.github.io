@@ -1,14 +1,18 @@
 {%- comment -%}
-_config.yml の canonical 設定に従って canonical URL を出力。
-- canonical.enabled: false の場合は非出力
-- canonical.base_device or per_lang.lang に統一
-- canonical_override を優先（許可されている場合）
+canonical 出力テンプレート（高度設定対応版）
+
+_config.yml の `site.canonical` に基づいて以下を制御：
+- enabled: false → 出力しない
+- override_allowed: true かつ page.canonical_override → それを優先
+- per_lang に page.lang が含まれればそれを使用
+- fallback_to_base: true → per_lang にない場合でも base_device/lang を補完
 {%- endcomment -%}
 
 {%- assign canon_cfg = site.canonical | default: {} -%}
 {%- assign enabled = canon_cfg.enabled | default: true -%}
 {%- assign base_device = canon_cfg.base_device | default: "pc" -%}
 {%- assign override_allowed = canon_cfg.override_allowed | default: true -%}
+{%- assign fallback_enabled = canon_cfg.fallback_to_base | default: true -%}
 {%- assign per_lang = canon_cfg.per_lang | default: {} -%}
 {%- assign lang = page.lang | default: "ja" -%}
 
@@ -16,10 +20,18 @@ _config.yml の canonical 設定に従って canonical URL を出力。
   {%- if page.canonical_override and override_allowed -%}
     <link rel="canonical" href="{{ page.canonical_override | absolute_url }}">
   {%- else -%}
-    {%- assign prefix = per_lang[lang] | default: '/' | append: base_device | append: '/' | append: lang -%}
-    {%- assign current_url = page.url -%}
-    {%- assign canonical_url = current_url
-      | replace_first: '/text/' | replace_first: '/mobile/' | replace_first: '/pc/' | prepend: prefix -%}
-    <link rel="canonical" href="{{ canonical_url | absolute_url }}">
+    {%- assign prefix = per_lang[lang] -%}
+    {%- if prefix == nil and fallback_enabled -%}
+      {%- assign prefix = '/' | append: base_device | append: '/' | append: lang -%}
+    {%- endif -%}
+
+    {%- if prefix -%}
+      {%- assign canonical_url = page.url
+        | replace_first: '/text/', '/'
+        | replace_first: '/mobile/', '/'
+        | replace_first: '/pc/', '/'
+        | prepend: prefix -%}
+      <link rel="canonical" href="{{ canonical_url | absolute_url }}">
+    {%- endif -%}
   {%- endif -%}
 {%- endif -%}
