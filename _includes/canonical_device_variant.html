@@ -1,4 +1,17 @@
 {%- comment -%}
+将来的な canonical_device_variant.html 用に設計（現時点では canonical_advanced.html のままで十分）
+以下の設定でcanonical_wrapper.htm内から呼び出される
+-----
+meta_config.yml
+
+canonical:
+  mode: cross_device
+-----
+
+以下は仮実装？？
+{%- endcomment -%}
+
+{%- comment -%}
 canonical_device_variant.html
 - 全 device 出力の中から canonical base_device/lang の URL を正規化対象とする構成
 - text/mobile/pc にまたがるページ群の中で base_device を正規版と明示
