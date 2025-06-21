@@ -20,7 +20,7 @@
 {% unless page.no_meta_description %}{% include meta_description.html %}{% endunless %}
 {% unless page.no_meta_favicon %}{% include meta_favicon.html %}{% endunless %}
 {% unless page.no_canonical %}{% include canonical.html %}{% endunless %}
-{% unless page.no_alternate %}{% include alternate.html %}{% endunless %}
+{% unless page.no_alternate %}{% include alternate_wrapper.html %}{% endunless %}
 {% unless page.no_meta_og %}{% include meta_open_graph.html %}{% endunless %}
 {% unless page.no_meta_schema_jsonld %}{% include meta_schema_jsonld.html %}{% endunless %}
 

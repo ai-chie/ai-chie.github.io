@@ -1,0 +1,20 @@
+{%- comment -%}
+alternate_wrapper.html
+- meta_config.alternate.mode により出力テンプレートを自動切替
+  - mode: "standard" → alternate_advanced.html
+  - mode: "cross_device" → alternate_device_cross.html
+- fallback: standard
+{%- endcomment -%}
+
+{%- assign meta_cfg = site.data.meta_config | default: {} -%}
+{%- assign alt_cfg = meta_cfg.alternate | default: {} -%}
+{%- assign mode = alt_cfg.mode | default: "standard" -%}
+
+{%- unless page.no_alternate -%}
+  {%- case mode -%}
+    {%- when "cross_device" -%}
+      {% include alternate_device_cross.html %}
+    {%- else -%}
+      {% include alternate_advanced.html %}
+  {%- endcase -%}
+{%- endunless -%}

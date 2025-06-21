@@ -13,9 +13,9 @@ meta_head_common_minimal.html
 {%- endunless -%}
 
 {%- unless page.no_canonical %}
-  {% include canonical_advanced.html %}
+  {% include canonical.html %}
 {%- endunless %}
 
 {%- unless page.no_alternate %}
-  {% include alternate_advanced.html %}
+  {% include alternate_wrapper.html %}
 {%- endunless %}

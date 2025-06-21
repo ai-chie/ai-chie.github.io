@@ -1,0 +1,20 @@
+{%- comment -%}
+meta_head_common_preview.html
+- プレビュー用や限定公開時の中間構成
+- canonical / alternate / description / favicon は出力
+- Open Graph, Twitter Card, JSON-LD は含まない
+{%- endcomment -%}
+
+{%- assign meta_cfg = site.data.meta_config | default: {} -%}
+{%- assign defaults = meta_cfg.defaults | default: {} -%}
+
+{%- unless page.noindex -%}
+  <meta name="robots" content="{{ meta_cfg.robots.default | default: 'index, follow' }}">
+{%- else -%}
+  <meta name="robots" content="noindex, nofollow">
+{%- endunless -%}
+
+{% unless page.no_meta_description %}{% include meta_description.html %}{% endunless %}
+{% unless page.no_meta_favicon %}{% include meta_favicon.html %}{% endunless %}
+{% unless page.no_canonical %}{% include canonical.html %}{% endunless %}
+{% unless page.no_alternate %}{% include alternate_wrapper.html %}{% endunless %}

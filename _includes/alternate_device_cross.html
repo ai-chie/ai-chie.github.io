@@ -1,0 +1,48 @@
+{%- comment -%}
+alternate_device_cross.html
+- device × lang の全組合せに基づく alternate 出力（例: /pc/ja, /text/en）
+- hreflang は lang を使い、URLのみ device/lang/slug で交差構成
+{%- endcomment -%}
+
+{%- assign meta_cfg = site.data.meta_config | default: {} -%}
+{%- assign alt_cfg = meta_cfg.alternate | default: {} -%}
+{%- assign enabled = alt_cfg.enabled | default: true -%}
+{%- assign supported_langs = alt_cfg.supported_langs | default: "ja,en" | split: "," -%}
+{%- assign devices = alt_cfg.device_matrix | default: "pc,text" | split: "," -%}
+{%- assign region_map = alt_cfg.region_map | default: {} -%}
+{%- assign x_default = alt_cfg.x_default | default: "/" -%}
+
+{%- assign url = page.url | default: "/" -%}
+{%- assign url_parts = url | split: "/" -%}
+{%- assign lang = page.lang | default: url_parts[2] | default: "ja" -%}
+{%- assign slug = nil -%}
+{%- assign type = nil -%}
+{%- assign is_top = false -%}
+{%- assign path_depth = url_parts | size -%}
+
+{%- if path_depth >= 5 -%}
+  {%- assign type = url_parts[3] -%}
+  {%- assign slug = url_parts[4] -%}
+{%- elsif path_depth == 4 and url_parts[3] != "" -%}
+  {%- assign slug = url_parts[3] -%}
+{%- elsif path_depth <= 3 or url contains '/index.html' -%}
+  {%- assign is_top = true -%}
+{%- endif -%}
+
+{%- if enabled and (slug or is_top) -%}
+  {%- for alt_lang in supported_langs -%}
+    {%- assign hreflang = region_map[alt_lang] | default: alt_lang -%}
+    {%- for dev in devices -%}
+      {%- assign base_path = "/" | append: dev | append: "/" | append: alt_lang -%}
+      {%- if is_top -%}
+        {%- assign alt_path = base_path | append: "/" -%}
+      {%- elsif type and slug -%}
+        {%- assign alt_path = base_path | append: "/" | append: type | append: "/" | append: slug | append: "/" -%}
+      {%- else -%}
+        {%- assign alt_path = base_path | append: "/" | append: slug | append: "/" -%}
+      {%- endif -%}
+      <link rel="alternate" hreflang="{{ hreflang | strip }}" href="{{ alt_path | absolute_url }}">
+    {%- endfor -%}
+  {%- endfor -%}
+  <link rel="alternate" hreflang="x-default" href="{{ x_default | absolute_url }}">
+{%- endif -%}

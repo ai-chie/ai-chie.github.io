@@ -24,11 +24,13 @@ canonical:
 alternate:
   enabled: true
   supported_langs: ["ja", "en"]
-  base_device: "pc"
+  base_device: "pc" # device_matrix:の導入でもう必要ない？
+  device_matrix: ["pc", "mobile", "text"]    # ← ★追加ポイント
   region_map:
     ja: "ja-JP"
     en: "en-US"
   x_default: "/"
+  mode: "cross_device"  # ← "standard" または "cross_device"
   
 open_graph:
   enabled: true # ← OGタグ有効化
