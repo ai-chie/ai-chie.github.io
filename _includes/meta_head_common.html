@@ -13,9 +13,10 @@
   <meta name="robots" content="noindex, nofollow">
 {%- endunless -%}
 
-{% include meta_description.html %}
-{% include meta_favicon.html %}
 {% include canonical.html %}
 {% include alternate.html %}
+
+{% include meta_description.html %}
+{% include meta_favicon.html %}
 {% unless page.no_og %}{% include meta_open_graph.html %}{% endunless %}
 {% unless page.no_jsonld %}{% include meta_schema_jsonld.html %}{% endunless %}

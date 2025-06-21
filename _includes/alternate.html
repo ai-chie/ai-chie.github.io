@@ -1,23 +1,30 @@
 {%- comment -%}
-alternate タグ出力テンプレート（taxonomy/post/トップページ自動対応）
+alternate タグ出力テンプレート（taxonomy/post/トップページ自動対応）（meta_config + region_map + top対応）
 
 - taxonomy: /device/lang/type/slug/
 - post:     /device/lang/slug/
 - top:      /device/lang/ or /device/lang/index.html
+
+- supported_langs を使って多言語 alternate を出力
+- page.url を元に slug/type/lang を推論
+- topページ (`/index.html` や /device/lang/) にも対応
+- hreflang="x-default" の出力あり
 {%- endcomment -%}
 
-{%- assign alt_cfg = site.alternate | default: {} -%}
+{%- assign meta_cfg = site.data.meta_config | default: {} -%}
+{%- assign alt_cfg = meta_cfg.alternate | default: {} -%}
 {%- assign enabled = alt_cfg.enabled | default: true -%}
 {%- assign supported_langs = alt_cfg.supported_langs | default: "ja,en" | split: "," -%}
 {%- assign base_device = alt_cfg.base_device | default: "pc" -%}
+{%- assign region_map = alt_cfg.region_map | default: {} -%}
+{%- assign x_default = alt_cfg.x_default | default: "/" -%}
+
 {%- assign url = page.url | default: "/" -%}
 {%- assign url_parts = url | split: "/" -%}
-
-{%- assign device = url_parts[1] | default: "pc" -%}
+{%- assign device = url_parts[1] | default: base_device -%}
 {%- assign lang = url_parts[2] | default: "ja" -%}
 {%- assign type = nil -%}
 {%- assign slug = nil -%}
-
 {%- assign path_depth = url_parts | size -%}
 
 {%- if path_depth >= 5 -%}
@@ -29,19 +36,19 @@ alternate タグ出力テンプレート（taxonomy/post/トップページ自�
   {%- assign is_top = true -%}
 {%- endif -%}
 
-{%- if enabled -%}
+{%- if enabled and (slug or is_top) -%}
   {%- for alt_lang in supported_langs -%}
+    {%- assign hreflang = region_map[alt_lang] | default: alt_lang -%}
     {%- assign base_path = "/" | append: base_device | append: "/" | append: alt_lang -%}
     {%- if is_top -%}
       {%- assign alt_path = base_path | append: "/" -%}
     {%- elsif type and slug -%}
       {%- assign alt_path = base_path | append: "/" | append: type | append: "/" | append: slug | append: "/" -%}
-    {%- elsif slug -%}
-      {%- assign alt_path = base_path | append: "/" | append: slug | append: "/" -%}
     {%- else -%}
-      {%- continue -%}
+      {%- assign alt_path = base_path | append: "/" | append: slug | append: "/" -%}
     {%- endif -%}
-    <link rel="alternate" hreflang="{{ alt_lang | strip }}" href="{{ alt_path | absolute_url }}">
+    <link rel="alternate" hreflang="{{ hreflang | strip }}" href="{{ alt_path | absolute_url }}">
   {%- endfor -%}
-  <link rel="alternate" hreflang="x-default" href="{{ '/' | absolute_url }}">
+  <link rel="alternate" hreflang="x-default" href="{{ x_default | absolute_url }}">
 {%- endif -%}
+

@@ -1,13 +1,18 @@
 {%- comment -%}
-favicon / Web App icons 設定
+favicon / Web App icons 設定（pathをmeta_configから制御可能）
 - /assets/favicon/ 以下にアイコン一式を配置しておく前提
 {%- endcomment -%}
 
-<link rel="icon" href="/assets/favicon/favicon.ico" type="image/x-icon" />
-<link rel="shortcut icon" href="/assets/favicon/favicon.ico" type="image/x-icon" />
+{%- assign meta_cfg = site.data.meta_config | default: {} -%}
+{%- assign favicon = meta_cfg.favicon | default: {} -%}
+{%- assign path = favicon.path | default: "/assets/favicon/" -%}
 
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png" />
-<link rel="manifest" href="/assets/favicon/site.webmanifest" />
-<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="{{ path }}favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="{{ path }}favicon.ico" type="image/x-icon" />
+<link rel="apple-touch-icon" sizes="180x180" href="{{ path }}apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="{{ path }}favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="{{ path }}favicon-16x16.png" />
+<link rel="manifest" href="{{ path }}site.webmanifest" />
+{%- if meta_cfg.defaults.theme_color %}
+<meta name="theme-color" content="{{ meta_cfg.defaults.theme_color }}">
+{%- endif %}

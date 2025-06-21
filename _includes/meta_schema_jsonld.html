@@ -1,28 +1,40 @@
 {%- comment -%}
-構造化データ（schema.org Article形式）
+構造化データ（schema.org Article形式 + AI metadata対応）
+- meta_config に基づいて柔軟に拡張
 - ChatGPTや検索エンジン向け
 - page.title, description, date, url, lang などを使用
 {%- endcomment -%}
 
+{%- assign meta_cfg = site.data.meta_config | default: {} -%}
+{%- assign defaults = meta_cfg.defaults | default: {} -%}
+{%- assign json_ld = meta_cfg.json_ld | default: {} -%}
+{%- assign ai_md = json_ld.ai_metadata | default: {} -%}
+
 {%- assign page_title = page.title | default: site.title -%}
-{%- assign page_description = page.description | default: site.description -%}
+{%- assign page_description = page.description | default: defaults.description | default: site.description -%}
 {%- assign page_url = page.url | absolute_url -%}
 {%- assign page_date = page.date | date_to_xmlschema -%}
-{%- assign page_lang = page.lang | default: "ja" -%}
-{%- assign page_author = site.author.name | default: site.title -%}
+{%- assign page_lang = page.lang | default: defaults.lang | default: "ja" -%}
+{%- assign author_type = json_ld.author_type | default: "Organization" -%}
+{%- assign author_name = site.author.name | default: defaults.author | default: site.title -%}
+{%- assign entity_type = json_ld.entity_type | default: "Article" -%}
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Article",
+  "@type": "{{ entity_type }}",
   "headline": "{{ page_title | escape }}",
   "description": "{{ page_description | escape }}",
   "datePublished": "{{ page_date }}",
   "inLanguage": "{{ page_lang }}",
   "url": "{{ page_url }}",
   "author": {
-    "@type": "Organization",
-    "name": "{{ page_author }}"
+    "@type": "{{ author_type }}",
+    "name": "{{ author_name }}"
+  }{% if ai_md.model or ai_md.processed_by or ai_md.content_type %},
+  "aiMetadata": {
+    {% if ai_md.model %}"model": "{{ ai_md.model }}"{% endif %}{% if ai_md.processed_by %}, "processedBy": "{{ ai_md.processed_by }}"{% endif %}{% if ai_md.content_type %}, "contentType": "{{ ai_md.content_type }}"{% endif %}
   }
+  {% endif %}
 }
 </script>

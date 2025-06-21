@@ -1,19 +1,24 @@
 {%- comment -%}
-canonical 出力テンプレート（taxonomy/post/トップページ対応）
+canonical 出力テンプレート（taxonomy/post/トップページ対応）（meta_config + top判定対応）
 
-_config.yml の設定に基づき、page.url から slug/type/lang を推論し、canonical URL を出力。
+meta_config.yml の設定に基づき、page.url から slug/type/lang を推論し、canonical URL を出力。
 - override → 優先
 - taxonomy: /device/lang/type/slug/
 - post:     /device/lang/slug/
 - top:      /device/lang/ or /device/lang/index.html
+
+- canonical.enabled により出力制御
+- canonical.per_lang または base_device + lang でURL補正
+- トップページ判定（index.html含む）
 {%- endcomment -%}
 
-{%- assign canon_cfg = site.canonical | default: {} -%}
-{%- assign enabled = canon_cfg.enabled | default: true -%}
-{%- assign base_device = canon_cfg.base_device | default: "pc" -%}
-{%- assign override_allowed = canon_cfg.override_allowed | default: true -%}
-{%- assign fallback_enabled = canon_cfg.fallback_to_base | default: true -%}
-{%- assign per_lang = canon_cfg.per_lang | default: {} -%}
+{%- assign meta_cfg = site.data.meta_config | default: {} -%}
+{%- assign canonical_cfg = meta_cfg.canonical | default: {} -%}
+{%- assign enabled = canonical_cfg.enabled | default: true -%}
+{%- assign base_device = canonical_cfg.base_device | default: "pc" -%}
+{%- assign override_allowed = canonical_cfg.override_allowed | default: true -%}
+{%- assign fallback_enabled = canonical_cfg.fallback_to_base | default: true -%}
+{%- assign per_lang = canonical_cfg.per_lang | default: {} -%}
 {%- assign url = page.url | default: "/" -%}
 {%- assign url_parts = url | split: "/" -%}
 {%- assign lang = page.lang | default: url_parts[2] | default: "ja" -%}
@@ -26,9 +31,7 @@ _config.yml の設定に基づき、page.url から slug/type/lang を推論し�
     {%- if prefix == nil and fallback_enabled -%}
       {%- assign prefix = "/" | append: base_device | append: "/" | append: lang -%}
     {%- endif -%}
-
     {%- assign is_top = url contains "/index.html" or url_parts.size <= 3 -%}
-
     {%- if prefix -%}
       {%- if is_top -%}
         {%- assign canonical_url = prefix | append: "/" -%}
@@ -43,3 +46,4 @@ _config.yml の設定に基づき、page.url から slug/type/lang を推論し�
     {%- endif -%}
   {%- endif -%}
 {%- endif -%}
+
