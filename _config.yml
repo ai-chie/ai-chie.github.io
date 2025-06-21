@@ -107,6 +107,11 @@ canonical:
     ja: "/pc/ja"
     en: "/pc/en"
 
+alternate:
+  enabled: true
+  supported_langs: ["ja", "en"]
+  base_device: "pc"
+
 
 # 言語対応設定
 # languages: ["ja", "en"]
