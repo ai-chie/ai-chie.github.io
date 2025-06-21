@@ -1,0 +1,20 @@
+{%- comment -%}
+canonical_wrapper.html
+- meta_config.canonical.mode により出力テンプレートを自動切替
+  - mode: "standard" → canonical_advanced.html
+  - mode: "cross_device" → canonical_device_variant.html（将来的な拡張用）
+- fallback: standard
+{%- endcomment -%}
+
+{%- assign meta_cfg = site.data.meta_config | default: {} -%}
+{%- assign can_cfg = meta_cfg.canonical | default: {} -%}
+{%- assign mode = can_cfg.mode | default: "standard" -%}
+
+{%- unless page.no_canonical -%}
+  {%- case mode -%}
+    {%- when "cross_device" -%}
+      {% include canonical_device_variant.html %}
+    {%- else -%}
+      {% include canonical.html %}
+  {%- endcase -%}
+{%- endunless -%}

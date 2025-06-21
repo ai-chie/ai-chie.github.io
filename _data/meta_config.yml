@@ -20,7 +20,8 @@ canonical:
   per_lang:                    # ← 言語別canonical正規パス。言語別canonicalルート（省略時は base_device 使用）
     ja: "/pc/ja"
     en: "/pc/en"
-
+  mode: "standard"  # または "cross_device"
+  
 alternate:
   enabled: true
   supported_langs: ["ja", "en"]
