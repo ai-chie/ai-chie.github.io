@@ -13,8 +13,8 @@ canonical_wrapper.html
 {%- unless page.no_canonical -%}
   {%- case mode -%}
     {%- when "cross_device" -%}
-      {% include canonical_device_variant.html %}
+      {% include head/head_tags/canonical_device_variant.html %}
     {%- else -%}
-      {% include canonical.html %}
+      {% include head/head_tags/canonical.html %}
   {%- endcase -%}
 {%- endunless -%}

@@ -2,6 +2,6 @@
 {% comment %} AI/クローラー向けの最小限のhead要素。base.htmlでmeta charset, viewport, titleは定義済み {% endcomment %}
 {% comment %} text モード用最小構成。SEOメタタグやCSSは含まず、HTML構造だけに集中。 {% endcomment %}
 <meta name="robots" content="index, follow">
-{% comment %} {% include meta_head_common.html %} {% endcomment %}
-{% include meta_head_common_minimal.html %}
+{% comment %} {% include head/head_tags/meta_head_common.html %} {% endcomment %}
+{% include head/head_tags/meta_head_common_minimal.html %}
 {% comment %} 必要に応じて、AIが解析しやすい追加のメタデータをここに記述 {% endcomment %}

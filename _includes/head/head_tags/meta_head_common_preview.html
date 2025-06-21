@@ -14,7 +14,7 @@ meta_head_common_preview.html
   <meta name="robots" content="noindex, nofollow">
 {%- endunless -%}
 
-{% unless page.no_meta_description %}{% include meta_description.html %}{% endunless %}
-{% unless page.no_meta_favicon %}{% include meta_favicon.html %}{% endunless %}
-{% unless page.no_canonical %}{% include canonical_wrapper.html %}{% endunless %}
-{% unless page.no_alternate %}{% include alternate_wrapper.html %}{% endunless %}
+{% unless page.no_meta_description %}{% include head/head_tags/meta_description.html %}{% endunless %}
+{% unless page.no_meta_favicon %}{% include head/head_tags/meta_favicon.html %}{% endunless %}
+{% unless page.no_canonical %}{% include head/head_tags/canonical_wrapper.html %}{% endunless %}
+{% unless page.no_alternate %}{% include head/head_tags/alternate_wrapper.html %}{% endunless %}

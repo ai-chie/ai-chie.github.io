@@ -13,8 +13,8 @@ alternate_wrapper.html
 {%- unless page.no_alternate -%}
   {%- case mode -%}
     {%- when "cross_device" -%}
-      {% include alternate_device_cross.html %}
+      {% include head/head_tags/alternate_device_cross.html %}
     {%- else -%}
-      {% include alternate.html %}
+      {% include head/head_tags/alternate.html %}
   {%- endcase -%}
 {%- endunless -%}
