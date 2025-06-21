@@ -24,15 +24,25 @@ alternate:
   enabled: true
   supported_langs: ["ja", "en"]
   base_device: "pc"
-
+  region_map:
+    ja: "ja-JP"
+    en: "en-US"
+  x_default: "/"
+  
 open_graph:
   enabled: true # ← OGタグ有効化
   locale_map:
-  ja: "ja_JP"
-  en: "en_US"
+    ja: "ja_JP"
+    en: "en_US"
 
 json_ld:
   enabled: true # ← 構造化データ出力をON
+  entity_type: "Article"
+  author_type: "Organization"
+  ai_metadata:
+    model: "ChatGPT-4o"
+    processed_by: "OpenAI"
+    content_type: "structured-blog"
   
 twitter:
   enabled: true
