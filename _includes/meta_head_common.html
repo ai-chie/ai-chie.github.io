@@ -6,6 +6,10 @@
 - robots
 - structured data (schema.org)
 - Open Graph / Twitter card
+
+- meta_config.yml に基づき、すべてのメタ情報を統合的に出力
+- canonical/alernateは wrapper経由で mode に応じて切替
+- フル構成：robots, description, favicon, canonical, alternate, og, jsonld
 {%- endcomment -%}
 
 {%- assign meta_cfg = site.data.meta_config | default: {} -%}
@@ -29,11 +33,11 @@
 
 Front Matter制御項目一覧
 
-キー名              | 対象テンプレート                     | 動作
-noindex: true      | <meta name="robots">             | "noindex, nofollow" を出力
-no_canonical: true | canonical.html          | canonicalタグを出力しない
-no_alternate: true | alternate.html          | alternateタグを出力しない
-no_og: true        | meta_open_graph.html    | Open Graph / Twitter Card を省略
-no_jsonld: true    | meta_schema_jsonld.html | JSON-LD構造化データを省略
+キー名              | 対象テンプレート                 | 動作
+noindex: true      | <meta name="robots">         | "noindex, nofollow" を出力
+no_canonical: true | canonical.html（及びその拡張）  | canonicalタグを出力しない
+no_alternate: true | alternate.html （及びその拡張） | alternateタグを出力しない
+no_og: true        | meta_open_graph.html         | Open Graph / Twitter Card を省略
+no_jsonld: true    | meta_schema_jsonld.html      | JSON-LD構造化データを省略
 
 {%- endcomment -%}

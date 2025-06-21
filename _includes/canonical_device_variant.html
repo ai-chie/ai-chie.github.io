@@ -1,11 +1,40 @@
-<!--
-将来的な canonical_device_variant.html 用に設計（現時点では canonical_advanced.html のままで十分）
-以下の設定でcanonical_wrapper.htm内から呼び出される
------
-meta_config.yml
+{%- comment -%}
+canonical_device_variant.html
+- 全 device 出力の中から canonical base_device/lang の URL を正規化対象とする構成
+- text/mobile/pc にまたがるページ群の中で base_device を正規版と明示
+{%- endcomment -%}
 
-canonical:
-  mode: cross_device
------
--->
+{%- assign meta_cfg = site.data.meta_config | default: {} -%}
+{%- assign can_cfg = meta_cfg.canonical | default: {} -%}
+{%- assign enabled = can_cfg.enabled | default: true -%}
+{%- assign base_device = can_cfg.base_device | default: "pc" -%}
+{%- assign fallback_enabled = can_cfg.fallback_to_base | default: true -%}
+{%- assign per_lang = can_cfg.per_lang | default: {} -%}
+{%- assign url = page.url | default: "/" -%}
+{%- assign url_parts = url | split: "/" -%}
+{%- assign lang = page.lang | default: url_parts[2] | default: "ja" -%}
 
+{%- if enabled -%}
+  {%- assign prefix = per_lang[lang] -%}
+  {%- if prefix == nil and fallback_enabled -%}
+    {%- assign prefix = "/" | append: base_device | append: "/" | append: lang -%}
+  {%- endif -%}
+
+  {%- assign is_top = url contains "/index.html" or url_parts.size <= 3 -%}
+  {%- assign slug_path = "" -%}
+
+  {%- if url_parts.size >= 5 -%}
+    {%- assign slug_path = "/" | append: url_parts[3] | append: "/" | append: url_parts[4] | append: "/" -%}
+  {%- elsif url_parts.size == 4 -%}
+    {%- assign slug_path = "/" | append: url_parts[3] | append: "/" -%}
+  {%- endif -%}
+
+  {%- if prefix -%}
+    {%- if is_top -%}
+      {%- assign canonical_url = prefix | append: "/" -%}
+    {%- else -%}
+      {%- assign canonical_url = prefix | append: slug_path -%}
+    {%- endif -%}
+    <link rel="canonical" href="{{ canonical_url | absolute_url }}">
+  {%- endif -%}
+{%- endif -%}
