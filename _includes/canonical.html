@@ -1,11 +1,11 @@
 {%- comment -%}
-canonical 出力テンプレート（高度設定対応版）
+canonical 出力テンプレート（taxonomy/post/トップページ対応）
 
-_config.yml の `site.canonical` に基づいて以下を制御：
-- enabled: false → 出力しない
-- override_allowed: true かつ page.canonical_override → それを優先
-- per_lang に page.lang が含まれればそれを使用
-- fallback_to_base: true → per_lang にない場合でも base_device/lang を補完
+_config.yml の設定に基づき、page.url から slug/type/lang を推論し、canonical URL を出力。
+- override → 優先
+- taxonomy: /device/lang/type/slug/
+- post:     /device/lang/slug/
+- top:      /device/lang/ or /device/lang/index.html
 {%- endcomment -%}
 
 {%- assign canon_cfg = site.canonical | default: {} -%}
@@ -14,7 +14,9 @@ _config.yml の `site.canonical` に基づいて以下を制御：
 {%- assign override_allowed = canon_cfg.override_allowed | default: true -%}
 {%- assign fallback_enabled = canon_cfg.fallback_to_base | default: true -%}
 {%- assign per_lang = canon_cfg.per_lang | default: {} -%}
-{%- assign lang = page.lang | default: "ja" -%}
+{%- assign url = page.url | default: "/" -%}
+{%- assign url_parts = url | split: "/" -%}
+{%- assign lang = page.lang | default: url_parts[2] | default: "ja" -%}
 
 {%- if enabled -%}
   {%- if page.canonical_override and override_allowed -%}
@@ -22,15 +24,21 @@ _config.yml の `site.canonical` に基づいて以下を制御：
   {%- else -%}
     {%- assign prefix = per_lang[lang] -%}
     {%- if prefix == nil and fallback_enabled -%}
-      {%- assign prefix = '/' | append: base_device | append: '/' | append: lang -%}
+      {%- assign prefix = "/" | append: base_device | append: "/" | append: lang -%}
     {%- endif -%}
 
+    {%- assign is_top = url contains "/index.html" or url_parts.size <= 3 -%}
+
     {%- if prefix -%}
-      {%- assign canonical_url = page.url
-        | replace_first: '/text/', '/'
-        | replace_first: '/mobile/', '/'
-        | replace_first: '/pc/', '/'
-        | prepend: prefix -%}
+      {%- if is_top -%}
+        {%- assign canonical_url = prefix | append: "/" -%}
+      {%- else -%}
+        {%- assign canonical_url = url
+          | replace_first: '/text/', '/'
+          | replace_first: '/mobile/', '/'
+          | replace_first: '/pc/', '/'
+          | prepend: prefix -%}
+      {%- endif -%}
       <link rel="canonical" href="{{ canonical_url | absolute_url }}">
     {%- endif -%}
   {%- endif -%}
