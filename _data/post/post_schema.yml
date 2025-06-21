@@ -349,3 +349,6 @@ permalink:
 # ----------
 # types
 # ----------
+
+# 「published:」（未導入）：Jekyllがビルドの含めるか
+# 「draft:, hidden, etc」：スクリプトにより出力展開するかや一覧表示に含めるか（「draft:」はJekyllのdrafs機能とは別）
