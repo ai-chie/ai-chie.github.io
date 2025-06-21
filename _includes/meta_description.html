@@ -1,0 +1,10 @@
+{%- comment -%}
+meta description 補完テンプレート
+- page.description または site.description を使用
+- SEOとSNSの両方に有効
+{%- endcomment -%}
+
+{%- assign desc = page.description | default: site.description -%}
+{%- if desc %}
+<meta name="description" content="{{ desc | strip_newlines | escape }}" />
+{%- endif %}
