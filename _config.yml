@@ -76,15 +76,10 @@ include:
 #  - _generated
 
 timezone: Asia/Tokyo
-
 encoding: utf-8
-
 show_drafts: false
-
 future: false
-
 unpublished: false
-
 lsi: true
 
 # permalink: 
@@ -105,19 +100,38 @@ default_lang: "ja"
 
 # 投稿と記事
 defaults:
-  # 日本語コンテンツ全般
+
   - scope:
-      path: "ja"
+      path: "_pages/pc/"
+      type: pages
+    values:
+      device: "pc"
+      
+  - scope:
+      path: "_pages/mobile/"
+      type: pages
+    values:
+      device: "mobile"
+      
+  - scope:
+      path: "_pages/text/"
+      type: pages
+    values:
+      device: "text"
+      
+  - scope:
+      path: "*/ja"
+      type: pages
     values:
       lang: "ja"
-      layout: default
 
-  # 英語コンテンツ全般
   - scope:
-      path: "en"
+      path: "*/en"
+      type: pages
     values:
       lang: "en"
-      layout: default
+
+
 
   # 投稿全体（_posts配下）への初期値（明示的な draft/hidden 対応）
   - scope:
