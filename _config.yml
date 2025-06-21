@@ -97,6 +97,7 @@ lsi: true
 github:
   is_project_page: false
 
+# canonical.htmlのロジック制御用
 canonical:
   enabled: true                # ← 全体ON/OFF。canonical出力を有効化
   base_device: "pc"            # 正規URLとして使う device。canonicalを統一する対象の device（例: "pc"）
