@@ -58,6 +58,7 @@ exclude:
   - .gitattributes
   - .gitignore
   - README.md
+  - _posts/
 
 # Include（明示的に処理対象とするディレクトリ）
 include:
@@ -65,7 +66,7 @@ include:
   - _includes/
   - _layouts/
   - _pages/
-  - _posts/
+#  - _posts/
   - assets/
   - .htaccess
   - index.md
@@ -83,118 +84,70 @@ unpublished: false
 lsi: true
 
 # permalink: 
+  
 # collections_dir: _collections
 
 # ディレクトリ設定
-#collections:
+# collections:
 #  posts:
 #    output: true
+#    permalink: /:collection/:path/
 
 # GitHub Pages 対応（project pageでない場合は false）
 github:
   is_project_page: false
 
 # 言語対応設定
-languages: ["ja", "en"]
-default_lang: "ja"
+# languages: ["ja", "en"]
+# default_lang: "ja"
 
-# 投稿と記事
-defaults:
+# 以下の理由によりdefaults:は設定しない。
+# _pages/はスクリプトにより出力展開される。
+# device, lang, type, layout, permalinkはスクリプトにより出力展開される際にcalculatedされる。
+# スクリプトにより出力展開される際に投稿やtaxonomyのスキーマ定義や各taxonomyの定義ファイル（categories.yml, tags.yml）によりデフォルト補完が行われる
+# defaults:
+## device:
+#   - scope:
+#       path: "_pages/pc/"
+#       type: "pages"
+#     values:
+#       device: "pc"      
+#   - scope:
+#       path: "_pages/mobile/"
+#       type: "pages"
+#     values:
+#       device: "mobile"      
+#   - scope:
+#       path: "_pages/text/"
+#       type: "pages"
+#     values:
+#       device: "text"      
+## lang
+#   - scope:
+#       path: "*/ja"
+#       type: "pages"
+#     values:
+#       lang: "ja"
+#   - scope:
+#       path: "*/en"
+#       type: "pages"
+#     values:
+#       lang: "en"
 
-  - scope:
-      path: "_pages/pc/"
-      type: pages
-    values:
-      device: "pc"
-      
-  - scope:
-      path: "_pages/mobile/"
-      type: pages
-    values:
-      device: "mobile"
-      
-  - scope:
-      path: "_pages/text/"
-      type: pages
-    values:
-      device: "text"
-      
-  - scope:
-      path: "*/ja"
-      type: pages
-    values:
-      lang: "ja"
-
-  - scope:
-      path: "*/en"
-      type: pages
-    values:
-      lang: "en"
-
-
-
+# 以下は例示
   # 投稿全体（_posts配下）への初期値（明示的な draft/hidden 対応）
-  - scope:
-      path: ""
-      type: "posts"
-    values:
-      layout: post
-      permalink: /:categories/:title/
-      lang: ja
-      draft: false
-      hidden: false
-  - scope:
-      path: "_posts/ja"
-    values:
-      lang: ja
-  - scope:
-      path: "_posts/en"
-    values:
-      lang: en
+# defaults:
+#   - scope:
+#       path: ""
+#       type: "posts"
+#     values:
+#       layout: post
+#       permalink: /:categories/:title/
+#       lang: ja
+#       draft: false
+#       hidden: false
 
-
-## デフォルト値の適用（投稿・カテゴリ・タグで共通化）
-#defaults:
-#  # 日本語コンテンツ全般
-#  - scope:
-#      path: "ja"
-#    values:
-#      lang: "ja"
-#      layout: default
-#
-#  # 英語コンテンツ全般
-#  - scope:
-#      path: "en"
-#    values:
-#      lang: "en"
-#      layout: default
-#
-#  # 投稿全体（_posts配下）への初期値（明示的な draft/hidden 対応）
-#  - scope:
-#      path: ""
-#      type: "posts"
-#    values:
-#      draft: false
-#      hidden: false
-#
-## ローカリゼーション・カスタム変数（任意）
-#defaults:
-#  -
-#    scope:
-#      path: ""
-#      type: "posts"
-#    values:
-#      layout: "post"
-#      lang: "ja"
-#
-
-#defaults:
-#  - scope:
-#      path: ""
-#    values:
-#      layout: default
-#collections:
-#  posts:
-#    output: true
-#    permalink: /:collection/:path/
-
+#   - scope:
+#       path: ""
+#     values:
+#       layout: default
