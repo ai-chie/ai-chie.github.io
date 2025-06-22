@@ -1,0 +1,48 @@
+{%- comment -%}
+alternate_device_priority.html（修正版）
+- device_priorityに基づく優先deviceのalternate出力
+- alt_cfg.enabled フラグと x_default 明示を反映
+{%- endcomment -%}
+
+{%- assign cfg = site.data.meta_config | default: {} -%}
+{%- assign alt = cfg.alternate | default: {} -%}
+{%- assign enabled = alt.enabled | default: true -%}
+{%- assign langs = alt.supported_langs | default: "ja,en" | split: "," -%}
+{%- assign devices = alt.device_priority | default: "pc,text" | split: "," -%}
+{%- assign region_map = alt.region_map | default: {} -%}
+{%- assign x_default_url = alt.x_default | default: "/" -%}
+{%- assign url = page.url | default: "/" -%}
+{%- assign url_parts = url | split: "/" -%}
+{%- assign lang = page.lang | default: url_parts[2] | default: "ja" -%}
+{%- assign is_top = url contains "/index.html" or url_parts.size <= 3 -%}
+{%- assign type = nil -%}
+{%- assign slug = nil -%}
+
+{%- if url_parts.size >= 5 -%}
+  {%- assign type = url_parts[3] -%}
+  {%- assign slug = url_parts[4] -%}
+{%- elsif url_parts.size == 4 and url_parts[3] != "" -%}
+  {%- assign slug = url_parts[3] -%}
+{%- endif -%}
+
+{%- if enabled and (slug or is_top) -%}
+  {%- for l in langs -%}
+    {%- assign hreflang = region_map[l] | default: l -%}
+    {%- assign out = false -%}
+    {%- for d in devices -%}
+      {%- assign base = "/" | append: d | append: "/" | append: l -%}
+      {%- if is_top -%}
+        {%- assign path = base | append: "/" -%}
+      {%- elsif type and slug -%}
+        {%- assign path = base | append: "/" | append: type | append: "/" | append: slug | append: "/" -%}
+      {%- else -%}
+        {%- assign path = base | append: "/" | append: slug | append: "/" -%}
+      {%- endif -%}
+      {%- if out == false -%}
+<link rel="alternate" hreflang="{{ hreflang }}" href="{{ path | absolute_url }}">
+        {%- assign out = true -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  <link rel="alternate" hreflang="x-default" href="{{ x_default_url | absolute_url }}">
+{%- endif -%}

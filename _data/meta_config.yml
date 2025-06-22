@@ -27,15 +27,16 @@ canonical:
     - mobile
   
 alternate:
-  enabled: true
-  supported_langs: ["ja", "en"]
-  base_device: "pc" # device_matrix:の導入でもう必要ない？
-  device_matrix: ["pc", "mobile", "text"]    # ← ★追加ポイント
-  region_map:
+  enabled: true                             # alternateタグ出力を有効にする
+  supported_langs: ["ja", "en"]             # 対象となる言語
+  base_device: "text"                         # 通常構成での言語パス構築に使われる基準device。（alternate.html 用）
+  device_matrix: ["text", "mobile", "pc"]   # "cross_device" モード用（"priority" モードでは参照されない）。cross_device モードで交差対象となるdeviceの全リスト
+  device_priority: ["text", "mobile", "pc"] # priorityモードで使用。言語ごとにこの順でdevice候補を探す。第1要素（例：text）が存在しない場合、第2候補（pc）へフォールバックする構成になっている
+  region_map:                               # hreflangの地域指定変換。"ja-JP" や "en-US" はGoogle推奨形式
     ja: "ja-JP"
     en: "en-US"
-  x_default: "/"
-  mode: "cross_device"  # ← "standard" または "cross_device"
+  x_default: "/"                            # x-default用のURL。空文字やスラッシュでもOK。alternate_device_priority.html では "langs[0] × devices[0]" を使わず、明示指定が優先される
+  mode: "priority"                          # ← "standard"（alternate.html）、"cross_device"（alternate_device_cross.html）、"priority"（alternate_device_priority.html）。使用するalternateテンプレートを決定するモード
   
 open_graph:
   enabled: true # ← OGタグ有効化
