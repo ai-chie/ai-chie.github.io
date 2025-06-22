@@ -1,0 +1,13 @@
+JavaScriptリダイレクトとの併用例（fallback対応）
+
+<head>
+  <script>
+    // JSが有効な場合に自動リダイレクト
+    window.location.replace("/mobile/ja/");
+  </script>
+  <noscript>
+    <meta http-equiv="refresh" content="0; url=/mobile/ja/">
+  </noscript>
+</head>
+
+📌 これは「JSあり：リダイレクト」「JSなし：metaでリダイレクト」というクロス対応です。

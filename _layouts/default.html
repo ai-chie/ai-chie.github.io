@@ -5,8 +5,12 @@ layout: base{% comment %} base.html を継承する {% endcomment %}
 {% comment %}
 PC・モバイル対応（text関連レイアウトはdefault.htmlレイアウトを使用しない）
 UI/UX・アクセシビリティ・可読性・拡張性・保守性を考慮。
-Tailwind適用
+言語選択・デバイス切替を表示。
+Tailwind適用。
 {% endcomment %}
+
+<noscript>
+</noscript>
 
 <header>
     {% comment %}
@@ -33,6 +37,12 @@ Tailwind適用
       <article>
           {{ content }} {% comment %} ページコンテンツがここに挿入されます {% endcomment %}
       </article>
+    {% comment %}
+    <aside>はPCでのみ表示し、モバイルでは非表示。
+    {% endcomment %}
+      <aside>
+          {% include sidebar.html %}
+      </aside>
     {% else %}
           {{ content }}
     {% endif %}
