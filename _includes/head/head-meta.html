@@ -1,6 +1,5 @@
-{% comment %} _includes/head-meta.html {% endcomment %}
 {% comment %} 人間向けのhead要素。base.htmlでmeta charset, viewport, titleは定義済みのため、重複部分は削除。 {% endcomment %}
-{% comment %} {% seo %}タグが多くのメタデータを生成するため、重複を避ける {% endcomment %}
+{% comment %} {% seo %}タグが多くのメタデータを生成するため、重複を避ける →　現在{% seo %}タグ使用停止 {% endcomment %}
 
 {%- if page.lang %}
   <meta name="language" content="{{ page.lang }}">
