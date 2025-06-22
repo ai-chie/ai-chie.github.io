@@ -25,7 +25,7 @@
 {% unless page.no_meta_favicon %}{% include head/head_tags/meta_favicon.html %}{% endunless %}
 {% unless page.no_canonical %}{% include head/head_tags/canonical_wrapper.html %}{% endunless %}
 {% unless page.no_alternate %}{% include head/head_tags/alternate_wrapper.html %}{% endunless %}
-{% unless page.no_meta_og %}{% include head/head_tags/meta_open_graph.html %}{% endunless %}
+{% unless page.no_meta_open_graph %}{% include head/head_tags/meta_open_graph.html %}{% endunless %}
 {% unless page.no_meta_schema_jsonld %}{% include head/head_tags/meta_schema_jsonld.html %}{% endunless %}
 
 
@@ -39,5 +39,6 @@ no_canonical: true | canonical.html（及びその拡張）  | canonicalタグ�
 no_alternate: true | alternate.html （及びその拡張） | alternateタグを出力しない
 no_og: true        | meta_open_graph.html         | Open Graph / Twitter Card を省略
 no_jsonld: true    | meta_schema_jsonld.html      | JSON-LD構造化データを省略
+etc..
 
 {%- endcomment -%}
