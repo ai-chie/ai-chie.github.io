@@ -27,9 +27,9 @@
 
     {% comment %} 子レイアウトやページがhead要素の内容を追加するためのフックポイント {% endcomment %}
     {%- if device == 'text' -%}
-      {%- include head-minimal.html -%}
+      {%- include head/head-minimal.html -%}
     {%- else -%}
-      {%- include head-meta.html -%}
+      {%- include head/head-meta.html -%}
     {% endif %}
 
     {% if layout.head_content %}
