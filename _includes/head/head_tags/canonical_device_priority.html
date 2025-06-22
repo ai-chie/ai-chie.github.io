@@ -1,0 +1,50 @@
+{%- comment -%}
+canonical_device_priority.html（修正版）
+- 元のコード構造を維持しつつ、device優先順位とページ単位指定に対応
+{%- endcomment -%}
+
+{%- assign meta_cfg = site.data.meta_config | default: {} -%}
+{%- assign canonical_cfg = meta_cfg.canonical | default: {} -%}
+{%- assign enabled = canonical_cfg.enabled | default: true -%}
+{%- assign base_device = canonical_cfg.base_device | default: "pc" -%}
+{%- assign override_allowed = canonical_cfg.override_allowed | default: true -%}
+{%- assign fallback_enabled = canonical_cfg.fallback_to_base | default: true -%}
+{%- assign per_lang = canonical_cfg.per_lang | default: {} -%}
+{%- assign priority_list = canonical_cfg.base_device_priority | default: "pc" | split: "," -%}
+{%- assign url = page.url | default: "/" -%}
+{%- assign url_parts = url | split: "/" -%}
+{%- assign lang = page.lang | default: url_parts[2] | default: "ja" -%}
+{%- assign prefer_device = page.canonical_prefer_device | default: nil -%}
+
+{%- if enabled -%}
+  {%- if page.canonical_override and override_allowed -%}
+    <link rel="canonical" href="{{ page.canonical_override | absolute_url }}">
+  {%- else -%}
+    {%- assign selected_device = prefer_device -%}
+    {%- if selected_device == nil -%}
+      {%- for dev in priority_list -%}
+        {%- assign selected_device = dev | strip -%}
+        {%- break -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- assign prefix = per_lang[lang] -%}
+    {%- if prefix == nil and fallback_enabled and selected_device -%}
+      {%- assign prefix = "/" | append: selected_device | append: "/" | append: lang -%}
+    {%- endif -%}
+
+    {%- assign is_top = url contains "/index.html" or url_parts.size <= 3 -%}
+    {%- if prefix -%}
+      {%- if is_top -%}
+        {%- assign canonical_url = prefix | append: "/" -%}
+      {%- else -%}
+        {%- assign canonical_url = url
+          | replace_first: '/text/', '/'
+          | replace_first: '/mobile/', '/'
+          | replace_first: '/pc/', '/'
+          | prepend: prefix -%}
+      {%- endif -%}
+      <link rel="canonical" href="{{ canonical_url | absolute_url }}">
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
