@@ -47,6 +47,9 @@ _data:
   lang:
 
     __files__:
+    - [post_badge.yml, _data/lang/post_badge.yml]
+    - [post_ui.yml, _data/lang/post_ui.yml]
+    - [post_warning.yml, _data/lang/post_warning.yml]
     - [taxonomy_badge.yml, _data/lang/taxonomy_badge.yml]
     - [taxonomy_ui.yml, _data/lang/taxonomy_ui.yml]
     - [taxonomy_warning.yml, _data/lang/taxonomy_warning.yml]
@@ -69,6 +72,9 @@ _data:
     - [tags.yml, _data/taxonomy/tags.yml]
     - [taxonomy_schema.yml, _data/taxonomy/taxonomy_schema.yml]
 
+  __files__:
+  - [meta_config.yml, _data/meta_config.yml]
+
 _export:
 
   __files__:
@@ -81,16 +87,39 @@ _includes:
     __files__:
     - [welcome.ja.md, _includes/contents/welcome.ja.md]
 
+  head:
+
+    head_tags:
+
+      __files__:
+      - [alternate.html, _includes/head/head_tags/alternate.html]
+      - [alternate_device_cross.html, _includes/head/head_tags/alternate_device_cross.html]
+      - [alternate_device_priority.html, _includes/head/head_tags/alternate_device_priority.html]
+      - [alternate_wrapper.html, _includes/head/head_tags/alternate_wrapper.html]
+      - [canonical.html, _includes/head/head_tags/canonical.html]
+      - [canonical_device_priority.html, _includes/head/head_tags/canonical_device_priority.html]
+      - [canonical_device_variant.html, _includes/head/head_tags/canonical_device_variant.html]
+      - [canonical_wrapper.html, _includes/head/head_tags/canonical_wrapper.html]
+      - [meta_description.html, _includes/head/head_tags/meta_description.html]
+      - [meta_favicon.html, _includes/head/head_tags/meta_favicon.html]
+      - [meta_head_common.html, _includes/head/head_tags/meta_head_common.html]
+      - [meta_head_common_minimal.html, _includes/head/head_tags/meta_head_common_minimal.html]
+      - [meta_head_common_preview.html, _includes/head/head_tags/meta_head_common_preview.html]
+      - [meta_open_graph.html, _includes/head/head_tags/meta_open_graph.html]
+      - [meta_schema_jsonld.html, _includes/head/head_tags/meta_schema_jsonld.html]
+
+    __files__:
+    - [head-meta.html, _includes/head/head-meta.html]
+    - [head-minimal.html, _includes/head/head-minimal.html]
+
   __files__:
-  - [head-meta.html, _includes/head-meta.html]
-  - [head-minimal.html, _includes/head-minimal.html]
-  - [lang_switch.html, _includes/lang_switch.html]
-  - [post-attribute-check.html, _includes/post-attribute-check.html]
-  - [post-list-item.html, _includes/post-list-item.html]
-  - [taxonomy-badge.html, _includes/taxonomy-badge.html]
+  - [badge.html, _includes/badge.html]
+  - [get_context_vars.html, _includes/get_context_vars.html]
+  - [item-list-block.html, _includes/item-list-block.html]
   - [item-list.html, _includes/item-list.html]
   - [item_data_preparer.html, _includes/item_data_preparer.html]
   - [item_list_generator.html, _includes/item_list_generator.html]
+  - [lang_switch.html, _includes/lang_switch.html]
 
 _layouts:
 
@@ -222,6 +251,7 @@ _pages:
       __files__:
       - [.keep, _pages/text/ja/.keep]
       - [2025-05-30-example.ja.md, _pages/text/ja/2025-05-30-example.ja.md]
+      - [index.html, _pages/text/ja/index.html]
 
 _posts:
 
@@ -232,13 +262,27 @@ _proj_mgmt:
 
   ref_protected:
 
+    temp:
+
+      __files__:
+      - [sitemap.xml, _proj_mgmt/ref_protected/temp/sitemap.xml]
+      - [sitemap_text.xml, _proj_mgmt/ref_protected/temp/sitemap_text.xml]
+
     __files__:
     - [2025-05-30-example.ja_template.md, _proj_mgmt/ref_protected/2025-05-30-example.ja_template.md]
+    - [GitHub Actions ワークフローについての注記.txt, _proj_mgmt/ref_protected/GitHub Actions ワークフローについての注記.txt]
+    - [Postテンプレート群についての注記.txt, _proj_mgmt/ref_protected/Postテンプレート群についての注記.txt]
+    - [Taxonomyテンプレート群についての注記.txt, _proj_mgmt/ref_protected/Taxonomyテンプレート群についての注記.txt]
+    - [Taxonomy展開スクリプトについての注記.txt, _proj_mgmt/ref_protected/Taxonomy展開スクリプトについての注記.txt]
     - [categories_template.yml, _proj_mgmt/ref_protected/categories_template.yml]
+    - [index.text.ja.html, _proj_mgmt/ref_protected/index.text.ja.html]
     - [post_schema_template.yml, _proj_mgmt/ref_protected/post_schema_template.yml]
     - [post_schema_template_2.yml, _proj_mgmt/ref_protected/post_schema_template_2.yml]
+    - [post_schema_template_3.yml, _proj_mgmt/ref_protected/post_schema_template_3.yml]
+    - [post_schema_template_4.yml, _proj_mgmt/ref_protected/post_schema_template_4.yml]
     - [tags_template.yml, _proj_mgmt/ref_protected/tags_template.yml]
     - [taxonomy_schema_template.yml, _proj_mgmt/ref_protected/taxonomy_schema_template.yml]
+    - [taxonomy_schema_template_2.yml, _proj_mgmt/ref_protected/taxonomy_schema_template_2.yml]
 
   script:
 
@@ -277,12 +321,15 @@ assets:
 
     __files__:
     - [.keep, assets/js/.keep]
+    - [tailwind.config.js, assets/js/tailwind.config.js]
+    - [taxonomy-list.js, assets/js/taxonomy-list.js]
 
 docs:
 
   __files__:
   - [.keep, docs/.keep]
   - [design_202506152046.md, docs/design_202506152046.md]
+  - [pages_output_structure_guide_202506162158.md, docs/pages_output_structure_guide_202506162158.md]
   - [project_purpose_notes_202506150024.md, docs/project_purpose_notes_202506150024.md]
 
 root_files:
@@ -291,10 +338,6 @@ root_files:
   - [.gitattributes, .gitattributes]
   - [Gemfile, Gemfile]
   - [Gemfile.lock, Gemfile.lock]
-  - [README.md, README.md]
   - [_config.yml, _config.yml]
-  - [_config_text.yml, _config_text.yml]
   - [index.md, index.md]
   - [robots.txt, robots.txt]
-  - [sitemap.xml, sitemap.xml]
-  - [sitemap_text.xml, sitemap_text.xml]
