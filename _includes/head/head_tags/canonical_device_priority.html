@@ -10,7 +10,10 @@ canonical_device_priority.html（修正版）
 {%- assign override_allowed = canonical_cfg.override_allowed | default: true -%}
 {%- assign fallback_enabled = canonical_cfg.fallback_to_base | default: true -%}
 {%- assign per_lang = canonical_cfg.per_lang | default: {} -%}
-{%- assign priority_list = canonical_cfg.base_device_priority | default: "pc" | split: "," -%}
+{%- assign priority_list = canonical_cfg.base_device_priority -%}
+{%- if priority_list == nil or priority_list == blank -%}
+  {%- assign priority_list = "pc" | split: "," -%}
+{%- endif -%}
 {%- assign url = page.url | default: "/" -%}
 {%- assign url_parts = url | split: "/" -%}
 {%- assign lang = page.lang | default: url_parts[2] | default: "ja" -%}
