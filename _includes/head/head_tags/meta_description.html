@@ -3,10 +3,10 @@ meta description 補完テンプレート（defaults fallback付き）
 - page.description または site.description を使用
 - SEOとSNSの両方に有効
 - モジュール化済み（cfg → def）
-- 出力細分化: no_description に対応
+ - 出力細分化: no_meta_description に対応
 {%- endcomment -%}
 
-{%- unless page.no_description -%}
+{%- unless page.no_meta_description -%}
   {%- assign cfg = site.data.meta_config | default: {} -%}
   {%- assign def = cfg.defaults | default: {} -%}
   {%- assign desc = page.description | default: def.description | default: site.description -%}

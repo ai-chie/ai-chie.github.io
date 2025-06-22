@@ -2,10 +2,10 @@
 favicon / Web App icons 設定（pathをmeta_configから制御可能）
 - /assets/favicon/ 以下にアイコン一式を配置しておく前提
 - モジュール化済み（cfg → fav）
-- 出力細分化: no_favicon に対応
+ - 出力細分化: no_meta_favicon に対応
 {%- endcomment -%}
 
-{%- unless page.no_favicon -%}
+{%- unless page.no_meta_favicon -%}
   {%- assign cfg = site.data.meta_config | default: {} -%}
   {%- assign fav = cfg.favicon | default: {} -%}
   {%- assign path = fav.path | default: "/assets/favicon/" -%}
