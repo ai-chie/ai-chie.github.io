@@ -13,17 +13,17 @@ robots:
 
 # canonical.htmlのロジック制御用
 canonical:
-  enabled: true                # ← 全体ON/OFF。canonical出力を有効化
-  base_device: "pc"            # 正規URLとして使う device。canonicalを統一する対象の device（例: "pc"）
-  override_allowed: true       # Front Matterでの canonical_override を許可。page.canonical_override による上書きを許可
-  fallback_to_base: true       # per_lang にない言語は base_device/lang を使う
-  per_lang:                    # ← 言語別canonical正規パス。言語別canonicalルート（省略時は base_device 使用）
+  enabled: true                # ← 全体ON/OFF。canonical出力を有効化。canonicalタグ全体の出力ON/OFF
+  base_device: "pc"            # 正規URLとして使う device。canonicalを統一する対象の device（例: "pc"）。fallback時や旧モードでの基準device
+  override_allowed: true       # Front Matterでの canonical_override を許可。page.canonical_override による上書きを許可。page.canonical_override を許可
+  fallback_to_base: true       # per_lang にない言語は base_device/lang を使う。per_lang がない言語に fallback許容
+  per_lang:                    # ← 言語別canonical正規パス。言語別canonicalルート（省略時は base_device 使用）。言語別canonicalパスマッピング
     ja: "/pc/ja"
     en: "/pc/en"
-  mode: "priority"  # "standard"、"cross_device"、"priority"
-  base_device_priority:
-    - text
+  mode: "priority"             # "standard"、"cross_device"、"priority"
+  base_device_priority:        # device優先順位のリスト
     - pc
+    - text
     - mobile
   
 alternate:

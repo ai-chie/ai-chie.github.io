@@ -1,8 +1,9 @@
 {%- comment -%}
 canonical_wrapper.html
 - meta_config.canonical.mode により出力テンプレートを自動切替
-  - mode: "standard" → canonical_advanced.html
+  - mode: "standard" → canonical.html
   - mode: "cross_device" → canonical_device_variant.html（将来的な拡張用）
+  - mode: "priority" → canonical_device_priority.html
 - fallback: standard
 {%- endcomment -%}
 
@@ -14,6 +15,8 @@ canonical_wrapper.html
   {%- case mode -%}
     {%- when "cross_device" -%}
       {% include head/head_tags/canonical_device_variant.html %}
+    {%- when "priority" -%}
+      {% include head/head_tags/canonical_device_priority.html %}
     {%- else -%}
       {% include head/head_tags/canonical.html %}
   {%- endcase -%}
