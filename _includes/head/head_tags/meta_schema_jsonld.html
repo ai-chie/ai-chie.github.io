@@ -34,12 +34,10 @@
   "author": {
     "@type": "{{ author_type }}",
     "name": "{{ author }}"
-  }{%- unless page.no_ai_metadata -%}{%- if ai.model or ai.processed_by or ai.content_type -%},
-  "aiMetadata": {
-    {%- if ai.model %}"model": "{{ ai.model }}"{% endif %}{% if ai.processed_by %}, "processedBy": "{{ ai.processed_by }}"{% endif %}{% if ai.content_type %}, "contentType": "{{ ai.content_type }}"{% endif %}
-  }
+  }{%- unless page.no_ai_metadata -%}
+  {%- capture ai_md -%}{%- if ai.model -%}"model": "{{ ai.model }}"{%- endif -%}{%- if ai.processed_by -%}{% if ai.model -%}, {% endif -%}"processedBy": "{{ ai.processed_by }}"{%- endif -%}{%- if ai.content_type -%}{% if ai.model or ai.processed_by -%}, {% endif -%}"contentType": "{{ ai.content_type }}"{%- endif -%}{%- endcapture -%}{%- assign ai_md = ai_md | strip -%}{%- if ai_md != '' -%},
+  "aiMetadata": { {{ ai_md }} }
   {%- endif -%}{%- endunless -%}
 }
 </script>
 {%- endunless %}
-
