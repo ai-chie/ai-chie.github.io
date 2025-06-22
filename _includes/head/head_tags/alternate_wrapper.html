@@ -1,8 +1,9 @@
 {%- comment -%}
 alternate_wrapper.html
 - meta_config.alternate.mode により出力テンプレートを自動切替
-  - mode: "standard" → alternate_advanced.html
+  - mode: "standard" → alternate.html
   - mode: "cross_device" → alternate_device_cross.html
+  - mode: "priority" → alternate_device_priority.html
 - fallback: standard
 {%- endcomment -%}
 
@@ -13,8 +14,10 @@ alternate_wrapper.html
 {%- unless page.no_alternate -%}
   {%- case mode -%}
     {%- when "cross_device" -%}
-      {% include head/head_tags/alternate_device_cross.html %}
+      {% include alternate_device_cross.html %}
+    {%- when "priority" -%}
+      {% include alternate_device_priority.html %}
     {%- else -%}
-      {% include head/head_tags/alternate.html %}
+      {% include alternate.html %}
   {%- endcase -%}
 {%- endunless -%}
