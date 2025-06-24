@@ -46,7 +46,7 @@
 <body>
     {{ content }} {% comment %} 子レイアウトの内容がここに挿入されます {% endcomment %}
     {%- unless device == 'text' -%}
-      <script src="/assets/js/item-list.js"></script>
+      <script src="/assets/js/item-list.js" defer></script>
     {% endunless %}
 </body>
 </html>
