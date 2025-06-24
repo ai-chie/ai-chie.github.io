@@ -14,35 +14,35 @@ Tailwind適用。
 
 <header>
     {% comment %}
-    例: 共通ヘッダー部品。
+    共通ヘッダー部品。
+     <h1>サイト名を含める。（<h1> はページごとに1つが原則）
+    サイトの説明を含める。
+    言語選択を含む
+    デバイス切替を含む。
+    <nav>を含む（<ul><li><a>などの正しいセマンティック構造を保証）。必要であればnavigation.htmlなどの共通ナビゲーション部品に切り出し。
     {% endcomment %}
     {% include header.html %}
 </header>
-
-<nav aria-label="Main Navigation">
-    {% comment %}
-    例: 共通ナビゲーション部品。
-    navigation.html に<ul><li><a>などの正しいセマンティック構造を保証。    
-    {% endcomment %}
-    {% include navigation.html %}
-</nav>
 
 <main>
     {% comment %}
     ページの内容がここに挿入されます。
     個別の記事はここで <article> を持つように調整する。
-    <article>が不要なページのためlayout ごとに出し分け例: page.layout == 'post' など）。
+    <article>が不要なページのためにlayoutごとに出し分け。例: page.layout == 'post' など）。
     {% endcomment %}
     {% if page.layout == "post" %}
       <article>
           {{ content }} {% comment %} ページコンテンツがここに挿入されます {% endcomment %}
       </article>
-    {% comment %}
-    <aside>はPCでのみ表示し、モバイルでは非表示。
-    {% endcomment %}
-      <aside>
-          {% include sidebar.html %}
-      </aside>
+      {% comment %}
+      <aside>はPCでのみ表示し、モバイルでは非表示。
+      現在表示されている記事と同カテゴリ内の記事一覧と、同タグ内の記事一覧を表示。
+      {% endcomment %}
+      {%- if device == 'pc' -%}
+        <aside>
+            {% include sidebar.html %}
+        </aside>
+      {% endif %}
     {% else %}
           {{ content }}
     {% endif %}
@@ -50,7 +50,7 @@ Tailwind適用。
 
 <footer>
     {% comment %}
-    例: 共通フッター部品
+    共通フッター部品
     {% endcomment %}
     {% include footer.html %}
 </footer>
